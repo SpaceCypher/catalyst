@@ -32,15 +32,6 @@ export default function App() {
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [viewJsonLd, setViewJsonLd] = useState(false);
 
-  // Sync state when URL changes or button is clicked
-  const handleToggleEnhanced = (val) => {
-    setIsEnhanced(val);
-    if (typeof window !== 'undefined' && window.history?.replaceState) {
-      const url = new URL(window.location.href);
-      url.searchParams.set('enhanced', val ? 'true' : 'false');
-      window.history.replaceState({}, '', url.toString());
-    }
-  };
 
   const products = isEnhanced ? richCatalog : thinCatalog;
   const currentProduct = products.find(p => p.product_id === selectedProduct?.product_id) || products[0];
@@ -76,26 +67,17 @@ export default function App() {
           </div>
 
           <div className="flex items-center space-x-3">
-            {/* Catalyst Lifecycle Switcher */}
-            <div className="flex items-center bg-slate-900/90 border border-slate-700 p-1 rounded-xl">
-              <button
-                onClick={() => handleToggleEnhanced(false)}
-                className={`px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all ${
-                  !isEnhanced ? 'bg-amber-600 text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'
-                }`}
-              >
-                1. Baseline (Control)
-              </button>
-              <button
-                onClick={() => handleToggleEnhanced(true)}
-                className={`px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all flex items-center gap-1 ${
-                  isEnhanced ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'
-                }`}
-              >
+            {/* Read-only status badge — controlled only by Catalyst dashboard approval */}
+            {isEnhanced ? (
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono font-bold">
                 <Sparkles className="w-3 h-3" />
-                <span>2. Catalyst Patched</span>
-              </button>
-            </div>
+                <span>Catalyst Patched</span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-400 text-xs font-mono font-bold">
+                <span>Baseline</span>
+              </div>
+            )}
 
             {/* Link to Catalyst Agent */}
             <a
