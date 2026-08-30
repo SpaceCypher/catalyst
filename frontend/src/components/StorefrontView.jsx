@@ -20,6 +20,10 @@ export default function StorefrontView({ activeDiff, onOpenStorefront }) {
   const [activeCatalogMode, setActiveCatalogMode] = useState(isApproved ? 'treatment' : 'control');
   const [selectedSku, setSelectedSku] = useState('merch-boot-01');
 
+  React.useEffect(() => {
+    setActiveCatalogMode(isApproved ? 'treatment' : 'control');
+  }, [isApproved]);
+
   const catalog = activeCatalogMode === 'treatment' ? richCatalog : thinCatalog;
   const currentProduct = catalog.find(p => p.product_id === selectedSku) || catalog[0] || {};
 

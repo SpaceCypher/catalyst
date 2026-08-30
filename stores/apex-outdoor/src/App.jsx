@@ -18,7 +18,15 @@ import thinCatalog from './catalog_thin.json';
 import richCatalog from './catalog_rich.json';
 
 export default function App() {
-  const [isEnhanced, setIsEnhanced] = useState(false);
+  const [isEnhanced, setIsEnhanced] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('enhanced') === 'true') return true;
+      if (params.get('enhanced') === 'false') return false;
+      return localStorage.getItem('catalyst_diff_status') === 'approved';
+    }
+    return false;
+  });
   const [selectedProduct, setSelectedProduct] = useState(thinCatalog[0]);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);

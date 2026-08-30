@@ -150,6 +150,12 @@ export default function App() {
     );
   }
 
+  const handleOpenStorefront = () => {
+    const isAppr = activeDiff?.status === 'approved' || activeDiff?.status === 'applied' || (typeof window !== 'undefined' && localStorage.getItem('catalyst_diff_status') === 'approved');
+    const url = isAppr ? 'https://apex-outdoor.vercel.app/?enhanced=true' : 'https://apex-outdoor.vercel.app/?enhanced=false';
+    window.open(url, '_blank');
+  };
+
   return (
     <div className="min-h-screen bg-[#090a0f] text-slate-200 flex flex-col font-sans selection:bg-slate-700 selection:text-white">
       
@@ -159,7 +165,7 @@ export default function App() {
         setActiveTab={setActiveTab}
         onResetDemo={handleResetDemo}
         onOpenDemoModal={() => setIsDemoModalOpen(true)}
-        onOpenStorefront={() => window.open('https://apex-outdoor.vercel.app', '_blank')}
+        onOpenStorefront={handleOpenStorefront}
         isResetting={isResetting}
         hasAnalyzed={hasAnalyzed}
         agentStatus={getAgentStatus()}
@@ -183,7 +189,7 @@ export default function App() {
             isApproving={isApproving}
             onRunExperiment={() => runExperiment('diff-apex-01')}
             experimentResult={experimentResult}
-            onOpenStorefront={() => window.open('https://apex-outdoor.vercel.app', '_blank')}
+            onOpenStorefront={handleOpenStorefront}
             onNavigateToProof={() => setActiveTab('proof')}
             onNavigateToStore={() => setActiveTab('store')}
             onOpenDiffModal={() => setIsDiffModalOpen(true)}
@@ -194,7 +200,7 @@ export default function App() {
         {activeTab === 'store' && (
           <StorefrontView
             activeDiff={activeDiff}
-            onOpenStorefront={() => window.open('https://apex-outdoor.vercel.app', '_blank')}
+            onOpenStorefront={handleOpenStorefront}
           />
         )}
 
