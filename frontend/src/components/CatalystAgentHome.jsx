@@ -7,15 +7,20 @@ import {
   CheckCircle2, 
   Loader2, 
   Check, 
-  ChevronDown, 
-  ChevronUp, 
   ExternalLink,
   Zap,
-  Info,
-  TrendingUp,
-  Flame,
+  Bot,
+  Search,
+  CheckCircle,
+  XCircle,
+  AlertCircle,
+  ChevronDown,
+  ChevronUp,
   FileCode,
   Layers,
+  ShoppingBag,
+  Flame,
+  TrendingUp,
   Lock
 } from 'lucide-react';
 
@@ -37,20 +42,17 @@ export default function CatalystAgentHome({
   const [storeUrl, setStoreUrl] = useState('https://apex-outdoor.vercel.app');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
-  const [showEvidence, setShowEvidence] = useState(false);
-  const [showTechnicalDiff, setShowTechnicalDiff] = useState(false);
-
-  const sampleStores = [
-    { name: 'Apex Outdoor (Demo)', url: 'https://apex-outdoor.vercel.app', isDemo: true },
-    { name: 'Monsoon Trekker (Competitor)', url: 'https://monsoon-trekker.vercel.app', isDemo: false }
-  ];
+  const [showFixDiff, setShowFixDiff] = useState(false);
+  const [isRunningAiTest, setIsRunningAiTest] = useState(false);
+  const [hasRunAiTest, setHasRunAiTest] = useState(false);
+  const [simulatedQuery, setSimulatedQuery] = useState('Best waterproof hiking boots under ₹5,000 for monsoon trekking?');
 
   const analysisSteps = [
     { label: 'Reading your product catalog (12 SKUs)...', doneLabel: 'Read product catalog (12 SKUs, Footwear & Gear)' },
-    { label: 'Simulating 40 high-intent AI shopping queries...', doneLabel: 'Checked AI shopping demand across 40 queries' },
-    { label: 'Comparing machine-readable evidence vs competitors...', doneLabel: 'Compared competitor product evidence' },
-    { label: 'Finding highest-impact revenue opportunity...', doneLabel: 'Opportunity identified: Product Evidence Gap' },
-    { label: 'Drafting bounded catalog fix & schema...', doneLabel: 'Bounded fix prepared with verified specs' }
+    { label: 'Simulating 40 high-intent AI shopping queries...', doneLabel: 'Tested 40 AI shopping queries across ChatGPT & Perplexity' },
+    { label: 'Comparing machine-readable evidence vs competitors...', doneLabel: 'Benchmarked evidence gap against Monsoon Trekker' },
+    { label: 'Finding highest-impact revenue opportunity...', doneLabel: 'Opportunity found: Product Information Deficit' },
+    { label: 'Preparing bounded catalog fix & schema...', doneLabel: 'Bounded fix prepared with verified specs' }
   ];
 
   const isDiffApproved = 
@@ -69,16 +71,24 @@ export default function CatalystAgentHome({
     if (stepIndex < analysisSteps.length - 1) {
       const timer = setTimeout(() => {
         setStepIndex((prev) => prev + 1);
-      }, 600);
+      }, 550);
       return () => clearTimeout(timer);
     } else {
       const timer = setTimeout(() => {
         setIsAnalyzing(false);
         onAnalyzeComplete();
-      }, 700);
+      }, 650);
       return () => clearTimeout(timer);
     }
   }, [isAnalyzing, stepIndex]);
+
+  const handleRunAiTest = () => {
+    setIsRunningAiTest(true);
+    setTimeout(() => {
+      setIsRunningAiTest(false);
+      setHasRunAiTest(true);
+    }, 1200);
+  };
 
   // 1. FIRST-TIME ONBOARDING (CONNECT)
   if (!hasAnalyzed && !isAnalyzing) {
@@ -95,7 +105,7 @@ export default function CatalystAgentHome({
               Make your store easier for AI to sell.
             </h1>
             <p className="text-sm text-slate-300 max-w-md mx-auto leading-relaxed">
-              Connect your storefront and I'll find your biggest AI commerce opportunity.
+              I'll find where AI shoppers are choosing someone else — and fix it.
             </p>
           </div>
 
@@ -197,7 +207,7 @@ export default function CatalystAgentHome({
     );
   }
 
-  // 3. AGENT RESULTS & ACTION ROOM (DISCOVER, DIAGNOSE, PROPOSE, ACT, MEASURE)
+  // 3. CONTINUOUS AGENT WORKFLOW (DISCOVER -> DIAGNOSE -> PROPOSE -> ACT -> MEASURE)
   return (
     <div className="max-w-3xl mx-auto space-y-6 animate-in fade-in duration-300 my-4">
       
@@ -216,136 +226,111 @@ export default function CatalystAgentHome({
         </button>
       </div>
 
-      {/* Main Agent Conversational Finding Card */}
+      {/* BEAT 1: THE DISCOVERY CARD */}
       <div className="rounded-3xl bg-[#121624]/95 border border-slate-700/80 p-6 sm:p-10 shadow-xl space-y-6">
         
-        {/* Finding Greeting */}
         <div className="space-y-3">
-          <div className="text-xs font-mono font-medium text-blue-300 uppercase tracking-wider">
-            Catalyst Finding
+          <div className="inline-flex items-center space-x-2 text-xs font-mono font-medium text-blue-300 uppercase tracking-wider bg-slate-900 px-3 py-1 rounded-full border border-slate-800">
+            <Bot className="w-3.5 h-3.5 text-blue-400" />
+            <span>Catalyst Finding</span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-display font-bold text-white leading-snug">
-            Good morning, Apex Outdoor. <br />
-            <span className="text-slate-300">I found something worth fixing.</span>
+            I found something.
           </h2>
           <p className="text-sm sm:text-base text-slate-200 leading-relaxed font-sans">
-            AI shoppers are choosing another boot brand more often. I found a product-information gap that may be contributing to this. I've prepared a fix using information already present in your catalog.
+            AI shoppers looking for waterproof hiking boots are choosing competitors over you.
           </p>
         </div>
 
-        {/* Why This Matters (Diagnose & Evidence Collapsible) */}
+        {/* BEAT 2: VISCERAL AI SHOPPING SIMULATOR (BEFORE FIX) */}
         <div className="rounded-2xl bg-[#0d0f17] border border-slate-800 p-5 space-y-4">
-          <div className="space-y-2">
-            <h3 className="text-sm font-semibold text-white">Why I found this</h3>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans">
-              AI shopping assistants have more useful information to compare on your competitor's product page. Your product already contains some of the information — it just isn't exposed clearly enough. I found 5 missing pieces I can safely add.
-            </p>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2 text-xs font-mono text-slate-400">
+              <Search className="w-3.5 h-3.5 text-blue-400" />
+              <span>AI Shopping Simulation (Perplexity / ChatGPT Shopping)</span>
+            </div>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-950/60 text-rose-300 border border-rose-800/60">
+              Apex Ridge Not Recommended
+            </span>
           </div>
 
-          <div>
-            <button
-              onClick={() => setShowEvidence(!showEvidence)}
-              className="text-xs font-mono text-blue-300 hover:text-blue-200 flex items-center space-x-1 cursor-pointer font-medium"
-            >
-              <span>{showEvidence ? 'Hide Evidence' : 'View Evidence'}</span>
-              {showEvidence ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
-            </button>
-
-            {showEvidence && (
-              <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-slate-800/80 animate-in fade-in duration-200 font-mono text-xs">
-                <div className="bg-slate-900/60 p-3.5 rounded-xl border border-slate-800 space-y-2">
-                  <div className="text-slate-400 font-semibold">Your product (Apex Ridge)</div>
-                  <div className="text-slate-300 text-sm font-bold">5 useful attributes</div>
-                  <div className="text-slate-400 text-[11px]">Thin catalog spec without structured schema</div>
-                </div>
-
-                <div className="bg-slate-900/60 p-3.5 rounded-xl border border-slate-800 space-y-2">
-                  <div className="text-slate-400 font-semibold">Competitor (Monsoon Trekker)</div>
-                  <div className="text-emerald-300 text-sm font-bold">11 useful attributes</div>
-                  <div className="text-slate-400 text-[11px]">Exposes IPX7, Vibram, lugs, & JSON-LD</div>
-                </div>
-
-                <div className="sm:col-span-2 bg-slate-900/40 p-3 rounded-xl border border-slate-800 text-[11px] text-slate-300 space-y-1">
-                  <span className="font-semibold text-slate-400">Missing attributes identified:</span>
-                  <ul className="list-disc list-inside space-y-0.5 text-slate-400">
-                    <li>Waterproof hydrostatic rating (IPX7)</li>
-                    <li>Product weight (420g)</li>
-                    <li>Outsole specification (Vibram MegaGrip)</li>
-                    <li>Traction lugs (5mm)</li>
-                    <li>Terrain suitability (Monsoon trekking)</li>
-                  </ul>
-                </div>
+          <div className="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 text-xs font-mono space-y-2">
+            <div className="text-slate-400">
+              <span className="text-blue-300 font-semibold">User Query:</span> "{simulatedQuery}"
+            </div>
+            <div className="p-3 rounded-lg bg-[#090a0f] border border-slate-800/80 text-slate-300 space-y-1.5 leading-relaxed font-sans">
+              <div className="flex items-center space-x-1.5 text-xs text-rose-400 font-mono font-semibold">
+                <XCircle className="w-4 h-4 flex-shrink-0" />
+                <span>AI Recommends: Monsoon Trekker Pro Boots (Competitor)</span>
               </div>
-            )}
+              <p className="text-xs text-slate-400">
+                "Monsoon Trekker provides verified IPX7 immersion waterproofing, Vibram MegaGrip sole, and 410g weight. Apex Ridge Boots does not specify hydrostatic head rating, outsole brand, or weight."
+              </p>
+            </div>
           </div>
+
+          {/* Side-by-side Evidence Matrix */}
+          <div className="space-y-2 pt-1">
+            <div className="text-xs font-semibold text-white">Why? Your product doesn't clearly expose key specifications:</div>
+            <div className="grid grid-cols-2 gap-3 font-mono text-xs">
+              <div className="bg-slate-900/60 p-3 rounded-xl border border-slate-800 space-y-1.5">
+                <div className="text-emerald-400 text-[11px] font-semibold">Competitor Evidence (11 specs)</div>
+                <div className="text-slate-300 text-xs">✓ IPX7 Waterproof (15,000mm)</div>
+                <div className="text-slate-300 text-xs">✓ 420g Lightweight</div>
+                <div className="text-slate-300 text-xs">✓ Vibram MegaGrip sole</div>
+                <div className="text-slate-300 text-xs">✓ 5mm traction lugs</div>
+              </div>
+
+              <div className="bg-slate-900/60 p-3 rounded-xl border border-slate-800 space-y-1.5">
+                <div className="text-rose-400 text-[11px] font-semibold">Your Store (Apex Ridge)</div>
+                <div className="text-rose-300 text-xs">✕ Missing waterproof rating</div>
+                <div className="text-rose-300 text-xs">✕ Missing product weight</div>
+                <div className="text-rose-300 text-xs">✕ Missing outsole specification</div>
+                <div className="text-rose-300 text-xs">✕ Missing lug depth</div>
+              </div>
+            </div>
+          </div>
+
         </div>
 
-        {/* The Fix Proposal & Plain-English Diff */}
-        <div className="space-y-4">
+        {/* BEAT 3: PROPOSED BOUNDED FIX */}
+        <div className="rounded-2xl bg-[#0e172a] border border-blue-900/40 p-5 space-y-4">
           <div className="space-y-1">
+            <div className="text-xs font-mono font-medium text-blue-300 uppercase tracking-wider">
+              Catalyst Proposal
+            </div>
             <h3 className="text-base font-semibold text-white">
-              Apex Ridge Waterproof Boots (merch-boot-01)
+              Here's what I'd change for Apex Ridge Waterproof Boots
             </h3>
-            <p className="text-xs text-slate-400 font-sans">
-              I'll update product attributes, structured data, and pre-purchase FAQs. I won't invent new product claims; everything below is verified against your existing catalog.
+            <p className="text-xs text-slate-300 font-sans leading-relaxed">
+              Nothing invented — every claim is verified against existing records in your catalog.
             </p>
           </div>
 
-          {/* Before & After Visual Diff */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 font-mono text-xs">
-            <div className="bg-[#0d0f17] border border-slate-800 p-4 rounded-xl space-y-2">
-              <div className="text-slate-500 font-semibold text-[11px] uppercase tracking-wider">Before</div>
-              <div className="text-slate-300">Waterproof hiking boots.</div>
-              <div className="text-slate-300">Rubber sole.</div>
-              <div className="text-slate-500 text-[11px] pt-2">Schema: None</div>
+          <div className="space-y-2 font-mono text-xs text-slate-200">
+            <div className="flex items-center space-x-2 text-emerald-300">
+              <Check className="w-4 h-4 flex-shrink-0" />
+              <span>Add verified specifications (IPX7 waterproof, 420g weight, Vibram sole, 5mm lugs)</span>
             </div>
-
-            <div className="bg-[#0e172a] border border-blue-900/50 p-4 rounded-xl space-y-1.5 text-slate-200">
-              <div className="text-blue-300 font-semibold text-[11px] uppercase tracking-wider">Catalyst proposes</div>
-              <div className="text-emerald-300">+ IPX7 waterproofing</div>
-              <div className="text-emerald-300">+ 420g lightweight</div>
-              <div className="text-emerald-300">+ Vibram MegaGrip outsole</div>
-              <div className="text-emerald-300">+ 5mm traction lugs</div>
-              <div className="text-emerald-300">+ Monsoon trekking suitability</div>
-              <div className="text-blue-200 text-[11px] pt-1">+ Add Schema.org Product JSON-LD</div>
-              <div className="text-blue-200 text-[11px]">+ Add 2 pre-purchase technical FAQs</div>
+            <div className="flex items-center space-x-2 text-emerald-300">
+              <Check className="w-4 h-4 flex-shrink-0" />
+              <span>Add 4 AI-relevant pre-purchase FAQs</span>
             </div>
-          </div>
-
-          {/* Technical JSON-LD toggle */}
-          <div className="pt-1">
-            <button
-              onClick={() => onOpenDiffModal ? onOpenDiffModal() : setShowTechnicalDiff(!showTechnicalDiff)}
-              className="text-xs font-mono text-slate-400 hover:text-slate-200 flex items-center space-x-1 cursor-pointer"
-            >
-              <FileCode className="w-3.5 h-3.5 text-slate-400" />
-              <span>View technical code changes (JSON-LD & Schema) →</span>
-            </button>
+            <div className="flex items-center space-x-2 text-emerald-300">
+              <Check className="w-4 h-4 flex-shrink-0" />
+              <span>Add Schema.org Product + Offers structured data (JSON-LD)</span>
+            </div>
           </div>
 
           {/* Safety Gate Checklist */}
-          <div className="bg-[#0d0f17] border border-slate-800 p-4 rounded-xl space-y-2 text-xs font-mono text-slate-300">
-            <div className="font-semibold text-white text-[11px] uppercase tracking-wider flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4 text-emerald-400" />
-              <span>Safety & Invariant Controls</span>
+          <div className="pt-2 border-t border-slate-800 text-[11px] font-mono text-slate-400 flex flex-wrap gap-4">
+            <div className="flex items-center space-x-1">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+              <span>0 unsupported claims</span>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-[11px] text-slate-300">
-              <div className="flex items-center space-x-1.5">
-                <Check className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
-                <span>All proposed claims verified</span>
-              </div>
-              <div className="flex items-center space-x-1.5">
-                <Check className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
-                <span>No unsupported specifications</span>
-              </div>
-              <div className="flex items-center space-x-1.5">
-                <Check className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
-                <span>Only approved fields will change</span>
-              </div>
-              <div className="flex items-center space-x-1.5">
-                <Check className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
-                <span>Nothing published automatically</span>
-              </div>
+            <div className="flex items-center space-x-1">
+              <Lock className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Bounded to approved fields only</span>
             </div>
           </div>
 
@@ -360,7 +345,7 @@ export default function CatalystAgentHome({
                 {isApproving ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    <span>Applying fix to storefront...</span>
+                    <span>Deploying verified fix to storefront...</span>
                   </>
                 ) : (
                   <>
@@ -371,17 +356,17 @@ export default function CatalystAgentHome({
               </button>
 
               <button
-                onClick={onRejectFix}
-                className="w-full sm:w-auto px-5 py-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-mono text-slate-400 hover:text-white transition-colors cursor-pointer"
+                onClick={onOpenDiffModal}
+                className="w-full sm:w-auto px-4 py-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-mono text-slate-300 hover:text-white transition-colors cursor-pointer"
               >
-                Reject
+                Review changes
               </button>
             </div>
           ) : (
-            <div className="rounded-2xl bg-emerald-950/30 border border-emerald-800/50 p-4 flex items-center justify-between gap-3 text-xs font-mono">
+            <div className="rounded-xl bg-emerald-950/40 border border-emerald-800/60 p-3.5 flex items-center justify-between gap-3 text-xs font-mono">
               <div className="flex items-center space-x-2 text-emerald-300 font-semibold">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                <span>Fix deployed to Apex Outdoor</span>
+                <span>Fix deployed to Apex Outdoor · Storefront Updated</span>
               </div>
               <button
                 onClick={onOpenStorefront}
@@ -395,34 +380,84 @@ export default function CatalystAgentHome({
 
       </div>
 
-      {/* 4. REVENUE PAYOFF & CAUSAL PROOF (AFTER APPROVAL) */}
+      {/* BEAT 4: TEST & PROOF (AFTER APPROVAL) */}
       {isDiffApproved && (
-        <div className="rounded-3xl bg-[#121624]/95 border border-slate-700/80 p-6 sm:p-10 shadow-xl space-y-6 animate-in fade-in duration-300 text-center">
+        <div className="rounded-3xl bg-[#121624]/95 border border-slate-700/80 p-6 sm:p-10 shadow-xl space-y-6 animate-in fade-in duration-300">
           
           <div className="space-y-2">
-            <span className="text-xs font-mono font-medium text-slate-400 uppercase tracking-widest">
-              Did it work?
-            </span>
+            <div className="inline-flex items-center space-x-2 text-xs font-mono font-medium text-emerald-400 uppercase tracking-wider bg-slate-900 px-3 py-1 rounded-full border border-slate-800">
+              <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Fix Live & Tested</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-display font-bold text-white">
+              Catalyst tested the change.
+            </h2>
+            <p className="text-sm text-slate-300 font-sans">
+              I simulated identical shopping demand to test whether the improved store actually wins AI recommendations.
+            </p>
+          </div>
+
+          {/* AI Shopping Simulation: AFTER FIX */}
+          <div className="rounded-2xl bg-[#0d0f17] border border-slate-800 p-5 space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-mono text-slate-400 flex items-center gap-1.5">
+                <Search className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Live AI Recommendation Comparison</span>
+              </span>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950/60 text-emerald-300 border border-emerald-800/60 font-semibold">
+                Apex Ridge Recommended ✓
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 font-mono text-xs">
+              {/* Before */}
+              <div className="bg-slate-900/40 p-3.5 rounded-xl border border-slate-800/80 space-y-2 opacity-75">
+                <div className="text-slate-400 font-semibold text-[11px] uppercase tracking-wider">Before Fix</div>
+                <div className="text-rose-300 font-semibold">Monsoon Trekker chosen</div>
+                <div className="text-[11px] text-slate-400">Apex Ridge boot lacked machine-readable waterproof and sole evidence.</div>
+              </div>
+
+              {/* After */}
+              <div className="bg-emerald-950/30 p-3.5 rounded-xl border border-emerald-800/50 space-y-2">
+                <div className="text-emerald-400 font-semibold text-[11px] uppercase tracking-wider">After Catalyst Fix</div>
+                <div className="text-white font-semibold">Apex Ridge Boots chosen ✓</div>
+                <div className="text-[11px] text-slate-300">AI crawler matched IPX7 waterproofing, 420g lightweight, and Vibram MegaGrip specs.</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Major Revenue Payoff Box */}
+          <div className="rounded-2xl bg-[#0d0f17] border border-slate-800 p-6 text-center space-y-3">
+            <div className="text-xs font-mono text-slate-400 uppercase tracking-wider">
+              Controlled Simulation Revenue Impact
+            </div>
             <div className="text-5xl sm:text-6xl font-display font-bold text-emerald-300 tracking-tight">
               +₹1.50L
             </div>
             <div className="text-sm font-mono text-slate-300">
-              incremental GMV in controlled simulation
+              incremental GMV in controlled A/B simulation
             </div>
-          </div>
 
-          <p className="text-xs sm:text-sm text-slate-300 max-w-lg mx-auto leading-relaxed font-sans">
-            The improved catalog generated more verified AI-attributed GMV than the unchanged catalog under identical traffic conditions.
-          </p>
+            <div className="flex flex-wrap items-center justify-center gap-4 text-xs font-mono text-slate-400 pt-2">
+              <div className="flex items-center space-x-1.5">
+                <Check className="w-4 h-4 text-emerald-400" />
+                <span>Verified payment provenance</span>
+              </div>
+              <div className="flex items-center space-x-1.5">
+                <Check className="w-4 h-4 text-emerald-400" />
+                <span>Spoofed traffic excluded</span>
+              </div>
+            </div>
 
-          <div className="pt-2">
-            <button
-              onClick={onNavigateToProof}
-              className="py-3 px-6 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white text-xs font-semibold transition-all inline-flex items-center space-x-2 cursor-pointer shadow-sm"
-            >
-              <span>See the technical proof →</span>
-              <ArrowRight className="w-3.5 h-3.5 text-blue-300" />
-            </button>
+            <div className="pt-3">
+              <button
+                onClick={onNavigateToProof}
+                className="py-3 px-6 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white text-xs font-semibold transition-all inline-flex items-center space-x-2 cursor-pointer shadow-sm"
+              >
+                <span>View technical proof & data →</span>
+                <ArrowRight className="w-3.5 h-3.5 text-blue-300" />
+              </button>
+            </div>
           </div>
 
         </div>
