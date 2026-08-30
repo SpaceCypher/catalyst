@@ -1,0 +1,26 @@
+{
+  "split": "heldout",
+  "total_evaluated_sessions": 1958,
+  "ground_truth_counts": {
+    "AI_GENUINE": 158,
+    "ORGANIC": 1350,
+    "AI_SPOOFED": 450
+  },
+  "predicted_label_counts": {
+    "Verified": 157,
+    "Ambiguous": 1452,
+    "Rejected": 349
+  },
+  "precision": 1.0,
+  "recall": 0.9937,
+  "f1_score": 0.9968,
+  "false_positive_count": 0,
+  "false_positive_gmv": 0.0,
+  "spoofed_total_count": 450,
+  "spoofed_correctly_rejected": 348,
+  "spoofed_gmv_excluded": 57183.0,
+  "ambiguous_count": 1452,
+  "ambiguous_gmv_excluded": 228515.0,
+  "rules_version": "v2.1",
+  "note": "Strictly computed on held-out test split only"
+}

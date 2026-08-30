@@ -1,0 +1,15 @@
+{
+  "arm": "treatment",
+  "catalog_state": "rich",
+  "total_sessions": 1342,
+  "ai_recommendation_share_pct": 17.8,
+  "ai_sessions": 142,
+  "organic_sessions": 900,
+  "spoofed_sessions": 300,
+  "conversions": 71,
+  "conversion_rate_pct": 5.29,
+  "verified_gmv": 46183.0,
+  "ambiguous_gmv": 109750.0,
+  "rejected_gmv": 7096.0,
+  "total_gmv": 163029.0
+}

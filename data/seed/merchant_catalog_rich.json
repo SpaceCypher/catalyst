@@ -1,0 +1,237 @@
+[
+  {
+    "product_id": "merch-boot-01",
+    "name": "Apex Ridge Waterproof Trekking Boots",
+    "category": "Footwear",
+    "price": 4499.0,
+    "attributes": [
+      "Waterproofing: HydroGuard IPX7 Full Immersion Membrane (15,000mm hydrostatic head)",
+      "Weight: 420g per boot (Men UK 8)",
+      "Terrain Compatibility: Alpine Rock, Mud, Wet Scree, Heavy Snow Trails",
+      "Sole Construction: Vibram MegaGrip Deep 5mm Lug Multi-directional Outsole",
+      "Upper Material: 1.8mm Full-Grain Hydrophobic Nubuck Leather with Kevlar Mudguard",
+      "Ankle Support: High-Cut Ergonomic Molded Collar with 360-degree Heel Lock",
+      "Cushioning: Dual-Density EVA Midsole with TPU Anti-torsion Stability Shank",
+      "Sizing & Fit: True-to-Size with Wide Toe Box for thick merino hiking socks",
+      "Lacing System: Rust-proof Zinc-Alloy Speed Hooks with Locking Lace Eyelet",
+      "Breathability Rating: 12,000 g/m²/24h Moisture Vapor Transmission",
+      "Warranty: 2-Year Full Performance Guarantee against seam & sole delamination"
+    ],
+    "review_count": 348,
+    "review_detail_score": 0.94,
+    "faq_count": 16,
+    "has_structured_schema": true,
+    "catalog_state": "rich"
+  },
+  {
+    "product_id": "merch-shoe-02",
+    "name": "SwiftTrail Aero Running Shoes",
+    "category": "Footwear",
+    "price": 3299.0,
+    "attributes": [
+      "Weight: 215g (Ultralight racing weight)",
+      "Drop: 6mm heel-to-toe offset for natural midfoot strike",
+      "Upper: Engineered Matryx Jacquard Breathable Hydrophobic Mesh",
+      "Outsole: Sticky Rubber 4mm Traction Lugs with Wet-Grip Compound",
+      "Midsole: Supercritical Nitrogen-Infused Responsive Cushion Foam",
+      "Fit Profile: Wide Toe Box with Locked Arch Support",
+      "Drainage: Integrated Hydro-Mesh Drainage Ports for stream crossings",
+      "Reflectivity: 360-degree 3M Scotchlite High-Visibility Accents",
+      "Odor Resistance: Agion Antimicrobial Silver-ion Treated Insole"
+    ],
+    "review_count": 412,
+    "review_detail_score": 0.91,
+    "faq_count": 14,
+    "has_structured_schema": true,
+    "catalog_state": "rich"
+  },
+  {
+    "product_id": "merch-pack-03",
+    "name": "Venture 45L Expedition Backpack",
+    "category": "Outdoor Gear",
+    "price": 2899.0,
+    "attributes": [
+      "Capacity: 45L + 5L Expandable Floating Top Collar",
+      "Waterproofing: 420D Diamond Ripstop Cordura with 2000mm PU Coating & Integrated Rain Cover",
+      "Suspension System: AirMesh Adjustable Torso Frame with Lumbar Load Transfer",
+      "Access Points: Top drawstring, Front J-Zip panel access, and Bottom sleeping bag compartment",
+      "Hydration Compatible: Dedicated 3L bladder sleeve with dual hose routing ports",
+      "Weight: 1.15kg ultralight technical build",
+      "Attachments: Dual Trekking Pole Quick-Locks, Ice Axe Loops, Daisy Chain Webbing",
+      "Hipbelt: Padded ErgoForm Hipbelt with Dual Water-Resistant Zippered Phone Pockets"
+    ],
+    "review_count": 280,
+    "review_detail_score": 0.89,
+    "faq_count": 12,
+    "has_structured_schema": true,
+    "catalog_state": "rich"
+  },
+  {
+    "product_id": "merch-tent-04",
+    "name": "Alpine Haven 3-Person Camping Tent",
+    "category": "Outdoor Gear",
+    "price": 5499.0,
+    "attributes": [
+      "Capacity: 3 Person (Floor area: 4.1 sq m, Peak height: 120cm)",
+      "Weather Resistance: 3000mm Waterproof Rainfly with Heat-Sealed Taped Seams",
+      "Pole Architecture: DAC 7001-T6 Aerospace Aluminum Featherlight Interlocking Poles",
+      "Wind Rating: Tested stable in sustained 65 km/h alpine gusts",
+      "Ventilation: Dual Cross-Flow High/Low Vents with No-See-Um Bug Mesh",
+      "Vestibules: Dual 1.2 sq m Gear Storage Vestibules with Weather Flaps",
+      "Packed Weight: 2.35kg trail weight with compression stuff sack"
+    ],
+    "review_count": 195,
+    "review_detail_score": 0.88,
+    "faq_count": 11,
+    "has_structured_schema": true,
+    "catalog_state": "rich"
+  },
+  {
+    "product_id": "merch-jack-05",
+    "name": "StormShield Windproof Softshell Jacket",
+    "category": "Apparel",
+    "price": 2499.0,
+    "attributes": [
+      "Windproof Rating: 100% Windproof 0 CFM rating with WindBlock Membrane",
+      "Water Repellency: Eco DWR PFC-Free Durable Water Repellent Finish",
+      "Thermal Lining: Brushed High-Density Thermal Micro-grid Interior",
+      "Breathability: 15,000 g/m²/24h with Underarm Zippered Pit Vents",
+      "Pockets: 2 Harness-Compatible Handwarmer Pockets, 1 Waterproof Chest Phone Pocket",
+      "Cuffs & Hem: Velcro Adjustable Ergonomic Cuffs with Cinch Cord Bungee Hem"
+    ],
+    "review_count": 260,
+    "review_detail_score": 0.90,
+    "faq_count": 13,
+    "has_structured_schema": true,
+    "catalog_state": "rich"
+  },
+  {
+    "product_id": "merch-fleece-06",
+    "name": "ThermaGrid High-Loft Fleece Pullover",
+    "category": "Apparel",
+    "price": 1899.0,
+    "attributes": [
+      "Fabric Tech: 280gsm Recycled Polartec Thermal Pro High-Loft Grid Fleece",
+      "Warmth-to-Weight: Exceptional thermal efficiency with channeled air chambers",
+      "Moisture Management: Hydrophobic fibers pull sweat away in under 3 minutes",
+      "Fit: Athletic trim fit for seamless layering under technical shells",
+      "Zippers: YKK Reverse Coil Quarter Zip with Chin Guard"
+    ],
+    "review_count": 185,
+    "review_detail_score": 0.87,
+    "faq_count": 9,
+    "has_structured_schema": true,
+    "catalog_state": "rich"
+  },
+  {
+    "product_id": "merch-head-07",
+    "name": "LumenPulse 600 USB-C Headlamp",
+    "category": "Outdoor Gear",
+    "price": 1299.0,
+    "attributes": [
+      "Lumen Output: 600 True Lumens with Cree XP-G3 Neutral White LED",
+      "Beam Distance: 110 meters spot / 25 meters flood",
+      "Battery: 1800mAh Li-ion USB-C Fast Rechargeable (also accepts 3x AAA)",
+      "Runtime: Up to 45 hours on Low, 4.5 hours on 600L Turbo",
+      "Water Resistance: IPX6 Stormproof Heavy Rain Rating",
+      "Red Light Mode: Dual Red LEDs for night vision preservation"
+    ],
+    "review_count": 310,
+    "review_detail_score": 0.92,
+    "faq_count": 12,
+    "has_structured_schema": true,
+    "catalog_state": "rich"
+  },
+  {
+    "product_id": "merch-audio-08",
+    "name": "WaveSync Pro ANC Wireless Earbuds",
+    "category": "Electronics",
+    "price": 2999.0,
+    "attributes": [
+      "Active Noise Cancellation: Hybrid ANC reducing up to 40dB ambient noise",
+      "Drivers: 11mm Titanium-Coated Bio-Diaphragm Dynamic Drivers",
+      "Battery Performance: 8 hours per charge + 32 hours case (40 hrs total)",
+      "Fast Charging: 10 mins charge provides 3 hours playback via USB-C & Qi Wireless",
+      "Water Resistance: IPX5 Sweat and Splash Resistant for intense workouts",
+      "Microphones: 6-Mic AI Environmental Noise Cancellation for crystal clear calls",
+      "Codecs: LDAC, AAC, SBC Hi-Res Audio Certified"
+    ],
+    "review_count": 520,
+    "review_detail_score": 0.95,
+    "faq_count": 18,
+    "has_structured_schema": true,
+    "catalog_state": "rich"
+  },
+  {
+    "product_id": "merch-bag-09",
+    "name": "Nomad Daily Urban Commuter Daypack 22L",
+    "category": "Outdoor Gear",
+    "price": 1999.0,
+    "attributes": [
+      "Capacity: 22L Optimized Everyday Volume",
+      "Laptop Protection: Suspended 360-degree Padded Pocket for up to 16 inch MacBook Pro",
+      "Material: 100% Recycled 600D Ballistic Poly with Weatherproof Water-Repellent Coating",
+      "Security: Hidden Luggage Pass-Through Strap & Anti-theft RFID Blocking Pocket",
+      "Ergonomics: Molded EVA Back Panel with breathable air channels"
+    ],
+    "review_count": 215,
+    "review_detail_score": 0.89,
+    "faq_count": 10,
+    "has_structured_schema": true,
+    "catalog_state": "rich"
+  },
+  {
+    "product_id": "merch-pant-10",
+    "name": "TerraFlex Quick-Dry Trail Pants",
+    "category": "Apparel",
+    "price": 1799.0,
+    "attributes": [
+      "Fabric: 4-Way Stretch Duraflex Nylon with UPF 50+ Sun Protection",
+      "Drying Speed: Hydrophobic quick-dry evaporates moisture in 15 minutes",
+      "Articulation: Gusseted Crotch & Articulated Knees for 100% range of motion",
+      "Pockets: 6 Deep Pockets including 2 YKK Zippered Security Cargo Pockets",
+      "Waistband: Built-in Low-Profile Nylon Webbing Belt with Magnetic Buckle"
+    ],
+    "review_count": 174,
+    "review_detail_score": 0.88,
+    "faq_count": 10,
+    "has_structured_schema": true,
+    "catalog_state": "rich"
+  },
+  {
+    "product_id": "merch-cook-11",
+    "name": "PyroCompact Ultralight Camp Stove",
+    "category": "Outdoor Gear",
+    "price": 1199.0,
+    "attributes": [
+      "Weight: 88g Titanium & Brass Featherweight Construction",
+      "Boil Time: 1 Liter of water boils in 3 minutes 15 seconds (3000W output)",
+      "Wind Resistance: Concave Burner Head with Integrated Windscreen Lip",
+      "Flame Control: Micro-Regulating Valve for precise simmer-to-boil control",
+      "Compatibility: Standard Lindal EN417 Threaded Isobutane/Propane Canisters"
+    ],
+    "review_count": 160,
+    "review_detail_score": 0.89,
+    "faq_count": 9,
+    "has_structured_schema": true,
+    "catalog_state": "rich"
+  },
+  {
+    "product_id": "merch-bot-12",
+    "name": "HydroShield 1000ml Insulated Flask",
+    "category": "Outdoor Gear",
+    "price": 999.0,
+    "attributes": [
+      "Thermal Insulation: TempGuard Vacuum Wall keeps Cold for 24h / Hot for 12h",
+      "Material: 18/8 Pro-Grade Food-Grade Stainless Steel (100% BPA & Toxin Free)",
+      "Lid Technology: Leak-proof Insulated Chug Cap with Stainless Steel Carry Loop",
+      "Coating: ColorLast Powder Coat resists condensation and slipping in wet hands",
+      "Dishwasher Safe: Powder coat and lid rated for top-rack dishwasher cleaning"
+    ],
+    "review_count": 290,
+    "review_detail_score": 0.93,
+    "faq_count": 11,
+    "has_structured_schema": true,
+    "catalog_state": "rich"
+  }
+]
