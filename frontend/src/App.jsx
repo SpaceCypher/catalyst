@@ -181,6 +181,7 @@ export default function App() {
               <DiagnosisPanel
                 opportunities={opportunities}
                 selectedOpp={selectedOpp}
+                activeDiff={activeDiff}
                 onSelectOpp={(opp) => setSelectedOpp(opp)}
                 onProposeFix={(opp) => setIsDiffModalOpen(true)}
               />

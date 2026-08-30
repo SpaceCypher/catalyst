@@ -1,0 +1,202 @@
+[
+  {
+    "query_id": "q01",
+    "query_text": "Best waterproof hiking boots under ₹5,000 for monsoon treks",
+    "category": "Footwear"
+  },
+  {
+    "query_id": "q02",
+    "query_text": "Trekking boots with high ankle support and Vibram grip",
+    "category": "Footwear"
+  },
+  {
+    "query_id": "q03",
+    "query_text": "Lightweight trail running shoes for wide feet with good wet grip",
+    "category": "Footwear"
+  },
+  {
+    "query_id": "q04",
+    "query_text": "Durable hiking shoes under ₹4,000 with quick drying mesh",
+    "category": "Footwear"
+  },
+  {
+    "query_id": "q05",
+    "query_text": "Best hiking boots with Kevlar mudguard and waterproof membrane",
+    "category": "Footwear"
+  },
+  {
+    "query_id": "q06",
+    "query_text": "Breathable mountain running shoes with low drop and rock plate",
+    "category": "Footwear"
+  },
+  {
+    "query_id": "q07",
+    "query_text": "Waterproof leather hiking boots with 2 year warranty",
+    "category": "Footwear"
+  },
+  {
+    "query_id": "q08",
+    "query_text": "Heavy snow and wet rocky trail boots under ₹5000",
+    "category": "Footwear"
+  },
+  {
+    "query_id": "q09",
+    "query_text": "Trail shoes with antimicrobial insoles for multi-day treks",
+    "category": "Footwear"
+  },
+  {
+    "query_id": "q10",
+    "query_text": "Lightweight technical trekking boots under 450g",
+    "category": "Footwear"
+  },
+  {
+    "query_id": "q11",
+    "query_text": "Durable trekking backpack 45L to 50L with rain cover under ₹3,500",
+    "category": "Outdoor Gear"
+  },
+  {
+    "query_id": "q12",
+    "query_text": "45L technical rucksack with front J-zip access and hydration sleeve",
+    "category": "Outdoor Gear"
+  },
+  {
+    "query_id": "q13",
+    "query_text": "3-person camping tent with high wind resistance and taped seams",
+    "category": "Outdoor Gear"
+  },
+  {
+    "query_id": "q14",
+    "query_text": "Waterproof dome tent with dual vestibules under ₹6,000",
+    "category": "Outdoor Gear"
+  },
+  {
+    "query_id": "q15",
+    "query_text": "High lumen USB-C rechargeable headlamp for night hiking",
+    "category": "Outdoor Gear"
+  },
+  {
+    "query_id": "q16",
+    "query_text": "Waterproof IPX6 headlamp with red night vision LED under ₹1,500",
+    "category": "Outdoor Gear"
+  },
+  {
+    "query_id": "q17",
+    "query_text": "Ultralight titanium camping stove under 100 grams",
+    "category": "Outdoor Gear"
+  },
+  {
+    "query_id": "q18",
+    "query_text": "Compact piezo ignition backpacking burner for high altitudes",
+    "category": "Outdoor Gear"
+  },
+  {
+    "query_id": "q19",
+    "query_text": "Double wall vacuum insulated steel water bottle 1000ml",
+    "category": "Outdoor Gear"
+  },
+  {
+    "query_id": "q20",
+    "query_text": "Dishwasher safe flask that keeps water cold for 24 hours",
+    "category": "Outdoor Gear"
+  },
+  {
+    "query_id": "q21",
+    "query_text": "Everyday commuter laptop backpack 20L with anti-theft pocket",
+    "category": "Outdoor Gear"
+  },
+  {
+    "query_id": "q22",
+    "query_text": "Water-resistant urban daypack with 16-inch suspended laptop sleeve",
+    "category": "Outdoor Gear"
+  },
+  {
+    "query_id": "q23",
+    "query_text": "Windproof breathable softshell jacket for cycling and trekking",
+    "category": "Apparel"
+  },
+  {
+    "query_id": "q24",
+    "query_text": "Men's weather-resistant jacket with pit zip ventilation under ₹3,000",
+    "category": "Apparel"
+  },
+  {
+    "query_id": "q25",
+    "query_text": "Thermal grid fleece pullover for winter alpine layering",
+    "category": "Apparel"
+  },
+  {
+    "query_id": "q26",
+    "query_text": "Quick dry fleece with quarter zip and moisture management",
+    "category": "Apparel"
+  },
+  {
+    "query_id": "q27",
+    "query_text": "Stretch quick-dry trekking pants with zippered cargo pockets",
+    "category": "Apparel"
+  },
+  {
+    "query_id": "q28",
+    "query_text": "UPF 50+ sun protection hiking trousers with articulated knees",
+    "category": "Apparel"
+  },
+  {
+    "query_id": "q29",
+    "query_text": "PFC-free DWR water repellent jacket for light rain",
+    "category": "Apparel"
+  },
+  {
+    "query_id": "q30",
+    "query_text": "Active lightweight fleece jacket under ₹2,000",
+    "category": "Apparel"
+  },
+  {
+    "query_id": "q31",
+    "query_text": "Noise cancelling wireless earbuds with long battery for gym under ₹3,500",
+    "category": "Electronics"
+  },
+  {
+    "query_id": "q32",
+    "query_text": "IPX5 sweatproof ANC earbuds with wireless charging case",
+    "category": "Electronics"
+  },
+  {
+    "query_id": "q33",
+    "query_text": "Hi-Res LDAC Bluetooth 5.3 earbuds with 6-mic clear call technology",
+    "category": "Electronics"
+  },
+  {
+    "query_id": "q34",
+    "query_text": "Affordable true wireless earbuds with 40dB active noise cancellation",
+    "category": "Electronics"
+  },
+  {
+    "query_id": "q35",
+    "query_text": "Best hiking gear bundle for Himalayan beginner trek",
+    "category": "Outdoor Gear"
+  },
+  {
+    "query_id": "q36",
+    "query_text": "Waterproof backpack 45L with ergonomic lumbar support frame",
+    "category": "Outdoor Gear"
+  },
+  {
+    "query_id": "q37",
+    "query_text": "Comfortable trail walking boots for plantar fasciitis and wide feet",
+    "category": "Footwear"
+  },
+  {
+    "query_id": "q38",
+    "query_text": "Camp cooking stove with micro regulating simmer valve",
+    "category": "Outdoor Gear"
+  },
+  {
+    "query_id": "q39",
+    "query_text": "Warm mid-layer fleece pullover with chin guard under ₹2,500",
+    "category": "Apparel"
+  },
+  {
+    "query_id": "q40",
+    "query_text": "Long battery life Bluetooth earbuds for travel with fast charging",
+    "category": "Electronics"
+  }
+]

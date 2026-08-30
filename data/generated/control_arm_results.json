@@ -1,15 +1,15 @@
 {
   "arm": "control",
   "catalog_state": "thin",
-  "total_sessions": 1268,
+  "total_sessions": 321,
   "ai_recommendation_share_pct": 8.2,
-  "ai_sessions": 68,
-  "organic_sessions": 900,
-  "spoofed_sessions": 300,
-  "conversions": 61,
-  "conversion_rate_pct": 4.81,
-  "verified_gmv": 18594.0,
-  "ambiguous_gmv": 117751.0,
-  "rejected_gmv": 22394.0,
-  "total_gmv": 158739.0
+  "ai_sessions": 21,
+  "organic_sessions": 225,
+  "spoofed_sessions": 75,
+  "conversions": 18,
+  "conversion_rate_pct": 5.61,
+  "verified_gmv": 3299.0,
+  "ambiguous_gmv": 47385.0,
+  "rejected_gmv": 3698.0,
+  "total_gmv": 54382.0
 }

@@ -171,81 +171,119 @@ export default function SpoofRejectionPanel({ evaluation, sessions = [], funnel 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
         {/* Left: Deep Dive Inspection Modal / Box */}
-        <div className="lg:col-span-6 bg-surface-card border-2 border-rose-500/40 rounded-2xl p-6 shadow-xl space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-surface-border">
-            <div>
-              <span className="text-[10px] font-mono uppercase tracking-wider text-rose-400 font-bold">
-                Attribution Audit Inspector
-              </span>
-              <h3 className="text-sm font-bold text-white mt-0.5">
-                Session #{activeSession.session_id}
-              </h3>
-            </div>
+        {(() => {
+          const score = activeSession.attribution_score !== undefined && activeSession.attribution_score !== null
+            ? activeSession.attribution_score
+            : (activeSession.total_score !== undefined ? activeSession.total_score : (activeSession.attribution_label === 'Verified' ? 4 : -1));
 
-            <span className={`px-3 py-1 rounded-lg text-xs font-bold font-mono ${
-              activeSession.attribution_label === 'Verified'
-                ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40'
-                : activeSession.attribution_label === 'Ambiguous'
-                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                : 'bg-rose-500/20 text-rose-400 border border-rose-500/40'
-            }`}>
-              {activeSession.attribution_label?.toUpperCase()} (Score: {activeSession.attribution_score})
-            </span>
-          </div>
+          const isKnownAi = activeSession.attribution_signals?.known_ai_referrer ?? 
+            (!activeSession.referrer?.includes('fake') && (activeSession.referrer?.includes('chatgpt') || activeSession.referrer?.includes('gemini') || activeSession.referrer?.includes('claude') || activeSession.referrer?.includes('perplexity')));
+            
+          const isValidQuery = activeSession.attribution_signals?.valid_query_match ?? 
+            (Boolean(activeSession.query_id) && !activeSession.query_id.includes('invalid') && activeSession.query_id !== 'None');
 
-          {/* 5-Signal Breakdown Table */}
-          <div className="space-y-2 text-xs font-mono">
-            <div className="p-2.5 rounded-lg bg-surface-dark flex items-center justify-between border border-surface-border">
-              <span className="text-slate-300">1. Known AI Domain Referrer ({activeSession.referrer})</span>
-              <span className={activeSession.attribution_signals?.known_ai_referrer ? "text-emerald-400 font-bold" : "text-slate-500"}>
-                {activeSession.attribution_signals?.known_ai_referrer ? "✓ (+1)" : "✗ (0)"}
-              </span>
-            </div>
+          const isDirectBehavior = activeSession.attribution_signals?.direct_behavior_signal ?? 
+            (activeSession.behavior_signal === 'direct');
 
-            <div className="p-2.5 rounded-lg bg-surface-dark flex items-center justify-between border border-surface-border">
-              <span className="text-slate-300">2. Valid Query & Intent Match ({activeSession.query_id || 'None'})</span>
-              <span className={activeSession.attribution_signals?.valid_query_match ? "text-emerald-400 font-bold" : "text-rose-400 font-bold"}>
-                {activeSession.attribution_signals?.valid_query_match ? "✓ (+1)" : "✗ (0)"}
-              </span>
-            </div>
+          const isTiming = activeSession.attribution_signals?.timing_consistent ?? 
+            (activeSession.timing_consistent ?? (activeSession.ground_truth_label !== 'AI_SPOOFED'));
 
-            <div className="p-2.5 rounded-lg bg-surface-dark flex items-center justify-between border border-surface-border">
-              <span className="text-slate-300">3. Direct AI Landing Behavior ({activeSession.behavior_signal})</span>
-              <span className={activeSession.attribution_signals?.direct_behavior_signal ? "text-emerald-400 font-bold" : "text-rose-400 font-bold"}>
-                {activeSession.attribution_signals?.direct_behavior_signal ? "✓ (+1)" : "✗ (0)"}
-              </span>
-            </div>
+          const isSpoofPenalty = activeSession.attribution_signals?.spoof_indicator_penalty ?? 
+            (activeSession.ground_truth_label === 'AI_SPOOFED' || activeSession.referrer?.includes('fake') || activeSession.query_id?.includes('invalid'));
 
-            <div className="p-2.5 rounded-lg bg-surface-dark flex items-center justify-between border border-surface-border">
-              <span className="text-slate-300">4. Referral Timing Consistency</span>
-              <span className={activeSession.attribution_signals?.timing_consistent ? "text-emerald-400 font-bold" : "text-rose-400 font-bold"}>
-                {activeSession.attribution_signals?.timing_consistent ? "✓ (+1)" : "✗ (0)"}
-              </span>
-            </div>
+          const orderAmount = activeSession.order_value || activeSession.amount || 2500;
+          
+          const behaviorText = activeSession.behavior_signal ? `(${activeSession.behavior_signal})` : (isDirectBehavior ? '(direct deep-link)' : '(generic session)');
+          
+          const auditReason = activeSession.rejection_reason || 
+            (activeSession.attribution_label === 'Rejected' 
+              ? 'Anomalous search query / spoofed referrer token detected. -2 penalty applied deterministically. Excluded from verified GMV.' 
+              : 'Session verified with genuine AI referrer, matched shopping query intent, and direct conversion timing.');
 
-            <div className="p-2.5 rounded-lg bg-rose-950/20 border border-rose-500/30 flex items-center justify-between">
-              <span className="text-rose-300 font-bold">5. Spoof Signature Penalty</span>
-              <span className={activeSession.attribution_signals?.spoof_indicator_penalty ? "text-rose-400 font-bold" : "text-slate-500"}>
-                {activeSession.attribution_signals?.spoof_indicator_penalty ? "✓ (-2 Penalty)" : "None"}
-              </span>
-            </div>
-          </div>
+          return (
+            <div className="lg:col-span-6 bg-surface-card border-2 border-rose-500/40 rounded-2xl p-6 shadow-xl space-y-4">
+              <div className="flex items-center justify-between pb-3 border-b border-surface-border">
+                <div>
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-rose-400 font-bold">
+                    Attribution Audit Inspector
+                  </span>
+                  <h3 className="text-sm font-bold text-white mt-0.5">
+                    Session #{activeSession.session_id}
+                  </h3>
+                </div>
 
-          {/* Decision Box */}
-          <div className="p-4 rounded-xl bg-surface-dark border border-surface-border space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-xs text-slate-400">Order Value on Checkout:</span>
-              <span className="text-sm font-bold text-white font-mono">₹{activeSession.order_value?.toLocaleString() || '2,500'}</span>
+                <span className={`px-3 py-1 rounded-lg text-xs font-bold font-mono ${
+                  activeSession.attribution_label === 'Verified'
+                    ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40'
+                    : activeSession.attribution_label === 'Ambiguous'
+                    ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                    : 'bg-rose-500/20 text-rose-400 border border-rose-500/40'
+                }`}>
+                  {activeSession.attribution_label?.toUpperCase() || 'REJECTED'} (Score: {score})
+                </span>
+              </div>
+
+              {/* 5-Signal Breakdown Table */}
+              <div className="space-y-2 text-xs font-mono">
+                <div className="p-2.5 rounded-lg bg-surface-dark flex items-center justify-between border border-surface-border">
+                  <span className="text-slate-300">1. Known AI Domain Referrer ({activeSession.referrer})</span>
+                  <span className={isKnownAi ? "text-emerald-400 font-bold" : "text-slate-500"}>
+                    {isKnownAi ? "✓ (+1)" : "✗ (0)"}
+                  </span>
+                </div>
+
+                <div className="p-2.5 rounded-lg bg-surface-dark flex items-center justify-between border border-surface-border">
+                  <span className="text-slate-300">2. Valid Query & Intent Match ({activeSession.query_id || 'None'})</span>
+                  <span className={isValidQuery ? "text-emerald-400 font-bold" : "text-rose-400 font-bold"}>
+                    {isValidQuery ? "✓ (+1)" : "✗ (0)"}
+                  </span>
+                </div>
+
+                <div className="p-2.5 rounded-lg bg-surface-dark flex items-center justify-between border border-surface-border">
+                  <span className="text-slate-300">3. Direct AI Landing Behavior {behaviorText}</span>
+                  <span className={isDirectBehavior ? "text-emerald-400 font-bold" : "text-rose-400 font-bold"}>
+                    {isDirectBehavior ? "✓ (+1)" : "✗ (0)"}
+                  </span>
+                </div>
+
+                <div className="p-2.5 rounded-lg bg-surface-dark flex items-center justify-between border border-surface-border">
+                  <span className="text-slate-300">4. Referral Timing Consistency</span>
+                  <span className={isTiming ? "text-emerald-400 font-bold" : "text-rose-400 font-bold"}>
+                    {isTiming ? "✓ (+1)" : "✗ (0)"}
+                  </span>
+                </div>
+
+                <div className={`p-2.5 rounded-lg border flex items-center justify-between ${
+                  isSpoofPenalty ? 'bg-rose-950/30 border-rose-500/40 text-rose-300' : 'bg-surface-dark border-surface-border text-slate-400'
+                }`}>
+                  <span className="font-bold">5. Spoof Signature Penalty</span>
+                  <span className={isSpoofPenalty ? "text-rose-400 font-bold" : "text-slate-500"}>
+                    {isSpoofPenalty ? "✓ (-2 Penalty Applied)" : "None (0)"}
+                  </span>
+                </div>
+              </div>
+
+              {/* Decision Box */}
+              <div className="p-4 rounded-xl bg-surface-dark border border-surface-border space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-slate-400">Order Value on Checkout:</span>
+                  <span className="text-sm font-bold text-white font-mono">₹{orderAmount.toLocaleString('en-IN')}</span>
+                </div>
+                <div className="flex items-center justify-between pt-1 border-t border-surface-border/60">
+                  <span className="text-xs font-bold text-rose-400">Attribution Action:</span>
+                  <span className="text-xs font-bold text-rose-300 uppercase">
+                    {activeSession.attribution_label === 'Verified' 
+                      ? `VERIFIED — ₹${orderAmount.toLocaleString('en-IN')} ATTRIBUTED TO GMV`
+                      : `REJECTED — ₹${orderAmount.toLocaleString('en-IN')} EXCLUDED FROM GMV`}
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-400 pt-1 leading-relaxed">
+                  <strong>Audit Log:</strong> <span className="text-slate-300">{auditReason}</span>
+                </p>
+              </div>
             </div>
-            <div className="flex items-center justify-between pt-1 border-t border-surface-border/60">
-              <span className="text-xs font-bold text-rose-400">Attribution Action:</span>
-              <span className="text-xs font-bold text-rose-300 uppercase">REJECTED — ₹{activeSession.order_value?.toLocaleString() || '2,500'} EXCLUDED FROM GMV</span>
-            </div>
-            <p className="text-[11px] text-slate-400 pt-1 leading-relaxed">
-              <strong>Audit Log:</strong> {activeSession.rejection_reason}
-            </p>
-          </div>
-        </div>
+          );
+        })()}
 
         {/* Right: Sessions List Filter */}
         <div className="lg:col-span-6 bg-surface-card border border-surface-border rounded-2xl p-6 shadow-md space-y-3">

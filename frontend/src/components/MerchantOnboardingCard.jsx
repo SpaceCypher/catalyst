@@ -1,10 +1,52 @@
 import React, { useState, useEffect } from 'react';
-import { Sparkles, Globe, ArrowRight, ShieldCheck, CheckCircle2, Loader2 } from 'lucide-react';
+import { 
+  Sparkles, 
+  Globe, 
+  ArrowRight, 
+  ShieldCheck, 
+  CheckCircle2, 
+  Loader2, 
+  Activity, 
+  Radar, 
+  Zap, 
+  Flame,
+  Search,
+  ExternalLink
+} from 'lucide-react';
 
 export default function MerchantOnboardingCard({ onAnalyzeComplete }) {
-  const [storeUrl, setStoreUrl] = useState('https://apexridge-outdoors.myshopify.com');
+  const sampleStores = [
+    { 
+      name: 'Apex Ridge Outdoors', 
+      url: 'https://apex-outdoor.vercel.app',
+      tag: 'Merchant Store • 12 SKUs',
+      badge: 'Deficit Found (-₹1.50L)'
+    },
+    { 
+      name: 'Monsoon Trekker', 
+      url: 'https://monsoon-trekker.vercel.app',
+      tag: 'Competitor Benchmark • 12 SKUs',
+      badge: '55% AI Win Rate'
+    }
+  ];
+  const [storeUrl, setStoreUrl] = useState(sampleStores[0].url);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
+
+  const liveQueries = [
+    "best waterproof hiking boots under ₹5,000",
+    "vibram sole grip lightweight monsoon boots",
+    "durable mountain trail footwear for rainy trek",
+    "breathable ankle support waterproof outdoor boots"
+  ];
+  const [activeQueryIndex, setActiveQueryIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveQueryIndex((prev) => (prev + 1) % liveQueries.length);
+    }, 3200);
+    return () => clearInterval(interval);
+  }, []);
 
   const analysisSteps = [
     { label: 'Reading your product catalog (12 SKUs)...', doneLabel: 'Catalog ingested (12 SKUs, Footwear & Gear)' },
@@ -37,91 +79,133 @@ export default function MerchantOnboardingCard({ onAnalyzeComplete }) {
   }, [isAnalyzing, stepIndex]);
 
   return (
-    <div className="max-w-2xl mx-auto my-10 animate-in fade-in zoom-in-95 duration-300">
+    <div className="max-w-3xl mx-auto my-6 sm:my-12 animate-in fade-in zoom-in-95 duration-300">
       {!isAnalyzing ? (
-        <div className="bg-surface-card border border-surface-border rounded-3xl p-8 sm:p-12 shadow-2xl relative overflow-hidden">
-          {/* Subtle glow header */}
-          <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-brand-500 via-indigo-500 to-emerald-400" />
+        <div className="relative rounded-3xl bg-[#121624]/90 backdrop-blur-xl border border-slate-700/60 p-8 sm:p-12 shadow-2xl overflow-hidden">
           
+          {/* Top hairline bar */}
+          <div className="absolute top-0 inset-x-0 h-1 bg-slate-700/80" />
+
+          {/* Header Tag & Title */}
           <div className="text-center space-y-4">
-            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-blue text-xs font-semibold uppercase tracking-wider">
-              <Sparkles className="w-3.5 h-3.5" />
+            <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-slate-800 border border-slate-700 text-blue-200 text-xs font-mono tracking-wider">
+              <Sparkles className="w-3.5 h-3.5 text-blue-300" />
               <span>Razorpay AI Commerce Revenue Agent</span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
-              Find where AI is losing you customers.
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-white tracking-tight leading-tight">
+              Where AI is silently <br />
+              <span className="text-slate-300 font-medium">
+                losing you customers.
+              </span>
             </h1>
 
-            <p className="text-sm text-slate-300 max-w-lg mx-auto leading-relaxed">
-              Catalyst discovers why AI shopping engines recommend competitors instead of your store, diagnoses evidence gaps, and drafts verified product fixes to boost your revenue.
+            <p className="text-sm text-slate-300 max-w-lg mx-auto leading-relaxed font-sans">
+              AI engines (ChatGPT, Gemini 3.5, Perplexity) recommend competitors when your catalog lacks structured proof. Catalyst finds the gap and fixes it.
             </p>
           </div>
 
+          {/* Live Query Radar Ticker */}
+          <div className="mt-8 p-3 rounded-2xl bg-[#0d0f17] border border-slate-800 flex items-center justify-between gap-3 text-xs font-mono">
+            <div className="flex items-center space-x-2 text-slate-400 pl-2">
+              <Radar className="w-4 h-4 text-blue-300" />
+              <span className="text-[11px] font-medium uppercase tracking-wider text-slate-400">Live AI Search Radar:</span>
+            </div>
+            <div className="text-slate-300 truncate font-mono text-[11px] bg-slate-800/60 px-3 py-1 rounded-lg border border-slate-700/60 flex-1 max-w-md text-right">
+              "{liveQueries[activeQueryIndex]}"
+            </div>
+          </div>
+
+          {/* Store URL Input Dock */}
           <div className="mt-8 space-y-4">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
-                🔗 Your Store URL
-              </label>
-              <div className="relative">
-                <Globe className="w-4 h-4 text-slate-500 absolute left-4 top-1/2 -translate-y-1/2" />
+              <div className="flex items-center justify-between mb-2">
+                <label className="text-xs font-semibold uppercase tracking-wider text-slate-300 font-mono">
+                  🔗 Enter Your Storefront URL
+                </label>
+                <span className="text-[11px] text-slate-400 font-mono">Supports any headless / web store</span>
+              </div>
+              
+              <div className="relative group">
+                <Globe className="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2 transition-colors" />
                 <input
                   type="text"
                   value={storeUrl}
                   onChange={(e) => setStoreUrl(e.target.value)}
-                  placeholder="https://yourstore.com"
-                  className="w-full pl-11 pr-4 py-3.5 rounded-xl bg-surface-dark border border-surface-border text-white text-sm focus:outline-none focus:border-brand-500 font-mono transition-colors"
+                  placeholder="https://yourstore.vercel.app"
+                  className="w-full pl-12 pr-4 py-3.5 rounded-xl bg-[#0d0f17] border border-slate-700 text-white text-sm focus:outline-none focus:border-blue-400 font-mono transition-all placeholder:text-slate-600"
                 />
               </div>
             </div>
 
-            <div className="flex flex-wrap gap-2 pt-1">
-              <span className="text-[11px] text-slate-400 self-center">Try sample store:</span>
-              <button
-                onClick={() => setStoreUrl('https://apexridge-outdoors.myshopify.com')}
-                className="text-[11px] px-2.5 py-1 rounded-lg bg-surface-dark border border-surface-border text-slate-300 hover:text-white hover:border-slate-500 transition-colors font-mono"
-              >
-                Apex Ridge Outdoors
-              </button>
-              <button
-                onClick={() => setStoreUrl('https://monsoon-trekker.in')}
-                className="text-[11px] px-2.5 py-1 rounded-lg bg-surface-dark border border-surface-border text-slate-300 hover:text-white hover:border-slate-500 transition-colors font-mono"
-              >
-                Monsoon Trekker
-              </button>
+            {/* Interactive Sample Store Pills */}
+            <div className="pt-1">
+              <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 block mb-2">
+                Or inspect verified test stores:
+              </span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                {sampleStores.map((store) => (
+                  <button
+                    key={store.url}
+                    type="button"
+                    onClick={() => setStoreUrl(store.url)}
+                    className={`p-3 rounded-xl border text-left transition-all font-mono cursor-pointer flex items-center justify-between group ${
+                      storeUrl === store.url
+                        ? 'bg-slate-800/80 border-blue-400/50 shadow-sm'
+                        : 'bg-[#0d0f17] border-slate-800 hover:border-slate-700 hover:bg-slate-800/40'
+                    }`}
+                  >
+                    <div>
+                      <div className="text-xs font-semibold text-white group-hover:text-blue-200 transition-colors flex items-center gap-1.5">
+                        <span>{store.name}</span>
+                        {storeUrl === store.url && (
+                          <span className="w-1.5 h-1.5 rounded-full bg-blue-300" />
+                        )}
+                      </div>
+                      <div className="text-[10px] text-slate-400">{store.tag}</div>
+                    </div>
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 border border-slate-700 text-slate-300 font-sans">
+                      {store.badge}
+                    </span>
+                  </button>
+                ))}
+              </div>
             </div>
 
+            {/* Big Tactile CTA */}
             <button
               onClick={handleStartAnalysis}
-              className="w-full mt-4 py-4 rounded-2xl bg-brand-500 hover:bg-brand-600 active:scale-[0.99] text-white text-base font-bold shadow-xl shadow-brand-500/25 transition-all flex items-center justify-center space-x-2.5 group"
+              className="w-full mt-6 py-3.5 px-6 rounded-xl bg-blue-600 hover:bg-blue-500 active:scale-[0.99] text-white text-sm font-semibold transition-all flex items-center justify-center space-x-2.5 cursor-pointer shadow-sm"
             >
-              <Sparkles className="w-5 h-5 text-indigo-200 group-hover:rotate-12 transition-transform" />
-              <span>✦ Analyze my store</span>
-              <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+              <Sparkles className="w-4 h-4 text-blue-200" />
+              <span>Run Autonomous Opportunity Scan</span>
+              <ArrowRight className="w-4 h-4 ml-1" />
             </button>
 
-            <div className="flex items-center justify-center space-x-2 text-xs text-slate-400 pt-2">
+            {/* Invariant Note */}
+            <div className="flex items-center justify-center space-x-2 text-xs text-slate-400 pt-2 font-mono">
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
-              <span>Takes ~30 seconds • No changes made without your explicit approval</span>
+              <span>100% Deterministic • No changes applied without merchant sign-off</span>
             </div>
           </div>
         </div>
       ) : (
-        /* Agent Progress Screen */
-        <div className="bg-surface-card border border-surface-border rounded-3xl p-8 sm:p-12 shadow-2xl space-y-8 animate-in fade-in duration-300">
-          <div className="text-center space-y-2">
-            <div className="inline-flex p-3 rounded-2xl bg-brand-500/10 border border-brand-500/20 text-brand-blue mb-2 animate-pulse">
+        /* Agent Progress Scanner Screen */
+        <div className="relative rounded-3xl bg-[#121624]/95 backdrop-blur-xl border border-slate-700 p-8 sm:p-12 shadow-2xl space-y-8 animate-in fade-in duration-300 overflow-hidden">
+          
+          <div className="text-center space-y-3">
+            <div className="inline-flex p-3 rounded-2xl bg-slate-800 border border-slate-700 text-blue-300 mb-1">
               <Loader2 className="w-6 h-6 animate-spin" />
             </div>
-            <h2 className="text-2xl font-extrabold text-white">
-              Catalyst is analyzing your store
+            <h2 className="text-2xl font-display font-bold text-white tracking-tight">
+              Observatory Engine Active
             </h2>
             <p className="text-xs text-slate-400 font-mono">
-              Analyzing: <span className="text-brand-blue">{storeUrl}</span>
+              Scanning catalog endpoints for: <span className="text-blue-200 font-semibold">{storeUrl}</span>
             </p>
           </div>
 
-          <div className="space-y-4 max-w-md mx-auto">
+          <div className="space-y-3 max-w-md mx-auto bg-[#0d0f17] p-5 rounded-2xl border border-slate-800">
             {analysisSteps.map((step, idx) => {
               const isDone = idx < stepIndex;
               const isCurrent = idx === stepIndex;
@@ -133,28 +217,28 @@ export default function MerchantOnboardingCard({ onAnalyzeComplete }) {
                     isDone
                       ? 'text-slate-200 font-medium'
                       : isCurrent
-                      ? 'text-brand-blue font-bold scale-[1.02]'
-                      : 'text-slate-500'
+                      ? 'text-blue-200 font-semibold scale-[1.01]'
+                      : 'text-slate-500 font-mono'
                   }`}
                 >
                   <div className="mt-0.5 flex-shrink-0">
                     {isDone ? (
                       <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                     ) : isCurrent ? (
-                      <div className="w-4 h-4 rounded-full border-2 border-brand-500 border-t-transparent animate-spin" />
+                      <div className="w-4 h-4 rounded-full border-2 border-blue-400 border-t-transparent animate-spin" />
                     ) : (
-                      <div className="w-4 h-4 rounded-full border border-slate-700" />
+                      <div className="w-4 h-4 rounded-full border border-slate-800" />
                     )}
                   </div>
-                  <span>{isDone ? step.doneLabel : step.label}</span>
+                  <span className="font-mono">{isDone ? step.doneLabel : step.label}</span>
                 </div>
               );
             })}
           </div>
 
-          <div className="pt-2 text-center">
-            <span className="text-[11px] font-mono text-slate-400">
-              Powered by <strong className="text-brand-blue">Gemini 3.5 Flash</strong> reasoning + Deterministic Verification
+          <div className="pt-1 text-center">
+            <span className="text-[11px] font-mono text-slate-500">
+              Model: <strong className="text-blue-200">Gemini 3.5 Flash</strong> • Verified Ground Truth Invariants
             </span>
           </div>
         </div>

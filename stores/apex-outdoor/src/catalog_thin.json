@@ -1,0 +1,202 @@
+[
+  {
+    "product_id": "merch-boot-01",
+    "name": "Apex Ridge Waterproof Trekking Boots",
+    "category": "Footwear",
+    "price": 4499.0,
+    "attributes": [
+      "Material: Synthetic Leather",
+      "Color: Olive Brown",
+      "Sole: Rubber",
+      "Closure: Lace-Up",
+      "Warranty: 6 months"
+    ],
+    "review_count": 18,
+    "review_detail_score": 0.22,
+    "faq_count": 3,
+    "has_structured_schema": false,
+    "catalog_state": "thin"
+  },
+  {
+    "product_id": "merch-shoe-02",
+    "name": "SwiftTrail Aero Running Shoes",
+    "category": "Footwear",
+    "price": 3299.0,
+    "attributes": [
+      "Type: Running Shoes",
+      "Color: Stealth Black",
+      "Weight: Lightweight",
+      "Material: Mesh"
+    ],
+    "review_count": 24,
+    "review_detail_score": 0.28,
+    "faq_count": 2,
+    "has_structured_schema": false,
+    "catalog_state": "thin"
+  },
+  {
+    "product_id": "merch-pack-03",
+    "name": "Venture 45L Expedition Backpack",
+    "category": "Outdoor Gear",
+    "price": 2899.0,
+    "attributes": [
+      "Capacity: 45 Litres",
+      "Color: Forest Green",
+      "Material: Polyester",
+      "Compartments: 3"
+    ],
+    "review_count": 14,
+    "review_detail_score": 0.19,
+    "faq_count": 2,
+    "has_structured_schema": false,
+    "catalog_state": "thin"
+  },
+  {
+    "product_id": "merch-tent-04",
+    "name": "Alpine Haven 3-Person Camping Tent",
+    "category": "Outdoor Gear",
+    "price": 5499.0,
+    "attributes": [
+      "Capacity: 3 Person",
+      "Season: 3-Season",
+      "Color: High-Vis Orange",
+      "Poles: Fiber Glass"
+    ],
+    "review_count": 11,
+    "review_detail_score": 0.25,
+    "faq_count": 1,
+    "has_structured_schema": false,
+    "catalog_state": "thin"
+  },
+  {
+    "product_id": "merch-jack-05",
+    "name": "StormShield Windproof Softshell Jacket",
+    "category": "Apparel",
+    "price": 2499.0,
+    "attributes": [
+      "Fit: Regular",
+      "Fabric: Softshell",
+      "Color: Navy Blue",
+      "Pockets: 2"
+    ],
+    "review_count": 29,
+    "review_detail_score": 0.31,
+    "faq_count": 3,
+    "has_structured_schema": false,
+    "catalog_state": "thin"
+  },
+  {
+    "product_id": "merch-fleece-06",
+    "name": "ThermaGrid High-Loft Fleece Pullover",
+    "category": "Apparel",
+    "price": 1899.0,
+    "attributes": [
+      "Material: Microfleece",
+      "Neck: Quarter Zip",
+      "Color: Charcoal Grey"
+    ],
+    "review_count": 16,
+    "review_detail_score": 0.20,
+    "faq_count": 1,
+    "has_structured_schema": false,
+    "catalog_state": "thin"
+  },
+  {
+    "product_id": "merch-head-07",
+    "name": "LumenPulse 600 USB-C Headlamp",
+    "category": "Outdoor Gear",
+    "price": 1299.0,
+    "attributes": [
+      "Brightness: 600 Lumens",
+      "Rechargeable: Yes",
+      "Battery: Built-in"
+    ],
+    "review_count": 22,
+    "review_detail_score": 0.27,
+    "faq_count": 2,
+    "has_structured_schema": false,
+    "catalog_state": "thin"
+  },
+  {
+    "product_id": "merch-audio-08",
+    "name": "WaveSync Pro ANC Wireless Earbuds",
+    "category": "Electronics",
+    "price": 2999.0,
+    "attributes": [
+      "Type: In-Ear True Wireless",
+      "Bluetooth: 5.3",
+      "Color: Matte Black",
+      "Battery Life: 28 Hours"
+    ],
+    "review_count": 35,
+    "review_detail_score": 0.33,
+    "faq_count": 4,
+    "has_structured_schema": false,
+    "catalog_state": "thin"
+  },
+  {
+    "product_id": "merch-bag-09",
+    "name": "Nomad Daily Urban Commuter Daypack 22L",
+    "category": "Outdoor Gear",
+    "price": 1999.0,
+    "attributes": [
+      "Capacity: 22L",
+      "Laptop Sleeve: 15.6 inch",
+      "Material: Nylon"
+    ],
+    "review_count": 19,
+    "review_detail_score": 0.21,
+    "faq_count": 2,
+    "has_structured_schema": false,
+    "catalog_state": "thin"
+  },
+  {
+    "product_id": "merch-pant-10",
+    "name": "TerraFlex Quick-Dry Trail Pants",
+    "category": "Apparel",
+    "price": 1799.0,
+    "attributes": [
+      "Fit: Straight Leg",
+      "Fabric: Stretch Nylon",
+      "Color: Khaki",
+      "Pockets: 4"
+    ],
+    "review_count": 15,
+    "review_detail_score": 0.24,
+    "faq_count": 2,
+    "has_structured_schema": false,
+    "catalog_state": "thin"
+  },
+  {
+    "product_id": "merch-cook-11",
+    "name": "PyroCompact Ultralight Camp Stove",
+    "category": "Outdoor Gear",
+    "price": 1199.0,
+    "attributes": [
+      "Fuel: Butane/Propane",
+      "Weight: 95g",
+      "Ignition: Piezo"
+    ],
+    "review_count": 20,
+    "review_detail_score": 0.26,
+    "faq_count": 1,
+    "has_structured_schema": false,
+    "catalog_state": "thin"
+  },
+  {
+    "product_id": "merch-bot-12",
+    "name": "HydroShield 1000ml Insulated Flask",
+    "category": "Outdoor Gear",
+    "price": 999.0,
+    "attributes": [
+      "Volume: 1000ml",
+      "Insulation: Double Wall Vacuum",
+      "Steel: 304 Stainless"
+    ],
+    "review_count": 31,
+    "review_detail_score": 0.30,
+    "faq_count": 2,
+    "has_structured_schema": false,
+    "catalog_state": "thin"
+  }
+]

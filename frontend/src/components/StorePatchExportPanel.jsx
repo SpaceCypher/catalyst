@@ -8,12 +8,13 @@ import {
   Webhook, 
   ShieldCheck, 
   Sparkles, 
-  ArrowRight,
-  Code2,
-  CheckCircle2
+  ArrowRight, 
+  Code2, 
+  CheckCircle2,
+  ExternalLink
 } from 'lucide-react';
 
-export default function StorePatchExportPanel({ activeDiff }) {
+export default function StorePatchExportPanel({ activeDiff, storeUrl = 'https://apex-outdoor.vercel.app' }) {
   const [copied, setCopied] = useState(false);
   const [activeFormat, setActiveFormat] = useState('jsonld');
 
@@ -21,7 +22,7 @@ export default function StorePatchExportPanel({ activeDiff }) {
     "@context": "https://schema.org/",
     "@type": "Product",
     "name": "Apex Ridge Waterproof Trekking Boots",
-    "image": "https://apexridge.in/assets/boots-main.jpg",
+    "image": "https://apex-outdoor.vercel.app/assets/boots-main.jpg",
     "description": "Premium waterproof monsoon trekking boots featuring IPX7 membrane, 420g lightweight frame, and Vibram MegaGrip sole.",
     "brand": { "@type": "Brand", "name": "Apex Ridge" },
     "offers": {
@@ -57,6 +58,7 @@ ${jsonLdCode}
   const webhookPayload = JSON.stringify({
     event: "catalyst.patch.published",
     store_id: "store_apex_01",
+    store_url: storeUrl,
     product_id: "merch-boot-01",
     status: activeDiff?.status || "approved",
     unsupported_claims_count: 0,
@@ -85,6 +87,8 @@ ${jsonLdCode}
     URL.revokeObjectURL(url);
   };
 
+  const cleanDomain = storeUrl.replace(/^https?:\/\//, '').replace(/\/$/, '');
+
   return (
     <div className="space-y-6">
       
@@ -99,7 +103,7 @@ ${jsonLdCode}
             Publish & Export Bounded Fix Patch
           </h1>
           <p className="text-xs text-slate-400 mt-1 max-w-2xl">
-            Deploy the verified fix to your live store. Catalyst provides both an automated connected storefront pipeline and clean exportable patches for Shopify, WooCommerce, or custom CMS platforms.
+            Deploy the verified fix to your live store. Catalyst provides both automated connected storefront synchronization and clean exportable patches for Vercel, Next.js Commerce, Headless APIs, or custom platforms.
           </p>
         </div>
 
@@ -133,19 +137,38 @@ ${jsonLdCode}
               Direct storefront integration with <strong>Apex Ridge Outdoors</strong>. The approved patch is automatically synced to the treatment testing arm.
             </p>
 
-            <div className="p-3 bg-surface-dark rounded-xl border border-surface-border text-[11px] font-mono space-y-1 text-slate-400">
-              <div>Store: <strong className="text-slate-200">apexridge-outdoors.myshopify.com</strong></div>
-              <div>SKU: <strong className="text-brand-blue">merch-boot-01</strong></div>
-              <div>Status: <strong className="text-emerald-400">{activeDiff?.status === 'approved' || activeDiff?.status === 'applied' ? 'Published to Treatment Arm' : 'Awaiting Approval'}</strong></div>
+            <div className="p-3 bg-surface-dark rounded-xl border border-surface-border text-[11px] font-mono space-y-1.5 text-slate-400">
+              <div className="flex items-center justify-between">
+                <span>Store:</span>
+                <a 
+                  href={storeUrl} 
+                  target="_blank" 
+                  rel="noreferrer"
+                  className="text-emerald-400 hover:underline flex items-center gap-1 font-bold"
+                >
+                  <span>{cleanDomain}</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              </div>
+              <div className="flex items-center justify-between">
+                <span>SKU:</span>
+                <strong className="text-brand-blue">merch-boot-01</strong>
+              </div>
+              <div className="flex items-center justify-between">
+                <span>Status:</span>
+                <strong className="text-emerald-400">
+                  {activeDiff?.status === 'approved' || activeDiff?.status === 'applied' ? 'Published to Treatment Arm' : 'Awaiting Approval'}
+                </strong>
+              </div>
             </div>
           </div>
 
-          {/* Pathway B: Webhook / CMS */}
+          {/* Pathway B: Webhook / Headless CMS */}
           <div className="bg-surface-card border border-surface-border rounded-2xl p-5 space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
                 <Webhook className="w-4 h-4 text-indigo-400" />
-                <span>CMS Webhook API</span>
+                <span>Headless CMS Webhook API</span>
               </span>
               <span className="text-[10px] font-mono text-slate-400 bg-surface-dark px-2 py-0.5 rounded">
                 Ready
@@ -153,11 +176,11 @@ ${jsonLdCode}
             </div>
 
             <p className="text-xs text-slate-300">
-              Automatically push verified structured fixes to headless CMS (Contentful, Strapi, Sanity, Shopify GraphQL Admin).
+              Automatically push verified structured fixes to headless commerce APIs (Next.js Commerce, Strapi, Sanity, Contentful, Custom API).
             </p>
 
             <div className="p-3 bg-surface-dark rounded-xl border border-surface-border text-[10px] font-mono text-slate-400 truncate">
-              POST https://api.yourstore.com/webhooks/catalyst
+              POST https://{cleanDomain}/api/webhooks/catalyst
             </div>
           </div>
 

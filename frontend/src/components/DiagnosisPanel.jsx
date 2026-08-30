@@ -12,8 +12,9 @@ import {
   Info
 } from 'lucide-react';
 
-export default function DiagnosisPanel({ opportunities = [], onProposeFix, isGenerating }) {
+export default function DiagnosisPanel({ opportunities = [], activeDiff, onProposeFix, isGenerating }) {
   const [selectedQueryIndex, setSelectedQueryIndex] = useState(0);
+  const isApproved = activeDiff?.status === 'approved' || activeDiff?.status === 'applied';
 
   const sampleQueries = [
     {
@@ -82,9 +83,19 @@ export default function DiagnosisPanel({ opportunities = [], onProposeFix, isGen
         <button
           onClick={() => onProposeFix('opp-01', 'merch-boot-01')}
           disabled={isGenerating}
-          className="inline-flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-600 text-white text-xs font-bold shadow-lg transition-all hover:scale-105"
+          className={`inline-flex items-center space-x-2 px-5 py-2.5 rounded-xl text-xs font-bold shadow-lg transition-all ${
+            isApproved 
+              ? 'bg-emerald-600/20 text-emerald-400 border border-emerald-500/40 hover:bg-emerald-600/30'
+              : 'bg-brand-500 hover:bg-brand-600 text-white hover:scale-105'
+          }`}
         >
-          <span>{isGenerating ? 'Generating...' : 'Propose Bounded Fix'}</span>
+          <span>
+            {isGenerating 
+              ? 'Generating...' 
+              : isApproved 
+              ? '✓ Fix Approved (Review Diff)' 
+              : 'Propose Bounded Fix'}
+          </span>
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>

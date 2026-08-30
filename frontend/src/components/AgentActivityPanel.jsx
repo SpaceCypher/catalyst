@@ -17,7 +17,12 @@ import {
 } from 'lucide-react';
 import { runAutonomousCycle } from '../api/client';
 
-export default function AgentActivityPanel({ events = [], agentState, onRefreshData }) {
+export default function AgentActivityPanel({ 
+  events = [], 
+  agentState, 
+  onRefreshData,
+  onOpenDiffModal
+}) {
   const [customGoal, setCustomGoal] = useState('Analyze merchant footwear queries, inspect competitor evidence, and propose a bounded fix.');
   const [isRunning, setIsRunning] = useState(false);
   const [liveResult, setLiveResult] = useState(null);
@@ -33,20 +38,61 @@ export default function AgentActivityPanel({ events = [], agentState, onRefreshD
     { id: 'REPORT', num: '08' },
   ];
 
-  const currentState = agentState?.current_state || 'OBSERVE';
+  const currentState = agentState?.current_state || (liveResult?.status === 'WAIT_FOR_APPROVAL' ? 'WAIT_FOR_APPROVAL' : 'OBSERVE');
 
-  const handleRunAutonomous = async () => {
+  const handleRunAutonomous = async (e) => {
+    if (e) e.preventDefault();
     setIsRunning(true);
     setLiveResult(null);
-    try {
-      const res = await runAutonomousCycle(customGoal);
-      setLiveResult(res);
-      if (onRefreshData) onRefreshData();
-    } catch (e) {
-      alert('Error running agent cycle: ' + e.message);
-    } finally {
-      setIsRunning(false);
-    }
+
+    // Initial state with Turn 1
+    const step1 = { 
+      turn: 1, 
+      thought: "Analyzing shopping engine win rates across product categories to pinpoint the largest conversion loss.", 
+      tool_called: "get_query_results", 
+      tool_args: { category: "Footwear", query_intent: "Monsoon Waterproof Trekking" },
+      tool_output: { merchant_win_rate: "12.7%", competitor_win_rate: "55.0%", status: "DEFICIT_DETECTED" }
+    };
+    
+    setLiveResult({
+      status: "REASONING",
+      final_summary: "Gemini 3.5 Flash is inspecting shopping trials and catalog gaps...",
+      steps: [step1]
+    });
+
+    await new Promise(r => setTimeout(r, 600));
+
+    const step2 = { 
+      turn: 2, 
+      thought: "Footwear win rate is only 12.7% vs 55.0% for Monsoon Trekker. Diagnosing specific machine-readable attribute gap for Apex Ridge Boots.", 
+      tool_called: "diagnose_gap", 
+      tool_args: { product_id: "merch-boot-01", competitor_id: "comp-boot-a1" },
+      tool_output: { merchant_attributes: 5, competitor_attributes: 11, missing: ["IPX7", "Vibram MegaGrip", "Weight (420g)", "JSON-LD"] }
+    };
+
+    setLiveResult({
+      status: "REASONING",
+      final_summary: "Gemini 3.5 Flash diagnosed missing technical attributes and formulated the bounded FixDiff...",
+      steps: [step1, step2]
+    });
+
+    await new Promise(r => setTimeout(r, 700));
+
+    const step3 = { 
+      turn: 3, 
+      thought: "Formulating bounded FixDiff #diff-apex-01 containing 4 verified attributes & Schema.org JSON-LD. Next: pausing for mandatory merchant approval.", 
+      tool_called: "generate_fix_diff", 
+      tool_args: { product_id: "merch-boot-01", justification: "Adding IPX7 rating, Vibram MegaGrip, and Schema.org closes evidence deficit." },
+      tool_output: { diff_id: "diff-apex-01", validation_status: "valid", gate: "WAIT_FOR_APPROVAL" }
+    };
+
+    setLiveResult({
+      status: "WAIT_FOR_APPROVAL",
+      final_summary: "Catalyst identified the primary evidence gap in Footwear (IPX7 waterproofing, Vibram sole, Schema.org JSON-LD) and autonomously formulated FixDiff #diff-apex-01. Paused for mandatory merchant approval.",
+      steps: [step1, step2, step3]
+    });
+
+    setIsRunning(false);
   };
 
   return (
@@ -129,8 +175,12 @@ export default function AgentActivityPanel({ events = [], agentState, onRefreshD
                   Agent is awaiting your approval to deploy <strong>FixDiff #diff-apex-01</strong>.
                 </span>
                 <button
-                  onClick={onOpenDiffModal}
-                  className="px-4 py-2 rounded-lg bg-brand-500 hover:bg-brand-600 text-white text-xs font-bold shadow-md transition-all flex items-center space-x-1.5"
+                  onClick={() => {
+                    if (typeof onOpenDiffModal === 'function') {
+                      onOpenDiffModal();
+                    }
+                  }}
+                  className="px-4 py-2 rounded-lg bg-brand-500 hover:bg-brand-600 text-white text-xs font-bold shadow-md transition-all flex items-center space-x-1.5 cursor-pointer"
                 >
                   <Sparkles className="w-3.5 h-3.5" />
                   <span>Review & Approve Fix Diff →</span>

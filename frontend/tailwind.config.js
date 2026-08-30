@@ -8,26 +8,34 @@ export default {
     extend: {
       colors: {
         brand: {
-          50: '#f0f7ff',
-          100: '#e0effe',
-          500: '#0c8ce9',
-          600: '#0284c7',
-          700: '#0369a1',
-          900: '#082f49',
-          razor: '#0c2340',
-          blue: '#3395ff'
+          50: '#f8fafc',
+          100: '#f1f5f9',
+          400: '#93c5fd', // Soft Ice Blue
+          500: '#60a5fa', // Muted Platinum Blue
+          600: '#3b82f6', // Calm Deep Blue
+          700: '#2563eb',
+          900: '#1e293b',
+          razor: '#0f172a',
+          blue: '#93c5fd',
+          cyan: '#7dd3fc',
+          emerald: '#86efac', // Soft Sage Emerald
+          rose: '#fda4af',    // Soft Coral Slate
+          amber: '#fde68a',   // Soft Muted Warmth
         },
         surface: {
-          dark: '#0a0d14',
-          card: '#111726',
-          cardLighter: '#172033',
-          border: '#1f293d',
-          borderLight: '#2e3d5b'
+          dark: '#090a0f',      // Deep Zinc Canvas
+          obsidian: '#0d0f17',  // Charcoal Canvas
+          card: '#121624',      // Soft Card Surface
+          cardLighter: '#171c2e',
+          border: '#272d3d',    // Warm Slate Border
+          borderLight: '#384156'
         }
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-        mono: ['JetBrains Mono', 'Fira Code', 'monospace']
+        display: ['Outfit', 'Space Grotesk', 'sans-serif'],
+        sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
+        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+        space: ['Space Grotesk', 'sans-serif']
       }
     },
   },

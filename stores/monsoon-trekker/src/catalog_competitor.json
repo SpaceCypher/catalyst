@@ -1,0 +1,156 @@
+[
+  {
+    "product_id": "comp-boot-a1",
+    "name": "SummitPro Trek Ultra Waterproof Boots",
+    "category": "Footwear",
+    "price": 4999.0,
+    "attributes": [
+      "Waterproof Rating: Gore-Tex Performance Comfort 28,000mm Membrane",
+      "Weight: 450g per boot",
+      "Terrain: Rugged High-Altitude Alpine & Wet Trails",
+      "Sole: Vibram Arctic Grip Outsole with 5mm Lugs",
+      "Upper: 2.0mm Waterproof Nubuck Leather with Rubber Toe Rands",
+      "Support: Full Ankle Lock with Memory Foam Collar",
+      "Midsole: Dual-Density Polyurethane with Carbon Shank",
+      "Size Guide: True to size, medium-wide width",
+      "Lacing: 2-Zone Lacing with Ball-Bearing Eyelets",
+      "Breathability: 14,000 g/m²/24h",
+      "Warranty: 2-Year Waterproof Guarantee"
+    ],
+    "review_count": 312,
+    "review_detail_score": 0.93,
+    "faq_count": 18,
+    "has_structured_schema": true,
+    "catalog_state": "competitor"
+  },
+  {
+    "product_id": "comp-shoe-a2",
+    "name": "TrailBlazer X Pro Carbon Trail Runner",
+    "category": "Footwear",
+    "price": 3899.0,
+    "attributes": [
+      "Weight: 230g Ultralight",
+      "Plate: Full-Length Carbon-Composite Rock Protection Plate",
+      "Drop: 4mm Race Offset",
+      "Upper: Ripstop Kevlar-Reinforced Mesh",
+      "Grip: 4.5mm Vibram Megagrip Wet Rubber",
+      "Midsole: Pebax Energy-Return Foam",
+      "Fit: Precision Heel Lock with Roomy Toe Box"
+    ],
+    "review_count": 275,
+    "review_detail_score": 0.89,
+    "faq_count": 15,
+    "has_structured_schema": true,
+    "catalog_state": "competitor"
+  },
+  {
+    "product_id": "comp-pack-a3",
+    "name": "Osprey-Style Apex Expedition 50L Rucksack",
+    "category": "Outdoor Gear",
+    "price": 3299.0,
+    "attributes": [
+      "Capacity: 50 Litres Technical Load",
+      "Rain Protection: Integrated High-Vis Rain Cover in dedicated pocket",
+      "Back System: Anti-Gravity Suspended 3D Mesh Backpanel",
+      "Hydration: External Hydration Sleeve for up to 3L Reservoir",
+      "Access: Top, Side and Sleeping Bag Compartment",
+      "Pockets: 8 Strategic Pockets + Trekking Pole Stow-on-the-Go"
+    ],
+    "review_count": 420,
+    "review_detail_score": 0.96,
+    "faq_count": 20,
+    "has_structured_schema": true,
+    "catalog_state": "competitor"
+  },
+  {
+    "product_id": "comp-tent-a4",
+    "name": "TerraNova StormShield 3P All-Weather Tent",
+    "category": "Outdoor Gear",
+    "price": 5999.0,
+    "attributes": [
+      "Capacity: 3 Person Spacious Geodesic Dome",
+      "Hydrostatic Head: 5000mm Floor / 3000mm Flysheet Taped PU",
+      "Poles: Yunan 7001 Aluminum High-Strength Poles",
+      "Wind Resistance: Beaufort Scale 8 Tested (75 km/h)",
+      "Packed Weight: 2.5kg Full Kit",
+      "Vestibules: Dual Porches with Storm Valances"
+    ],
+    "review_count": 180,
+    "review_detail_score": 0.87,
+    "faq_count": 14,
+    "has_structured_schema": true,
+    "catalog_state": "competitor"
+  },
+  {
+    "product_id": "comp-jack-a5",
+    "name": "MountainTech 3-Layer GORE Windstopper Jacket",
+    "category": "Apparel",
+    "price": 2799.0,
+    "attributes": [
+      "Technology: 3-Layer Windstopper Fabric with DWR C6",
+      "Breathability: RET < 6 Extremely Breathable",
+      "Ventilation: 2-Way Underarm Pit Zips",
+      "Pockets: 3 YKK Aquaguard Zippered Pockets",
+      "Hood: 3-Way Adjustable Helmet-Compatible Storm Hood"
+    ],
+    "review_count": 350,
+    "review_detail_score": 0.92,
+    "faq_count": 16,
+    "has_structured_schema": true,
+    "catalog_state": "competitor"
+  },
+  {
+    "product_id": "comp-audio-b1",
+    "name": "SoundPeak Elite 85 ANC True Wireless Earbuds",
+    "category": "Electronics",
+    "price": 3499.0,
+    "attributes": [
+      "Active Noise Cancellation: Adaptive Quad-Mic ANC up to 42dB",
+      "Drivers: 12mm Beryllium Coated Hi-Res Acoustic Drivers",
+      "Battery: 9 hours bud + 36 hours case (45h Total)",
+      "Charging: Fast Qi Wireless + 5-min quick charge for 2h play",
+      "IP Rating: IP57 Dust and Waterproof (Can be washed under tap)",
+      "App Control: 10-Band Graphic EQ + Hearing Test Profile"
+    ],
+    "review_count": 480,
+    "review_detail_score": 0.95,
+    "faq_count": 22,
+    "has_structured_schema": true,
+    "catalog_state": "competitor"
+  },
+  {
+    "product_id": "comp-head-b2",
+    "name": "NightRanger 750 Tactical Dual-Fuel Headlamp",
+    "category": "Outdoor Gear",
+    "price": 1499.0,
+    "attributes": [
+      "Lumens: 750 Lumens Turbo with PowerTap Instant Brightness Sensor",
+      "Beam: 125m Focused Spot / 30m Wide Flood",
+      "Dual Fuel: 2400mAh Li-ion USB-C or 3x AAA Alkaline",
+      "Rating: IP67 Submersible Waterproof to 1 meter for 30 min",
+      "Modes: Full strength, Dimming, Strobe, RGB Red/Green/Blue night-vision"
+    ],
+    "review_count": 290,
+    "review_detail_score": 0.91,
+    "faq_count": 15,
+    "has_structured_schema": true,
+    "catalog_state": "competitor"
+  },
+  {
+    "product_id": "comp-fleece-b3",
+    "name": "AlpineGrid Tech Thermal Hybrid Jacket",
+    "category": "Apparel",
+    "price": 2199.0,
+    "attributes": [
+      "Fabric: Polartec Power Grid Fleece with Wind-Resistant Chest Panel",
+      "Thermal Weight: 260g Medium Weight Active Insulation",
+      "Thumb Loops: Integrated Low-Profile Elasticated Thumb Holes",
+      "Zippers: YKK Front Zip with Draft Flap"
+    ],
+    "review_count": 210,
+    "review_detail_score": 0.88,
+    "faq_count": 12,
+    "has_structured_schema": true,
+    "catalog_state": "competitor"
+  }
+]

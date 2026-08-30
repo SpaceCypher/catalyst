@@ -4,39 +4,81 @@
 
 @layer base {
   body {
-    @apply bg-[#080b11] text-slate-100 antialiased font-sans;
-    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    @apply bg-[#090a0f] text-slate-200 antialiased font-sans selection:bg-slate-700 selection:text-white;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11", "ss01";
   }
+
+  h1, h2, h3, h4, .font-display {
+    font-family: 'Outfit', 'Space Grotesk', sans-serif;
+    letter-spacing: -0.025em;
+  }
+}
+
+/* Fine architectural grid background */
+.bg-grid-pattern {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
 }
 
 /* Custom Scrollbars */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0d121d;
+  background: #090a0f;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1f2a3f;
-  border-radius: 3px;
+  background: #1e2538;
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #2e3e5c;
+  background: #2d3748;
 }
 
-/* Subtle glow effects */
+/* Luxury Soft Glassmorphism */
+.glass-panel {
+  background: rgba(18, 22, 36, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.glass-panel-interactive {
+  background: rgba(18, 22, 36, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-panel-interactive:hover {
+  border-color: rgba(147, 197, 253, 0.25);
+  box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.4);
+}
+
+/* Soft, Calming Ambient Shadows (No harsh neons) */
 .glow-blue {
-  box-shadow: 0 0 35px -5px rgba(51, 149, 255, 0.15);
+  box-shadow: 0 4px 20px -4px rgba(96, 165, 250, 0.15);
 }
 
 .glow-emerald {
-  box-shadow: 0 0 35px -5px rgba(16, 185, 129, 0.15);
+  box-shadow: 0 4px 20px -4px rgba(134, 239, 172, 0.12);
 }
 
 .glow-rose {
-  box-shadow: 0 0 35px -5px rgba(244, 63, 94, 0.15);
+  box-shadow: 0 4px 20px -4px rgba(253, 164, 175, 0.12);
+}
+
+/* Ambient Radial Background */
+.bg-mesh-dark {
+  background-image: 
+    radial-gradient(at 10% 10%, rgba(96, 165, 250, 0.04) 0px, transparent 40%),
+    radial-gradient(at 90% 15%, rgba(134, 239, 172, 0.03) 0px, transparent 40%),
+    radial-gradient(at 50% 90%, rgba(99, 102, 241, 0.03) 0px, transparent 50%);
 }

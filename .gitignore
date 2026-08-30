@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+env/
+venv/
+ENV/
+.pytest_cache/
+
+# Databases & logs
+*.db-shm
+*.db-wal
+*.log
+
+# Node & Build artifacts
+node_modules/
+dist/
+.vercel
+.turbo
+
+# Environment secrets
+.env
+.env.local
+.DS_Store

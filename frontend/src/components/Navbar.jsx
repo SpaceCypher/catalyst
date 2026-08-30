@@ -24,37 +24,36 @@ export default function Navbar({
     { id: 'inbox', label: 'Home', icon: Inbox },
     { id: 'opportunities', label: 'Opportunities', icon: Search },
     { id: 'experiments', label: 'Experiments', icon: FlaskConical },
-    { id: 'export', label: 'Store Patch & Export', icon: Code2 },
+    { id: 'export', label: 'Store Patch', icon: Code2 },
     { id: 'console', label: 'Technical Console', icon: Terminal },
   ];
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-surface-border bg-[#070c14]/90 backdrop-blur-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    <header className="sticky top-0 z-40 w-full border-b border-surface-border bg-[#090a0f]/90 backdrop-blur-xl">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
         
         {/* Left: Brand Identity */}
-        <div className="flex items-center space-x-6">
+        <div className="flex items-center space-x-4 lg:space-x-6 flex-shrink-0">
           <div 
             onClick={() => setActiveTab('inbox')}
-            className="flex items-center space-x-2.5 cursor-pointer group"
+            className="flex items-center space-x-2.5 cursor-pointer group flex-shrink-0 select-none"
           >
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-500 flex items-center justify-center shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform">
-              <Sparkles className="w-4 h-4 text-white" />
+            <div className="w-8 h-8 rounded-xl bg-slate-800 border border-slate-700/60 flex items-center justify-center group-hover:border-blue-400/50 transition-all flex-shrink-0">
+              <Sparkles className="w-4 h-4 text-blue-300" />
             </div>
-            <div className="flex flex-col">
-              <span className="text-base font-black tracking-tight text-white flex items-center gap-1.5">
+            <div className="flex items-center space-x-2 flex-shrink-0">
+              <span className="text-base font-bold tracking-tight text-white whitespace-nowrap">
                 Catalyst
-                <span className="text-[10px] font-mono font-bold bg-brand-500/10 text-brand-blue border border-brand-500/20 px-1.5 py-0.2 rounded">
-                  AI Revenue Agent
-                </span>
               </span>
-              <span className="text-[10px] text-slate-400 font-mono">Connected: <strong>Apex Outdoor (Demo)</strong></span>
+              <span className="text-[10px] font-mono font-medium bg-slate-800 text-blue-200 border border-slate-700 px-2 py-0.5 rounded-full whitespace-nowrap inline-block">
+                Revenue Agent
+              </span>
             </div>
           </div>
 
           {/* Navigation Tabs */}
           {hasAnalyzed && (
-            <nav className="hidden md:flex items-center space-x-1 pl-4 border-l border-surface-border">
+            <nav className="hidden md:flex items-center space-x-1 pl-4 border-l border-surface-border flex-shrink-0">
               {navItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = activeTab === item.id;
@@ -62,14 +61,14 @@ export default function Navbar({
                   <button
                     key={item.id}
                     onClick={() => setActiveTab(item.id)}
-                    className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                    className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs whitespace-nowrap transition-all cursor-pointer ${
                       isActive
-                        ? 'bg-brand-500/15 text-brand-blue border border-brand-500/30 font-bold'
-                        : 'text-slate-400 hover:text-slate-200 hover:bg-surface-card'
+                        ? 'bg-slate-800/80 text-blue-200 border border-slate-700 font-semibold shadow-sm'
+                        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 border border-transparent'
                     }`}
                   >
-                    <Icon className="w-3.5 h-3.5" />
-                    <span>{item.label}</span>
+                    <Icon className="w-3.5 h-3.5 flex-shrink-0" />
+                    <span className="whitespace-nowrap">{item.label}</span>
                   </button>
                 );
               })}
@@ -78,25 +77,25 @@ export default function Navbar({
         </div>
 
         {/* Right: Actions */}
-        <div className="flex items-center space-x-2 sm:space-x-3">
+        <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
           
           {/* Open Storefront Button */}
           <button
             onClick={onOpenStorefront}
-            className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-emerald-950/60 hover:bg-emerald-900/60 border border-emerald-500/40 text-emerald-300 text-xs font-mono font-bold transition-all"
-            title="Open the connected Apex Outdoor merchant storefront"
+            className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-emerald-900/40 text-emerald-300 text-xs font-mono font-medium whitespace-nowrap transition-all cursor-pointer"
+            title="Open connected Apex Outdoor merchant storefront"
           >
-            <ShoppingBag className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Apex Storefront</span>
+            <ShoppingBag className="w-3.5 h-3.5 flex-shrink-0 text-emerald-400" />
+            <span className="whitespace-nowrap">Apex Storefront</span>
           </button>
 
-          {/* 5-Beat Demo Walkthrough Pitch Button */}
+          {/* 5-Beat Demo Pitch Button */}
           <button
             onClick={onOpenDemoModal}
-            className="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-lg bg-brand-500 hover:bg-brand-600 text-white text-xs font-bold shadow-md shadow-brand-500/20 transition-all active:scale-95"
+            className="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium whitespace-nowrap transition-all shadow-sm cursor-pointer"
           >
-            <PlayCircle className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">5-Beat Demo Pitch</span>
+            <PlayCircle className="w-3.5 h-3.5 flex-shrink-0" />
+            <span className="whitespace-nowrap hidden sm:inline">5-Beat Demo Pitch</span>
             <span className="sm:hidden">Demo</span>
           </button>
 
@@ -105,10 +104,10 @@ export default function Navbar({
             onClick={onResetDemo}
             disabled={isResetting}
             title="Reset store analysis"
-            className="flex items-center space-x-1 px-2.5 py-1.5 rounded-lg bg-surface-card hover:bg-surface-border border border-surface-border text-slate-400 hover:text-slate-200 text-xs font-mono transition-colors disabled:opacity-50"
+            className="flex items-center space-x-1 px-2.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-slate-200 text-xs font-mono whitespace-nowrap transition-colors disabled:opacity-50 cursor-pointer"
           >
-            <RotateCcw className={`w-3 h-3 ${isResetting ? 'animate-spin' : ''}`} />
-            <span className="hidden sm:inline">Reset</span>
+            <RotateCcw className={`w-3 h-3 flex-shrink-0 ${isResetting ? 'animate-spin' : ''}`} />
+            <span className="hidden sm:inline whitespace-nowrap">Reset</span>
           </button>
         </div>
 
