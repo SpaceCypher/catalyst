@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
-import MerchantOnboardingCard from './components/MerchantOnboardingCard';
-import AgentInboxHome from './components/AgentInboxHome';
-import DiagnosisPanel from './components/DiagnosisPanel';
-import ExperimentResultPanel from './components/ExperimentResultPanel';
-import StorePatchExportPanel from './components/StorePatchExportPanel';
-import AgentActivityPanel from './components/AgentActivityPanel';
+import CatalystAgentHome from './components/CatalystAgentHome';
+import StorefrontView from './components/StorefrontView';
+import ActivityTimeline from './components/ActivityTimeline';
+import ProofHub from './components/ProofHub';
 import DemoStorefront from './components/DemoStorefront';
 import DiffReviewModal from './components/DiffReviewModal';
 import DemoWalkthroughModal from './components/DemoWalkthroughModal';
@@ -28,7 +26,7 @@ import {
 export default function App() {
   const [currentView, setCurrentView] = useState('catalyst'); // 'catalyst' | 'storefront'
   const [hasAnalyzed, setHasAnalyzed] = useState(true);
-  const [activeTab, setActiveTab] = useState('inbox');
+  const [activeTab, setActiveTab] = useState('catalyst'); // 'catalyst' | 'store' | 'activity' | 'proof'
   const [opportunities, setOpportunities] = useState([]);
   const [selectedOpp, setSelectedOpp] = useState(null);
   const [activeDiff, setActiveDiff] = useState(null);
@@ -43,6 +41,7 @@ export default function App() {
   const [agentState, setAgentState] = useState(null);
   const [agentEvents, setAgentEvents] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isApproving, setIsApproving] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
 
   const loadAllData = async () => {
@@ -81,26 +80,39 @@ export default function App() {
     loadAllData();
   }, []);
 
-  const handleApproveDiff = async (diffId) => {
+  const isApproved = activeDiff?.status === 'approved' || activeDiff?.status === 'applied';
+
+  // Compute dynamic agent status for Navbar badge
+  const getAgentStatus = () => {
+    if (!hasAnalyzed) return 'ready';
+    if (isApproving) return 'analyzing';
+    if (!isApproved) return 'waiting_approval';
+    return 'complete';
+  };
+
+  const handleApproveDiff = async (diffId = 'diff-apex-01') => {
     try {
+      setIsApproving(true);
       const res = await approveFix(diffId);
       setActiveDiff(res);
       setIsDiffModalOpen(false);
       // Run experiment simulation after approval
       const expRes = await runExperiment(diffId);
       setExperimentResult(expRes);
-      loadAllData();
+      await loadAllData();
     } catch (e) {
       alert('Error approving fix: ' + e.message);
+    } finally {
+      setIsApproving(false);
     }
   };
 
-  const handleRejectDiff = async (diffId) => {
+  const handleRejectDiff = async (diffId = 'diff-apex-01') => {
     try {
       const res = await rejectFix(diffId);
       setActiveDiff(res);
       setIsDiffModalOpen(false);
-      loadAllData();
+      await loadAllData();
     } catch (e) {
       alert('Error rejecting fix: ' + e.message);
     }
@@ -112,7 +124,7 @@ export default function App() {
       await resetDemo();
       await loadAllData();
       setHasAnalyzed(false);
-      setActiveTab('inbox');
+      setActiveTab('catalyst');
     } catch (e) {
       console.error('Reset failed:', e);
     } finally {
@@ -130,7 +142,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-surface-dark text-slate-100 flex flex-col font-sans selection:bg-brand-500 selection:text-white">
+    <div className="min-h-screen bg-[#090a0f] text-slate-200 flex flex-col font-sans selection:bg-slate-700 selection:text-white">
       
       {/* Top Navigation */}
       <Navbar
@@ -138,85 +150,65 @@ export default function App() {
         setActiveTab={setActiveTab}
         onResetDemo={handleResetDemo}
         onOpenDemoModal={() => setIsDemoModalOpen(true)}
-        onOpenStorefront={() => setCurrentView('storefront')}
+        onOpenStorefront={() => window.open('https://apex-outdoor.vercel.app', '_blank')}
         isResetting={isResetting}
         hasAnalyzed={hasAnalyzed}
+        agentStatus={getAgentStatus()}
       />
 
-      {/* Main Content Area */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Main Experience Flow */}
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
         
-        {!hasAnalyzed ? (
-          /* Level 0: 1-Click Merchant Onboarding Entry */
-          <MerchantOnboardingCard
+        {/* 1. CATALYST TAB (Primary Agent Flow) */}
+        {activeTab === 'catalyst' && (
+          <CatalystAgentHome
+            hasAnalyzed={hasAnalyzed}
             onAnalyzeComplete={() => {
               setHasAnalyzed(true);
-              setActiveTab('inbox');
               loadAllData();
             }}
+            opportunities={opportunities}
+            activeDiff={activeDiff}
+            onApproveFix={() => handleApproveDiff('diff-apex-01')}
+            onRejectFix={() => handleRejectDiff('diff-apex-01')}
+            isApproving={isApproving}
+            onRunExperiment={() => runExperiment('diff-apex-01')}
+            experimentResult={experimentResult}
+            onOpenStorefront={() => window.open('https://apex-outdoor.vercel.app', '_blank')}
+            onNavigateToProof={() => setActiveTab('proof')}
+            onNavigateToStore={() => setActiveTab('store')}
+            onOpenDiffModal={() => setIsDiffModalOpen(true)}
           />
-        ) : (
-          /* The Clean Product Views */
-          <div>
-            {activeTab === 'inbox' && (
-              <AgentInboxHome
-                opportunities={opportunities}
-                activeDiff={activeDiff}
-                experimentResult={experimentResult}
-                evaluationResult={evaluationResult}
-                sessions={sessions}
-                funnel={funnel}
-                agentEvents={agentEvents}
-                agentState={agentState}
-                onOpenDiffModal={() => setIsDiffModalOpen(true)}
-                onViewAllOpportunities={() => setActiveTab('opportunities')}
-                onViewExperiments={() => setActiveTab('experiments')}
-                onViewExportPatch={() => setActiveTab('export')}
-                onOpenStorefront={() => setCurrentView('storefront')}
-                onAnalyzeNewStore={() => setHasAnalyzed(false)}
-              />
-            )}
+        )}
 
-            {activeTab === 'opportunities' && (
-              <DiagnosisPanel
-                opportunities={opportunities}
-                selectedOpp={selectedOpp}
-                activeDiff={activeDiff}
-                onSelectOpp={(opp) => setSelectedOpp(opp)}
-                onProposeFix={(opp) => setIsDiffModalOpen(true)}
-              />
-            )}
+        {/* 2. STORE TAB (Connected Store State) */}
+        {activeTab === 'store' && (
+          <StorefrontView
+            activeDiff={activeDiff}
+            onOpenStorefront={() => window.open('https://apex-outdoor.vercel.app', '_blank')}
+          />
+        )}
 
-            {activeTab === 'experiments' && experimentResult && (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h1 className="text-2xl font-extrabold text-white">Controlled Experiment Proof</h1>
-                    <p className="text-xs text-slate-400 mt-0.5">
-                      Measuring verified incremental AI GMV across identical baseline traffic.
-                    </p>
-                  </div>
-                  <span className="text-xs font-mono text-brand-blue bg-brand-500/10 px-3 py-1 rounded-full border border-brand-500/20">
-                    Controlled simulation result
-                  </span>
-                </div>
-                <ExperimentResultPanel result={experimentResult} />
-              </div>
-            )}
+        {/* 3. ACTIVITY TAB (Operations Timeline) */}
+        {activeTab === 'activity' && (
+          <ActivityTimeline
+            activeDiff={activeDiff}
+            experimentResult={experimentResult}
+          />
+        )}
 
-            {activeTab === 'export' && (
-              <StorePatchExportPanel activeDiff={activeDiff} />
-            )}
-
-            {activeTab === 'console' && (
-              <AgentActivityPanel
-                events={agentEvents}
-                agentState={agentState}
-                onRefreshData={loadAllData}
-                onOpenDiffModal={() => setIsDiffModalOpen(true)}
-              />
-            )}
-          </div>
+        {/* 4. PROOF TAB (Technical Verification Hub) */}
+        {activeTab === 'proof' && (
+          <ProofHub
+            activeDiff={activeDiff}
+            experimentResult={experimentResult}
+            evaluationResult={evaluationResult}
+            sessions={sessions}
+            funnel={funnel}
+            agentEvents={agentEvents}
+            agentState={agentState}
+            onOpenDiffModal={() => setIsDiffModalOpen(true)}
+          />
         )}
 
       </main>
@@ -236,7 +228,9 @@ export default function App() {
         <DemoWalkthroughModal
           onClose={() => setIsDemoModalOpen(false)}
           onNavigateTab={(tab) => {
-            setActiveTab(tab);
+            if (tab === 'inbox' || tab === 'opportunities') setActiveTab('catalyst');
+            else if (tab === 'experiments' || tab === 'attribution' || tab === 'console') setActiveTab('proof');
+            else setActiveTab('catalyst');
             setIsDemoModalOpen(false);
           }}
           onOpenDiff={() => {
@@ -247,10 +241,11 @@ export default function App() {
       )}
 
       {/* Clean Footer */}
-      <footer className="border-t border-surface-border py-6 bg-[#05080e] text-center text-xs text-slate-400 font-mono">
+      <footer className="border-t border-slate-800/80 py-5 bg-[#090a0f] text-center text-xs text-slate-400 font-mono">
         Catalyst AI Commerce Revenue Agent • Connected to Apex Outdoor (Demo Merchant) • Razorpay Buildathon
       </footer>
 
     </div>
   );
 }
+

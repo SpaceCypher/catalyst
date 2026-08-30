@@ -3,12 +3,11 @@ import {
   Sparkles, 
   RotateCcw, 
   PlayCircle,
-  Inbox,
-  Search,
-  FlaskConical,
-  Code2,
-  Terminal,
-  ShoppingBag
+  ShoppingBag,
+  Activity,
+  ShieldCheck,
+  Zap,
+  ExternalLink
 } from 'lucide-react';
 
 export default function Navbar({ 
@@ -18,40 +17,64 @@ export default function Navbar({
   onOpenDemoModal,
   onOpenStorefront,
   isResetting,
-  hasAnalyzed
+  hasAnalyzed,
+  agentStatus = 'ready' // 'ready' | 'analyzing' | 'waiting_approval' | 'measuring' | 'complete'
 }) {
   const navItems = [
-    { id: 'inbox', label: 'Home', icon: Inbox },
-    { id: 'opportunities', label: 'Opportunities', icon: Search },
-    { id: 'experiments', label: 'Experiments', icon: FlaskConical },
-    { id: 'export', label: 'Store Patch', icon: Code2 },
-    { id: 'console', label: 'Technical Console', icon: Terminal },
+    { id: 'catalyst', label: 'Catalyst', icon: Zap },
+    { id: 'store', label: 'Store', icon: ShoppingBag },
+    { id: 'activity', label: 'Activity', icon: Activity },
+    { id: 'proof', label: 'Proof', icon: ShieldCheck },
   ];
+
+  const getStatusDisplay = () => {
+    switch(agentStatus) {
+      case 'analyzing':
+        return { label: 'Analyzing store...', color: 'bg-blue-400', textColor: 'text-blue-300', pulse: true };
+      case 'waiting_approval':
+        return { label: 'Waiting for your approval', color: 'bg-amber-400', textColor: 'text-amber-300', pulse: true };
+      case 'measuring':
+        return { label: 'Measuring revenue lift...', color: 'bg-purple-400', textColor: 'text-purple-300', pulse: true };
+      case 'complete':
+        return { label: 'Fix verified • Monitoring', color: 'bg-emerald-400', textColor: 'text-emerald-300', pulse: false };
+      case 'ready':
+      default:
+        return { label: 'Ready', color: 'bg-emerald-400', textColor: 'text-emerald-300', pulse: false };
+    }
+  };
+
+  const status = getStatusDisplay();
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-surface-border bg-[#090a0f]/90 backdrop-blur-xl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
         
-        {/* Left: Brand Identity */}
+        {/* Left: Brand Identity & Status */}
         <div className="flex items-center space-x-4 lg:space-x-6 flex-shrink-0">
           <div 
-            onClick={() => setActiveTab('inbox')}
+            onClick={() => setActiveTab('catalyst')}
             className="flex items-center space-x-2.5 cursor-pointer group flex-shrink-0 select-none"
           >
             <div className="w-8 h-8 rounded-xl bg-slate-800 border border-slate-700/60 flex items-center justify-center group-hover:border-blue-400/50 transition-all flex-shrink-0">
-              <Sparkles className="w-4 h-4 text-blue-300" />
+              <Zap className="w-4 h-4 text-blue-300" />
             </div>
             <div className="flex items-center space-x-2 flex-shrink-0">
               <span className="text-base font-bold tracking-tight text-white whitespace-nowrap">
                 Catalyst
               </span>
               <span className="text-[10px] font-mono font-medium bg-slate-800 text-blue-200 border border-slate-700 px-2 py-0.5 rounded-full whitespace-nowrap inline-block">
-                Revenue Agent
+                AI Commerce Agent
               </span>
             </div>
           </div>
 
-          {/* Navigation Tabs */}
+          {/* Dynamic Agent Status Indicator */}
+          <div className="hidden sm:flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-slate-900 border border-slate-800 text-xs font-mono">
+            <span className={`w-2 h-2 rounded-full ${status.color} ${status.pulse ? 'animate-pulse' : ''}`} />
+            <span className={status.textColor}>{status.label}</span>
+          </div>
+
+          {/* Navigation Tabs (Catalyst, Store, Activity, Proof) */}
           {hasAnalyzed && (
             <nav className="hidden md:flex items-center space-x-1 pl-4 border-l border-surface-border flex-shrink-0">
               {navItems.map((item) => {
@@ -63,7 +86,7 @@ export default function Navbar({
                     onClick={() => setActiveTab(item.id)}
                     className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs whitespace-nowrap transition-all cursor-pointer ${
                       isActive
-                        ? 'bg-slate-800/80 text-blue-200 border border-slate-700 font-semibold shadow-sm'
+                        ? 'bg-slate-800/90 text-blue-200 border border-slate-700 font-semibold shadow-sm'
                         : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 border border-transparent'
                     }`}
                   >
@@ -79,14 +102,15 @@ export default function Navbar({
         {/* Right: Actions */}
         <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
           
-          {/* Open Storefront Button */}
+          {/* Open Storefront Link */}
           <button
             onClick={onOpenStorefront}
-            className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-emerald-900/40 text-emerald-300 text-xs font-mono font-medium whitespace-nowrap transition-all cursor-pointer"
+            className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 hover:text-white text-xs font-mono whitespace-nowrap transition-all cursor-pointer"
             title="Open connected Apex Outdoor merchant storefront"
           >
-            <ShoppingBag className="w-3.5 h-3.5 flex-shrink-0 text-emerald-400" />
+            <ShoppingBag className="w-3.5 h-3.5 flex-shrink-0 text-slate-400" />
             <span className="whitespace-nowrap">Apex Storefront</span>
+            <ExternalLink className="w-3 h-3 text-slate-500" />
           </button>
 
           {/* 5-Beat Demo Pitch Button */}
