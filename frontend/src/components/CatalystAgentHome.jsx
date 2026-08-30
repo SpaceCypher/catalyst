@@ -272,70 +272,143 @@ export default function CatalystAgentHome({
 
             {/* AI Shopping Simulator Box */}
             <div className="rounded-2xl bg-[#0d0f17] border border-slate-800 p-5 space-y-4">
-              <div className="space-y-1">
+              <div className="space-y-2">
                 <div className="text-xs font-mono text-slate-400 font-semibold uppercase tracking-wider flex items-center justify-between">
-                  <span>Ask an AI shopper</span>
-                  <span className="text-[10px] text-blue-300">ChatGPT / Perplexity AI Engine</span>
+                  <span className="flex items-center gap-1.5">
+                    <Search className="w-3.5 h-3.5 text-blue-400" />
+                    <span>Ask an AI shopper</span>
+                  </span>
+                  <span className="text-[10px] text-blue-300 font-mono">ChatGPT / Perplexity AI Engine</span>
                 </div>
                 
-                <div className="flex items-center space-x-2 pt-1">
+                {/* Search Form */}
+                <form 
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleRunAiSimulator();
+                  }}
+                  className="flex items-center space-x-2 pt-1"
+                >
                   <div className="relative flex-1">
                     <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
                     <input
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
+                      placeholder="e.g. best waterproof hiking boots under ₹5,000"
                       className="w-full pl-10 pr-3 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-white text-xs font-mono focus:outline-none focus:border-blue-400"
                     />
                   </div>
                   <button
-                    onClick={handleRunAiSimulator}
-                    className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-mono text-white flex items-center space-x-1.5 cursor-pointer"
+                    type="submit"
+                    disabled={isSimulatingQuery}
+                    className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 disabled:bg-slate-800 text-xs font-mono text-white flex items-center space-x-1.5 cursor-pointer transition-all shadow-sm flex-shrink-0"
                   >
-                    <Play className="w-3 h-3 text-blue-300" />
-                    <span>Run</span>
+                    {isSimulatingQuery ? (
+                      <>
+                        <Loader2 className="w-3 h-3 animate-spin text-blue-200" />
+                        <span>Querying...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Play className="w-3 h-3 text-blue-200" />
+                        <span>Run</span>
+                      </>
+                    )}
                   </button>
+                </form>
+
+                {/* Preset Query Chips */}
+                <div className="flex flex-wrap items-center gap-1.5 pt-1 text-[11px] font-mono">
+                  <span className="text-slate-500">Presets:</span>
+                  {[
+                    'best waterproof hiking boots under ₹5,000',
+                    'monsoon trekking boots with vibram sole',
+                    'lightweight 420g trail hiking shoes'
+                  ].map((preset, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => {
+                        setSearchQuery(preset);
+                        setIsSimulatingQuery(true);
+                        setTimeout(() => setIsSimulatingQuery(false), 400);
+                      }}
+                      className="px-2 py-0.5 rounded-md bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-slate-200 transition-colors cursor-pointer"
+                    >
+                      {preset}
+                    </button>
+                  ))}
                 </div>
               </div>
 
-              {/* Before vs After AI Recommendation Simulator Result */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 font-mono text-xs pt-1">
-                
-                {/* Before */}
-                <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
-                  <div className="text-slate-400 text-[11px] font-semibold uppercase tracking-wider">
-                    BEFORE FIX
+              {/* Dynamic Simulation Loading Banner */}
+              {isSimulatingQuery ? (
+                <div className="p-4 rounded-xl bg-slate-900/80 border border-blue-900/40 text-center space-y-2 animate-in fade-in duration-150">
+                  <div className="inline-flex items-center space-x-2 text-xs font-mono text-blue-300">
+                    <Loader2 className="w-4 h-4 animate-spin text-blue-400" />
+                    <span>Perplexity AI crawler synthesizing product search for: "{searchQuery}"...</span>
                   </div>
-                  <div className="text-xs text-slate-300 space-y-1.5">
-                    <div className="text-slate-400">AI recommends:</div>
-                    <div className="text-slate-200 font-semibold">🥾 Monsoon Trekker</div>
-                    <div className="text-slate-200 font-semibold">🥾 TrailPro</div>
-                    <div className="text-rose-400 pt-1 text-[11px] font-bold">
-                      ❌ Apex Ridge (Not recommended)
-                    </div>
+                  <div className="text-[11px] text-slate-400 font-mono">
+                    Checking Schema.org JSON-LD, specs table, and return policies...
                   </div>
                 </div>
-
-                {/* After */}
-                <div className={`p-4 rounded-xl border space-y-2 transition-all ${
-                  isDiffApproved 
-                    ? 'bg-emerald-950/30 border-emerald-800/60 shadow-sm'
-                    : 'bg-slate-900/30 border-slate-800/60 opacity-60'
-                }`}>
-                  <div className="text-emerald-400 text-[11px] font-semibold uppercase tracking-wider">
-                    AFTER CATALYST FIX
-                  </div>
-                  <div className="text-xs text-slate-300 space-y-1.5">
-                    <div className="text-slate-400">AI recommends:</div>
-                    <div className="text-emerald-300 font-bold">
-                      🥾 Apex Ridge (YOU) ✓
+              ) : (
+                /* Dynamic Before vs After AI Recommendation Simulator Result */
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 font-mono text-xs pt-1 animate-in fade-in duration-200">
+                  
+                  {/* Before Fix Recommendation Card */}
+                  <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
+                    <div className="flex items-center justify-between text-slate-400 text-[11px] font-semibold uppercase tracking-wider">
+                      <span>BEFORE FIX</span>
+                      <span className="text-[10px] text-rose-400 font-normal">Apex Omitted</span>
                     </div>
-                    <div className="text-slate-400">🥾 Monsoon Trekker</div>
-                    <div className="text-slate-400">🥾 TrailPro</div>
+                    <div className="text-xs text-slate-300 space-y-1.5">
+                      <div className="text-slate-400 text-[11px]">AI Engine recommendations:</div>
+                      <div className="p-2 rounded-lg bg-slate-800/80 border border-slate-700 text-white font-semibold flex items-center justify-between">
+                        <span>#1 🥾 Monsoon Trekker</span>
+                        <span className="text-[10px] text-emerald-400 font-normal">IPX7 Match</span>
+                      </div>
+                      <div className="p-2 rounded-lg bg-slate-800/40 border border-slate-800 text-slate-300 flex items-center justify-between">
+                        <span>#2 🥾 TrailPro Extreme</span>
+                        <span className="text-[10px] text-slate-400 font-normal">Vibram Sole</span>
+                      </div>
+                      <div className="text-rose-400 pt-1 text-[11px] font-bold flex items-center gap-1">
+                        <XCircle className="w-3.5 h-3.5 flex-shrink-0" />
+                        <span>Apex Ridge: Omitted (Missing IPX7 & sole data)</span>
+                      </div>
+                    </div>
                   </div>
-                </div>
 
-              </div>
+                  {/* After Fix Recommendation Card */}
+                  <div className={`p-4 rounded-xl border space-y-2 transition-all ${
+                    isDiffApproved 
+                      ? 'bg-emerald-950/30 border-emerald-800/60 shadow-sm'
+                      : 'bg-slate-900/30 border-slate-800/60 opacity-60'
+                  }`}>
+                    <div className="flex items-center justify-between text-emerald-400 text-[11px] font-semibold uppercase tracking-wider">
+                      <span>AFTER CATALYST FIX</span>
+                      <span className="text-[10px] font-bold text-emerald-300">Apex #1 Pick ✓</span>
+                    </div>
+                    <div className="text-xs text-slate-300 space-y-1.5">
+                      <div className="text-slate-400 text-[11px]">AI Engine recommendations:</div>
+                      <div className="p-2 rounded-lg bg-emerald-900/40 border border-emerald-700/60 text-white font-bold flex items-center justify-between shadow-sm">
+                        <span className="text-emerald-300">#1 🥾 Apex Ridge (YOU) ✓</span>
+                        <span className="text-[10px] text-emerald-400 font-normal">15k mm + Vibram</span>
+                      </div>
+                      <div className="p-2 rounded-lg bg-slate-900/60 border border-slate-800 text-slate-400 flex items-center justify-between">
+                        <span>#2 🥾 Monsoon Trekker</span>
+                        <span className="text-[10px] text-slate-500 font-normal">Alternate</span>
+                      </div>
+                      <div className="text-emerald-300 pt-1 text-[11px] font-semibold flex items-center gap-1">
+                        <CheckCircle2 className="w-3.5 h-3.5 flex-shrink-0 text-emerald-400" />
+                        <span>AI crawler verified all specifications</span>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              )}
             </div>
 
             {/* Human View Fix Proposal */}
