@@ -109,6 +109,8 @@ export default function CatalystAgentHome({
     }, 450);
   };
 
+  const [showFullCapabilities, setShowFullCapabilities] = useState(false);
+
   // 1. FIRST-TIME ONBOARDING (CONNECT + METHODOLOGY)
   if (!hasAnalyzed && !isAnalyzing) {
     return (
@@ -197,7 +199,7 @@ export default function CatalystAgentHome({
             </div>
           </div>
 
-          {/* Right Column: Methodology & Architecture (7 Cols) */}
+          {/* Right Column: How Catalyst Works & Methodology (7 Cols) */}
           <div className="lg:col-span-7 flex flex-col">
             <div className="rounded-3xl bg-[#121624]/95 border border-slate-700/80 p-6 sm:p-8 shadow-2xl flex-1 space-y-5">
               
@@ -205,92 +207,196 @@ export default function CatalystAgentHome({
                 <div className="flex items-center space-x-2">
                   <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                   <span className="text-xs font-mono font-bold text-slate-200 uppercase tracking-wider">
-                    Our Methodology & Operating Invariants
+                    How Catalyst Works
                   </span>
                 </div>
-                <span className="text-[11px] font-mono text-slate-400">
-                  4-Step Closed Loop
-                </span>
+                <button
+                  onClick={() => setShowFullCapabilities(true)}
+                  className="text-[11px] font-mono text-blue-400 hover:text-blue-300 underline font-semibold cursor-pointer"
+                >
+                  View full 11 capabilities →
+                </button>
               </div>
 
-              {/* 4 Methodology Cards */}
+              {/* 4 Methodology Pillars */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 
-                {/* Step 1 */}
+                {/* Pillar 01 */}
                 <div className="p-3.5 rounded-2xl bg-[#0c101c] border border-slate-800/80 space-y-1.5">
                   <div className="flex items-center space-x-2">
                     <span className="w-5 h-5 rounded-full bg-blue-500/20 text-blue-300 font-mono text-[11px] font-bold flex items-center justify-center">
-                      1
+                      01
                     </span>
                     <span className="text-xs font-bold text-white">
-                      Evidence Extraction
+                      Discover Demand
                     </span>
                   </div>
                   <p className="text-[11px] text-slate-300 leading-relaxed">
-                    AI search engines (Perplexity, ChatGPT) require structured technical tokens (e.g., 15k mm waterproof rating, Vibram sole), not generic marketing fluff.
+                    Catalyst tests high-intent shopping queries and finds where AI shoppers choose competitors instead of your products.
                   </p>
                 </div>
 
-                {/* Step 2 */}
+                {/* Pillar 02 */}
                 <div className="p-3.5 rounded-2xl bg-[#0c101c] border border-slate-800/80 space-y-1.5">
                   <div className="flex items-center space-x-2">
                     <span className="w-5 h-5 rounded-full bg-amber-500/20 text-amber-300 font-mono text-[11px] font-bold flex items-center justify-center">
-                      2
+                      02
                     </span>
                     <span className="text-xs font-bold text-white">
-                      40-Query Benchmark Panel
+                      Diagnose the Gap
                     </span>
                   </div>
                   <p className="text-[11px] text-slate-300 leading-relaxed">
-                    We benchmark your store against competitor catalogs across 40 high-intent shopping queries to identify exact omitted specifications.
+                    It compares the evidence AI can actually understand — product attributes, reviews, FAQs and structured data — and identifies the highest-value missing signals.
                   </p>
                 </div>
 
-                {/* Step 3 */}
+                {/* Pillar 03 */}
                 <div className="p-3.5 rounded-2xl bg-[#0c101c] border border-slate-800/80 space-y-1.5">
                   <div className="flex items-center space-x-2">
                     <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono text-[11px] font-bold flex items-center justify-center">
-                      3
+                      03
                     </span>
                     <span className="text-xs font-bold text-white">
-                      Deterministic Safety Gate
+                      Act Safely
                     </span>
                   </div>
                   <p className="text-[11px] text-slate-300 leading-relaxed">
-                    Catalyst enforces the <code className="text-amber-300 font-mono">WAIT_FOR_APPROVAL</code> invariant. Bounded Schema.org JSON-LD diffs require explicit merchant confirmation.
+                    Catalyst creates a grounded fix, verifies every claim against your catalog, and pauses at <code className="text-amber-300 font-mono text-[10px]">WAIT_FOR_APPROVAL</code> until you approve the change.
                   </p>
                 </div>
 
-                {/* Step 4 */}
+                {/* Pillar 04 */}
                 <div className="p-3.5 rounded-2xl bg-[#0c101c] border border-slate-800/80 space-y-1.5">
                   <div className="flex items-center space-x-2">
                     <span className="w-5 h-5 rounded-full bg-purple-500/20 text-purple-300 font-mono text-[11px] font-bold flex items-center justify-center">
-                      4
+                      04
                     </span>
                     <span className="text-xs font-bold text-white">
-                      Razorpay Revenue Loop
+                      Prove Revenue
                     </span>
                   </div>
                   <p className="text-[11px] text-slate-300 leading-relaxed">
-                    Dynamic checkout offer injection (<code className="text-emerald-300 font-mono">rzp_off_monsoon</code>) and automated recovery notifications recover abandoned AI shopping carts.
+                    Catalyst re-tests AI discovery, connects AI-originated sessions to Razorpay payments, runs controlled experiments and rejects suspicious attribution before calculating GMV impact.
                   </p>
                 </div>
 
+              </div>
+
+              {/* Anchor Sentence Banner */}
+              <div className="p-3.5 rounded-2xl bg-gradient-to-r from-blue-950/40 via-slate-900 to-indigo-950/40 border border-blue-500/30 text-xs text-slate-200 leading-relaxed">
+                <span className="font-semibold text-blue-200">
+                  "Catalyst doesn't just tell you what to improve. It finds the opportunity, proposes the fix, gets your approval, deploys it, measures the outcome, and finds what to do next."
+                </span>
               </div>
 
               {/* Bottom Guarantee Banner */}
               <div className="p-3 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-between text-xs font-mono text-slate-300">
                 <div className="flex items-center space-x-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                  <span>5-Signal Anti-Spoofing Classifier eliminates false GMV attribution</span>
+                  <span>Verified Against Catalog Source Data (Zero Unsupported Claims)</span>
                 </div>
-                <span className="text-emerald-400 font-bold hidden sm:inline">100% Grounded</span>
+                <span className="text-emerald-400 font-bold hidden sm:inline">Grounded</span>
               </div>
 
             </div>
           </div>
 
         </div>
+
+        {/* 11-Stage Capability Architecture Modal */}
+        {showFullCapabilities && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
+            <div className="bg-[#121624] border border-slate-700 rounded-3xl max-w-4xl w-full max-h-[85vh] overflow-y-auto p-6 sm:p-8 space-y-6 shadow-2xl">
+              
+              <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+                <div>
+                  <h3 className="text-xl font-display font-bold text-white">
+                    Catalyst's 11-Stage Closed-Loop Capability Spectrum
+                  </h3>
+                  <p className="text-xs text-slate-400 font-mono">
+                    Full autonomous agent pipeline from catalog connection to revenue realization
+                  </p>
+                </div>
+                <button
+                  onClick={() => setShowFullCapabilities(false)}
+                  className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors cursor-pointer"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                
+                <div className="p-4 rounded-2xl bg-[#0b0e18] border border-slate-800 space-y-2">
+                  <div className="font-mono font-bold text-blue-400">1. Connect</div>
+                  <p className="text-slate-300">Paste store URL. Auto-detect products, categories, catalog SKUs and benchmark competitors with zero manual setup.</p>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-[#0b0e18] border border-slate-800 space-y-2">
+                  <div className="font-mono font-bold text-blue-400">2. Discover</div>
+                  <p className="text-slate-300">Generate high-intent shopping queries. Test merchant vs competitors across AI shopping surfaces to detect omitted products.</p>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-[#0b0e18] border border-slate-800 space-y-2">
+                  <div className="font-mono font-bold text-amber-400">3. Diagnose</div>
+                  <p className="text-slate-300">Compare product attributes, reviews, evidence depth, missing FAQs and structured data. Rank opportunities by commercial impact.</p>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-[#0b0e18] border border-slate-800 space-y-2">
+                  <div className="font-mono font-bold text-amber-400">4. Act</div>
+                  <p className="text-slate-300">Generate grounded product-copy improvements, FAQs, Schema.org JSON-LD, and show exact visual diffs explaining the reasoning.</p>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-[#0b0e18] border border-slate-800 space-y-2">
+                  <div className="font-mono font-bold text-emerald-400">5. Safety</div>
+                  <p className="text-slate-300">Ground every claim in verified merchant data. Enforce mandatory <code className="text-amber-300">WAIT_FOR_APPROVAL</code> and complete agent audit logs.</p>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-[#0b0e18] border border-slate-800 space-y-2">
+                  <div className="font-mono font-bold text-emerald-400">6. Deploy</div>
+                  <p className="text-slate-300">Apply approved changes to the connected store. Generate CMS/HTML/JSON-LD export payloads for Shopify or WooCommerce.</p>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-[#0b0e18] border border-slate-800 space-y-2">
+                  <div className="font-mono font-bold text-purple-400">7. Re-discover</div>
+                  <p className="text-slate-300">Re-run the same AI shopping queries across engines to verify whether recommendations flipped to your store as #1 pick.</p>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-[#0b0e18] border border-slate-800 space-y-2">
+                  <div className="font-mono font-bold text-purple-400">8. Revenue Optimization</div>
+                  <p className="text-slate-300">Identify AI shoppers, recommend appropriate Razorpay card/UPI offers, detect checkout drop-offs, and trigger recovery reminders.</p>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-[#0b0e18] border border-slate-800 space-y-2">
+                  <div className="font-mono font-bold text-indigo-400">9. Attribution</div>
+                  <p className="text-slate-300">AI referral → session → checkout → Razorpay payment. Reject suspicious spoofed headers with 5-signal classifier.</p>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-[#0b0e18] border border-slate-800 space-y-2">
+                  <div className="font-mono font-bold text-indigo-400">10. Experimentation</div>
+                  <p className="text-slate-300">Control vs treatment evaluation across 3,000 sessions. Clearly label simulation vs real payment data without claiming unproven causality.</p>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-[#0b0e18] border border-slate-800 space-y-2 md:col-span-2">
+                  <div className="font-mono font-bold text-cyan-400">11. Learn / Next Action</div>
+                  <p className="text-slate-300">If the intervention worked → automatically discover the next biggest opportunity in the catalog. If not → investigate evidence deficits.</p>
+                </div>
+
+              </div>
+
+              <div className="flex justify-end pt-2">
+                <button
+                  onClick={() => setShowFullCapabilities(false)}
+                  className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all cursor-pointer shadow-md"
+                >
+                  Close Capability Spec
+                </button>
+              </div>
+
+            </div>
+          </div>
+        )}
 
       </div>
     );
