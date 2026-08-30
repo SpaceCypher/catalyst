@@ -53,7 +53,10 @@ export default function CatalystAgentHome({
     { label: 'Drafting bounded catalog fix & schema...', doneLabel: 'Bounded fix prepared with verified specs' }
   ];
 
-  const isDiffApproved = activeDiff?.status === 'approved' || activeDiff?.status === 'applied';
+  const isDiffApproved = 
+    activeDiff?.status === 'approved' || 
+    activeDiff?.status === 'applied' ||
+    (typeof window !== 'undefined' && localStorage.getItem('catalyst_diff_status') === 'approved');
 
   const handleStartAnalysis = () => {
     setIsAnalyzing(true);

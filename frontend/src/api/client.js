@@ -77,9 +77,11 @@ export async function fetchFix(diffId = 'diff-apex-01') {
     const res = await fetch(`${API_BASE}/fix/${diffId}`);
     if (res.ok) {
       const data = await res.json();
+      const storedStatus = typeof window !== 'undefined' ? localStorage.getItem('catalyst_diff_status') : null;
       if (data && data.fields && data.fields.length > 0) {
         return {
           ...data,
+          status: storedStatus || data.status || "proposed",
           reason: data.reason || "Competitors expose 11 machine-readable technical attributes and Schema.org JSON-LD, winning 55% of Footwear queries. Adding IPX7 rating, Vibram sole specs, weight, and Product structured data closes the evidence deficit.",
           evidence: data.evidence || [
             { source: "Footwear AI Shopping Evaluation", query_id: "qry-footwear-01", observation: "Competitor recommended 3.7x more often due to explicit IPX7 waterproofing and Vibram sole evidence." },
@@ -95,12 +97,15 @@ export async function fetchFix(diffId = 'diff-apex-01') {
       }
     }
   } catch (e) {}
+
+  const storedStatus = typeof window !== 'undefined' ? localStorage.getItem('catalyst_diff_status') : null;
+
   return {
     diff_id: "diff-apex-01",
     opportunity_id: "opp-01",
     product_id: "merch-boot-01",
     product_name: "Apex Ridge Waterproof Trekking Boots",
-    status: "proposed",
+    status: storedStatus || "proposed",
     validation_status: "valid",
     reason: "Competitors expose 11 machine-readable technical attributes and Schema.org JSON-LD, winning 55% of Footwear queries. Adding IPX7 rating, Vibram sole specs, weight, and Product structured data closes the evidence deficit.",
     evidence: [
@@ -117,23 +122,29 @@ export async function fetchFix(diffId = 'diff-apex-01') {
 }
 
 export async function approveFix(diffId) {
-  if (typeof window !== 'undefined' && window.location.hostname.includes('vercel.app')) {
-    return { diff_id: diffId, status: "approved" };
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('catalyst_diff_status', 'approved');
   }
   try {
     const res = await fetch(`${API_BASE}/fix/${diffId}/approve`, { method: 'POST' });
-    if (res.ok) return await res.json();
+    if (res.ok) {
+      const data = await res.json();
+      return { ...data, status: 'approved' };
+    }
   } catch (e) {}
   return { diff_id: diffId, status: "approved" };
 }
 
 export async function rejectFix(diffId) {
-  if (typeof window !== 'undefined' && window.location.hostname.includes('vercel.app')) {
-    return { diff_id: diffId, status: "rejected" };
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('catalyst_diff_status', 'rejected');
   }
   try {
     const res = await fetch(`${API_BASE}/fix/${diffId}/reject`, { method: 'POST' });
-    if (res.ok) return await res.json();
+    if (res.ok) {
+      const data = await res.json();
+      return { ...data, status: 'rejected' };
+    }
   } catch (e) {}
   return { diff_id: diffId, status: "rejected" };
 }
@@ -313,8 +324,9 @@ export async function runAutonomousCycle(goal = 'Analyze merchant catalog perfor
 }
 
 export async function resetDemo() {
-  if (typeof window !== 'undefined' && window.location.hostname.includes('vercel.app')) {
-    return { status: "reset_complete" };
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem('catalyst_diff_status');
+    localStorage.removeItem('catalyst_has_analyzed');
   }
   try {
     const res = await fetch(`${API_BASE}/demo/reset`, { method: 'POST' });

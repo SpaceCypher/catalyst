@@ -93,8 +93,9 @@ export default function App() {
   const handleApproveDiff = async (diffId = 'diff-apex-01') => {
     try {
       setIsApproving(true);
+      setActiveDiff(prev => ({ ...(prev || {}), status: 'approved' }));
       const res = await approveFix(diffId);
-      setActiveDiff(res);
+      setActiveDiff(res || { diff_id: diffId, status: 'approved' });
       setIsDiffModalOpen(false);
       // Run experiment simulation after approval
       const expRes = await runExperiment(diffId);
@@ -109,8 +110,9 @@ export default function App() {
 
   const handleRejectDiff = async (diffId = 'diff-apex-01') => {
     try {
+      setActiveDiff(prev => ({ ...(prev || {}), status: 'rejected' }));
       const res = await rejectFix(diffId);
-      setActiveDiff(res);
+      setActiveDiff(res || { diff_id: diffId, status: 'rejected' });
       setIsDiffModalOpen(false);
       await loadAllData();
     } catch (e) {
