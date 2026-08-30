@@ -133,7 +133,7 @@ export default function App() {
           </div>
 
           <button
-            onClick={() => setIsEnhanced(!isEnhanced)}
+            onClick={() => handleToggleEnhanced(!isEnhanced)}
             className="text-xs font-bold underline font-mono flex-shrink-0 hover:text-white"
           >
             {isEnhanced ? 'Switch to Baseline (Before) ←' : 'Switch to Catalyst Patched (After) →'}
