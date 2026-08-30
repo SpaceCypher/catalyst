@@ -69,6 +69,17 @@ export default function CatalystAgentHome({
     activeDiff?.status === 'applied' ||
     (typeof window !== 'undefined' && localStorage.getItem('catalyst_diff_status') === 'approved');
 
+  // Reset internal states when demo is reset
+  useEffect(() => {
+    if (!hasAnalyzed || !isDiffApproved) {
+      setHasTestedOffer(false);
+      setHasApprovedReminder(false);
+      setNextOpportunityActive(false);
+      setShowTechnicalDiff(false);
+      setActiveWhyModal(null);
+    }
+  }, [hasAnalyzed, isDiffApproved]);
+
   const handleStartAnalysis = () => {
     setIsAnalyzing(true);
     setStepIndex(0);

@@ -123,10 +123,17 @@ export default function App() {
   const handleResetDemo = async () => {
     setIsResetting(true);
     try {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('catalyst_diff_status');
+        localStorage.removeItem('catalyst_has_analyzed');
+      }
       await resetDemo();
-      await loadAllData();
+      setActiveDiff({ diff_id: 'diff-apex-01', status: 'proposed' });
+      setExperimentResult(null);
       setHasAnalyzed(false);
       setActiveTab('catalyst');
+      await loadAllData();
+      setActiveDiff({ diff_id: 'diff-apex-01', status: 'proposed' });
     } catch (e) {
       console.error('Reset failed:', e);
     } finally {
