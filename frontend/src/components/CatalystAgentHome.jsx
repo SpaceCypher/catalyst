@@ -32,6 +32,349 @@ import {
   X
 } from 'lucide-react';
 
+const OPPORTUNITIES_MAP = {
+  'opp-01': {
+    id: 'opp-01',
+    rank: 1,
+    name: 'Apex Ridge Waterproof Boots',
+    shortName: '1. Apex Boots',
+    sku: 'merch-boot-01',
+    category: 'Footwear',
+    competitor: 'Monsoon Trekker',
+    queryPreset: 'best waterproof hiking boots under ₹5,000',
+    presets: [
+      'best waterproof hiking boots under ₹5,000',
+      'monsoon trekking boots with vibram sole',
+      'lightweight 420g trail hiking shoes'
+    ],
+    headline: 'Apex Ridge Waterproof Boots are losing AI recommendations to Monsoon Trekker.',
+    summary: 'AI shopping engines recommend competitors because your product page exposes fewer structured comparison signals.',
+    competitorSpecs: [
+      { label: '✓ 15,000mm IPX7 Rating', key: 'IPX7' },
+      { label: '✓ 420g Lightweight Spec', key: 'weight' },
+      { label: '✓ Vibram MegaGrip Outsole', key: 'outsole' },
+      { label: '✓ 5mm Lug Depth', key: 'lugs' }
+    ],
+    merchantDeficits: [
+      '✕ Basic "waterproof" claim only',
+      '✕ Missing weight specification',
+      '✕ Generic "rubber sole" claim',
+      '✕ Missing lug depth & monsoon FAQs'
+    ],
+    diffs: [
+      '+ Waterproof rating: 15,000mm IPX7',
+      '+ Weight: 420g lightweight',
+      '+ Outsole: Vibram MegaGrip 5mm lugs',
+      '+ Sizing & Monsoon FAQ section',
+      '+ Schema.org/Product & Offers JSON-LD'
+    ],
+    technicalDiffs: [
+      '+ "waterproof_rating": "15,000mm IPX7"',
+      '+ "weight": "420g"',
+      '+ "outsole": "Vibram MegaGrip 5mm lugs"',
+      '+ "@context": "https://schema.org/", "@type": "Product", "offers": "₹4499"'
+    ],
+    simBefore: {
+      first: '#1 🥾 Monsoon Trekker',
+      firstTag: 'IPX7 Match',
+      second: '#2 🥾 TrailPro Extreme',
+      secondTag: 'Vibram Sole',
+      omitted: 'Apex Ridge: Omitted (Missing IPX7)'
+    },
+    simAfter: {
+      first: '#1 🥾 Apex Ridge (YOU) ✓',
+      firstTag: '15k mm + Vibram',
+      second: '#2 🥾 Monsoon Trekker',
+      secondTag: 'Alternate'
+    },
+    offer: {
+      name: '💳 ICICI Instant 10% Off',
+      code: 'rzp_off_monsoon_icici',
+      lift: '+18% Lift',
+      cartConv: '14.2% → 17.8%',
+      revenue: '+₹48,000'
+    },
+    recovery: {
+      abandoned: '24 sessions',
+      recovered: '18 orders (75%)',
+      revenue: '+₹72,000'
+    },
+    revenue: {
+      liftPct: '+125% Lift',
+      gmvDisplay: '+₹1.50L',
+      controlText: '24 orders × ₹5,000 = ₹1.20L',
+      treatmentText: '54 orders × ₹5,000 = ₹2.70L',
+      netText: '+₹1,50,000 (+₹1.50L)'
+    },
+    nextAction: {
+      title: '⚡ Venture 45L Expedition Backpack',
+      desc: 'Catalyst completed the boots fix and automatically discovered your trekking backpacks have the same evidence gap in volume capacity and load-bearing specs.',
+      deficits: [
+        '• Missing 45-liter laboratory volume spec',
+        '• Missing 600D ripstop nylon material rating'
+      ],
+      potential: '+₹95,000 GMV',
+      nextOppId: 'opp-02',
+      buttonText: 'Investigate & Fix Venture 45L →'
+    }
+  },
+  'opp-02': {
+    id: 'opp-02',
+    rank: 2,
+    name: 'Venture 45L Expedition Backpack',
+    shortName: '2. Venture 45L',
+    sku: 'merch-pack-03',
+    category: 'Outdoor Gear',
+    competitor: 'NorthTrail 45L Alpine Pro',
+    queryPreset: 'best lightweight 45L expedition backpack under ₹6,000',
+    presets: [
+      'best lightweight 45L expedition backpack under ₹6,000',
+      '600D ripstop travel backpack with internal frame',
+      'waterproof trekking rucksack with raincover'
+    ],
+    headline: 'Venture 45L Backpack is losing AI recommendations to NorthTrail 45L Alpine Pro.',
+    summary: 'Competitors expose 45L certified capacity, 600D Diamond Ripstop nylon, and internal aluminum frame ratings, winning AI travel recommendations.',
+    competitorSpecs: [
+      { label: '✓ 45L Certified Volume', key: 'capacity' },
+      { label: '✓ 600D Diamond Ripstop Nylon', key: 'material' },
+      { label: '✓ 6061 Aluminum Stay', key: 'frame' },
+      { label: '✓ 3L Hydration Sleeve', key: 'hydration' }
+    ],
+    merchantDeficits: [
+      '✕ Missing 45L laboratory volume',
+      '✕ Generic "durable fabric" claim',
+      '✕ Unlisted internal frame specs',
+      '✕ Missing hydration routing & FAQs'
+    ],
+    diffs: [
+      '+ Capacity: 45-Liter Certified Volume',
+      '+ Material: 600D Diamond Ripstop Nylon',
+      '+ Frame: Ergonomic 6061 Aluminum Stay',
+      '+ 3L Hydration Port & Raincover FAQs',
+      '+ Schema.org/Product & Offers JSON-LD'
+    ],
+    technicalDiffs: [
+      '+ "capacity": "45L"',
+      '+ "fabric": "600D Diamond Ripstop Nylon"',
+      '+ "frame": "6061 Anodized Aluminum"',
+      '+ "@context": "https://schema.org/", "@type": "Product", "offers": "₹3999"'
+    ],
+    simBefore: {
+      first: '#1 🎒 NorthTrail 45L',
+      firstTag: '45L Match',
+      second: '#2 🎒 Alpine Summit',
+      secondTag: '600D Nylon',
+      omitted: 'Venture 45L: Omitted (Missing 45L volume)'
+    },
+    simAfter: {
+      first: '#1 🎒 Venture 45L (YOU) ✓',
+      firstTag: '45L + 600D',
+      second: '#2 🎒 NorthTrail 45L',
+      secondTag: 'Alternate'
+    },
+    offer: {
+      name: '💳 HDFC Instant ₹500 Off',
+      code: 'rzp_off_venture_hdfc',
+      lift: '+15% Lift',
+      cartConv: '13.8% → 17.1%',
+      revenue: '+₹35,000'
+    },
+    recovery: {
+      abandoned: '19 sessions',
+      recovered: '14 orders (74%)',
+      revenue: '+₹56,000'
+    },
+    revenue: {
+      liftPct: '+110% Lift',
+      gmvDisplay: '+₹95,000',
+      controlText: '20 orders × ₹4,000 = ₹80,000',
+      treatmentText: '44 orders × ₹4,000 = ₹1,75,000',
+      netText: '+₹95,000 GMV Lift'
+    },
+    nextAction: {
+      title: '⚡ Summit StormShield 3-Person Tent',
+      desc: 'Catalyst verified your boots and backpacks, and queued your 4-season tents for Beaufort wind ratings and hydrostatic floor waterproofing.',
+      deficits: [
+        '• Missing Beaufort Scale Force 9 wind rating',
+        '• Missing 5,000mm bathtub floor waterproofing spec'
+      ],
+      potential: '+₹1,10,000 GMV',
+      nextOppId: 'opp-03',
+      buttonText: 'Investigate & Fix StormShield Tent →'
+    }
+  },
+  'opp-03': {
+    id: 'opp-03',
+    rank: 3,
+    name: 'Alpine Haven 3-Person Camping Tent',
+    shortName: '3. StormShield Tent',
+    sku: 'merch-tent-04',
+    category: 'Tents & Shelter',
+    competitor: 'StormShield Pro 3P',
+    queryPreset: '4 season waterproof 3-person camping tent under ₹7,000',
+    presets: [
+      '4 season waterproof 3-person camping tent under ₹7,000',
+      'windproof alpine tent with 5000mm floor',
+      'lightweight 3 person backpacking tent with rainfly'
+    ],
+    headline: 'Alpine Haven 3-Person Tent is losing AI recommendations to StormShield Pro.',
+    summary: 'Competitors expose Beaufort Scale Force 9 wind ratings and 5,000mm bathtub floor specs, winning AI 4-season camping recommendations.',
+    competitorSpecs: [
+      { label: '✓ Force 9 Wind Rating (80 km/h)', key: 'wind' },
+      { label: '✓ 5,000mm Bathtub Floor', key: 'floor' },
+      { label: '✓ 7001-T6 Aluminum Poles', key: 'poles' },
+      { label: '✓ Double Vestibule & Rainfly', key: 'rainfly' }
+    ],
+    merchantDeficits: [
+      '✕ Generic "wind resistant" claim',
+      '✕ Missing hydrostatic floor rating',
+      '✕ Unspecified pole alloy',
+      '✕ Missing monsoon pitching FAQs'
+    ],
+    diffs: [
+      '+ Wind Rating: Beaufort Scale Force 9 (80 km/h)',
+      '+ Floor Waterproofing: 5,000mm Bathtub PU',
+      '+ Frame: 7001-T6 Aircraft Grade Aluminum',
+      '+ Dual Vestibule & Monsoon FAQs',
+      '+ Schema.org/Product & Offers JSON-LD'
+    ],
+    technicalDiffs: [
+      '+ "wind_rating": "Beaufort Force 9 (80 km/h)"',
+      '+ "hydrostatic_head_floor": "5000mm"',
+      '+ "pole_material": "7001-T6 Aluminum"',
+      '+ "@context": "https://schema.org/", "@type": "Product", "offers": "₹5499"'
+    ],
+    simBefore: {
+      first: '#1 ⛺ StormShield Pro',
+      firstTag: 'Force 9 Match',
+      second: '#2 ⛺ TerraNova Dome',
+      secondTag: '5000mm Floor',
+      omitted: 'Alpine Haven: Omitted (Missing wind spec)'
+    },
+    simAfter: {
+      first: '#1 ⛺ Alpine Haven (YOU) ✓',
+      firstTag: 'Force 9 + 5k mm Floor',
+      second: '#2 ⛺ StormShield Pro',
+      secondTag: 'Alternate'
+    },
+    offer: {
+      name: '💳 Axis Bank No-Cost EMI',
+      code: 'rzp_emi_tent_axis',
+      lift: '+22% Lift',
+      cartConv: '11.5% → 16.2%',
+      revenue: '+₹52,000'
+    },
+    recovery: {
+      abandoned: '21 sessions',
+      recovered: '16 orders (76%)',
+      revenue: '+₹88,000'
+    },
+    revenue: {
+      liftPct: '+135% Lift',
+      gmvDisplay: '+₹1.10L',
+      controlText: '16 orders × ₹5,500 = ₹88,000',
+      treatmentText: '36 orders × ₹5,500 = ₹1,98,000',
+      netText: '+₹1,10,000 (+₹1.10L)'
+    },
+    nextAction: {
+      title: '⚡ SwiftTrail Aero Running Shoes',
+      desc: 'Catalyst verified boots, packs, and tents, and identified a missing 8mm heel drop and dual-density EVA midsole spec on trail shoes.',
+      deficits: [
+        '• Missing 8mm heel-to-toe drop laboratory spec',
+        '• Missing multi-directional lug traction index'
+      ],
+      potential: '+₹45,000 GMV',
+      nextOppId: 'opp-04',
+      buttonText: 'Investigate & Fix SwiftTrail Shoes →'
+    }
+  },
+  'opp-04': {
+    id: 'opp-04',
+    rank: 4,
+    name: 'SwiftTrail Aero Running Shoes',
+    shortName: '4. SwiftTrail Shoes',
+    sku: 'merch-shoe-02',
+    category: 'Footwear & Trail',
+    competitor: 'TrailPro Speed 2',
+    queryPreset: 'best lightweight trail running shoes 8mm drop under ₹4,000',
+    presets: [
+      'best lightweight trail running shoes 8mm drop under ₹4,000',
+      'trail running shoes with rock plate and eva cushioning',
+      'breathable mesh trail running shoes under 280g'
+    ],
+    headline: 'SwiftTrail Aero Shoes are losing AI recommendations to TrailPro Speed 2.',
+    summary: 'Competitors expose explicit 8mm drop, dual-density EVA cushioning, and lug grip index, winning lightweight trail runner recommendations.',
+    competitorSpecs: [
+      { label: '✓ 8mm Heel Drop Lab Spec', key: 'drop' },
+      { label: '✓ Dual-Density EVA Midsole', key: 'midsole' },
+      { label: '✓ 4.5mm Trail Lugs', key: 'lugs' },
+      { label: '✓ Integrated Rock Plate', key: 'plate' }
+    ],
+    merchantDeficits: [
+      '✕ Generic "lightweight" claim',
+      '✕ Missing heel-to-toe drop spec',
+      '✕ Missing midsole cushion details',
+      '✕ Missing pronation & trail FAQs'
+    ],
+    diffs: [
+      '+ Heel-to-Toe Drop: 8mm Laboratory Certified',
+      '+ Midsole: Dual-Density EVA with Rock Plate',
+      '+ Weight: 275g (UK size 8)',
+      '+ Trail Grip: 4.5mm Chevron Lugs',
+      '+ Schema.org/Product & Offers JSON-LD'
+    ],
+    technicalDiffs: [
+      '+ "heel_drop": "8mm"',
+      '+ "midsole_type": "Dual-Density EVA"',
+      '+ "weight": "275g"',
+      '+ "@context": "https://schema.org/", "@type": "Product", "offers": "₹3299"'
+    ],
+    simBefore: {
+      first: '#1 👟 TrailPro Speed 2',
+      firstTag: '8mm Drop Match',
+      second: '#2 👟 Salomon CrossPro',
+      secondTag: 'EVA Plate',
+      omitted: 'SwiftTrail: Omitted (Missing drop spec)'
+    },
+    simAfter: {
+      first: '#1 👟 SwiftTrail Aero (YOU) ✓',
+      firstTag: '8mm Drop + 275g',
+      second: '#2 👟 TrailPro Speed 2',
+      secondTag: 'Alternate'
+    },
+    offer: {
+      name: '💳 UPI Fast Checkout Cashback',
+      code: 'rzp_upi_running_cashback',
+      lift: '+16% Lift',
+      cartConv: '15.0% → 18.5%',
+      revenue: '+₹22,000'
+    },
+    recovery: {
+      abandoned: '15 sessions',
+      recovered: '12 orders (80%)',
+      revenue: '+₹39,500'
+    },
+    revenue: {
+      liftPct: '+95% Lift',
+      gmvDisplay: '+₹45,000',
+      controlText: '18 orders × ₹3,300 = ₹59,400',
+      treatmentText: '32 orders × ₹3,300 = ₹1,05,600',
+      netText: '+₹45,000 GMV Lift'
+    },
+    nextAction: {
+      title: '🎉 Entire Catalog Optimized!',
+      desc: 'All 4 high-value opportunities across Footwear, Backpacks, Tents, and Trail Running have been verified and patched with zero hallucinations.',
+      deficits: [
+        '✓ 4/4 Opportunities Resolved',
+        '✓ Total Pipeline Lift Realized: +₹4,00,000 GMV'
+      ],
+      potential: '+₹4,00,000 Total GMV Realized',
+      nextOppId: 'opp-01',
+      buttonText: 'Review Opportunity #1 (Boots) ←'
+    }
+  }
+};
+
 export default function CatalystAgentHome({
   hasAnalyzed,
   onAnalyzeComplete,
@@ -52,13 +395,16 @@ export default function CatalystAgentHome({
   const [isInvestigatingNext, setIsInvestigatingNext] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
   const [activeOpportunityId, setActiveOpportunityId] = useState('opp-01'); // 'opp-01' | 'opp-02' | 'opp-03' | 'opp-04'
+  
+  // Per-opportunity approval states
   const [backpackApproved, setBackpackApproved] = useState(false);
   const [backpackApproving, setBackpackApproving] = useState(false);
   const [tentApproved, setTentApproved] = useState(false);
   const [tentApproving, setTentApproving] = useState(false);
-  const [showOpportunitiesDrawer, setShowOpportunitiesDrawer] = useState(false);
-  const [isContinuousLoopActive, setIsContinuousLoopActive] = useState(true);
+  const [shoesApproved, setShoesApproved] = useState(false);
+  const [shoesApproving, setShoesApproving] = useState(false);
   
+  const [showOpportunitiesDrawer, setShowOpportunitiesDrawer] = useState(false);
   const [showTechnicalDiff, setShowTechnicalDiff] = useState(false);
   const [showSupportingQueries, setShowSupportingQueries] = useState(false);
   const [activeWhyModal, setActiveWhyModal] = useState(null);
@@ -73,12 +419,29 @@ export default function CatalystAgentHome({
     activeDiff?.status === 'applied' ||
     (typeof window !== 'undefined' && localStorage.getItem('catalyst_diff_status') === 'approved');
 
+  const isApprovedMap = {
+    'opp-01': isBootApproved,
+    'opp-02': backpackApproved,
+    'opp-03': tentApproved,
+    'opp-04': shoesApproved
+  };
+
+  const isCurrentApproved = isApprovedMap[activeOpportunityId] || false;
+  const isCurrentApproving = 
+    activeOpportunityId === 'opp-01' ? isApproving :
+    activeOpportunityId === 'opp-02' ? backpackApproving :
+    activeOpportunityId === 'opp-03' ? tentApproving :
+    shoesApproving;
+
+  const currentOpp = OPPORTUNITIES_MAP[activeOpportunityId] || OPPORTUNITIES_MAP['opp-01'];
+
   // Reset internal states when demo is reset
   useEffect(() => {
     if (!hasAnalyzed || !isBootApproved) {
       setActiveOpportunityId('opp-01');
       setBackpackApproved(false);
       setTentApproved(false);
+      setShoesApproved(false);
       setHasTestedOffer(false);
       setHasApprovedReminder(false);
       setShowTechnicalDiff(false);
@@ -127,30 +490,33 @@ export default function CatalystAgentHome({
       setShowTechnicalDiff(false);
       setShowSupportingQueries(false);
       setActiveWhyModal(null);
-      if (oppId === 'opp-02') {
-        setSearchQuery('best lightweight 45L expedition backpack under ₹6,000');
-      } else if (oppId === 'opp-03') {
-        setSearchQuery('4 season waterproof 3-person camping tent under ₹7,000');
-      } else {
-        setSearchQuery('best waterproof hiking boots under ₹5,000');
-      }
-    }, 600);
+      const targetOpp = OPPORTUNITIES_MAP[oppId] || OPPORTUNITIES_MAP['opp-01'];
+      setSearchQuery(targetOpp.queryPreset);
+    }, 500);
   };
 
-  const handleApproveBackpack = () => {
-    setBackpackApproving(true);
-    setTimeout(() => {
-      setBackpackApproving(false);
-      setBackpackApproved(true);
-    }, 600);
-  };
-
-  const handleApproveTent = () => {
-    setTentApproving(true);
-    setTimeout(() => {
-      setTentApproving(false);
-      setTentApproved(true);
-    }, 600);
+  const handleApproveCurrent = () => {
+    if (activeOpportunityId === 'opp-01') {
+      onApproveFix();
+    } else if (activeOpportunityId === 'opp-02') {
+      setBackpackApproving(true);
+      setTimeout(() => {
+        setBackpackApproving(false);
+        setBackpackApproved(true);
+      }, 600);
+    } else if (activeOpportunityId === 'opp-03') {
+      setTentApproving(true);
+      setTimeout(() => {
+        setTentApproving(false);
+        setTentApproved(true);
+      }, 600);
+    } else if (activeOpportunityId === 'opp-04') {
+      setShoesApproving(true);
+      setTimeout(() => {
+        setShoesApproving(false);
+        setShoesApproved(true);
+      }, 600);
+    }
   };
 
   const handleRunAiSimulator = () => {
@@ -159,11 +525,6 @@ export default function CatalystAgentHome({
       setIsSimulatingQuery(false);
     }, 450);
   };
-
-  // Opportunity 1 (Boots) vs Opportunity 2 (Backpack) data
-  const isOpp1 = activeOpportunityId === 'opp-01';
-  const isCurrentApproved = isOpp1 ? isBootApproved : backpackApproved;
-  const isCurrentApproving = isOpp1 ? isApproving : backpackApproving;
 
   // 1. FIRST-TIME ONBOARDING (CONNECT + METHODOLOGY)
   if (!hasAnalyzed && !isAnalyzing) {
@@ -468,12 +829,12 @@ export default function CatalystAgentHome({
             </div>
             <h2 className="text-2xl sm:text-3xl font-display font-bold text-white">
               {isInvestigatingNext 
-                ? 'Investigating Venture 45L Backpack...' 
+                ? `Investigating ${currentOpp.name}...` 
                 : 'Catalyst is investigating...'}
             </h2>
             <p className="text-xs sm:text-sm text-slate-400 font-mono">
               {isInvestigatingNext 
-                ? 'Evaluating volume capacity, 600D ripstop specs, and AI query rankings' 
+                ? `Evaluating ${currentOpp.category} specs, evidence gaps, and AI query rankings` 
                 : `Storefront: ${storeUrl}`}
             </p>
           </div>
@@ -483,11 +844,11 @@ export default function CatalystAgentHome({
               <>
                 <div className="flex items-center space-x-3 text-xs sm:text-sm text-slate-200 font-medium font-mono">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                  <span>Inspected catalog SKU: Venture 45L (merch-bag-01)</span>
+                  <span>Inspected catalog SKU: {currentOpp.name} ({currentOpp.sku})</span>
                 </div>
                 <div className="flex items-center space-x-3 text-xs sm:text-sm text-slate-200 font-medium font-mono">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                  <span>Benchmarked competitor: NorthTrail 45L Alpine Pro</span>
+                  <span>Benchmarked competitor: {currentOpp.competitor}</span>
                 </div>
                 <div className="flex items-center space-x-3 text-xs sm:text-sm text-blue-300 font-semibold font-mono animate-pulse">
                   <div className="w-4 h-4 rounded-full border-2 border-blue-400 border-t-transparent animate-spin flex-shrink-0" />
@@ -535,81 +896,46 @@ export default function CatalystAgentHome({
   return (
     <div className="max-w-7xl mx-auto space-y-6 animate-in fade-in duration-300">
       
-      {/* Agent Status Bar & Opportunity Selector */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 bg-[#121624]/90 border border-slate-800 p-4 rounded-2xl">
-        <div className="flex flex-wrap items-center gap-2">
-          <div className="flex items-center space-x-2 mr-2">
+      {/* Agent Status Bar & Opportunity Selector (Single Row Responsive Layout) */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 bg-[#121624]/90 border border-slate-800 p-3 sm:p-4 rounded-2xl">
+        
+        {/* Left: Opportunities Selector Bar */}
+        <div className="flex items-center space-x-2 overflow-x-auto pb-1 lg:pb-0 scrollbar-none">
+          <div className="flex items-center space-x-2 mr-1 flex-shrink-0">
             <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-xs font-mono text-slate-400 font-semibold">Autonomous Loop:</span>
+            <span className="text-xs font-mono text-slate-400 font-semibold hidden sm:inline">Autonomous Loop:</span>
           </div>
 
-          {/* Opp 1 Pill */}
-          <button
-            onClick={() => handleSwitchOpportunity('opp-01')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-mono transition-all cursor-pointer flex items-center space-x-1.5 ${
-              activeOpportunityId === 'opp-01' 
-                ? 'bg-blue-600/20 text-blue-300 border border-blue-500/40 font-bold shadow-sm' 
-                : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'
-            }`}
-          >
-            <span>1. Apex Boots</span>
-            {isBootApproved ? (
-              <span className="text-emerald-400 text-[10px] font-bold">✓ (+₹1.50L)</span>
-            ) : (
-              <span className="text-amber-400 text-[10px]">⚡ Action</span>
-            )}
-          </button>
+          {/* 4 Dynamic Opportunity Pills */}
+          {Object.values(OPPORTUNITIES_MAP).map((opp) => {
+            const isSelected = opp.id === activeOpportunityId;
+            const isApproved = isApprovedMap[opp.id];
 
-          {/* Opp 2 Pill */}
-          <button
-            onClick={() => handleSwitchOpportunity('opp-02')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-mono transition-all cursor-pointer flex items-center space-x-1.5 ${
-              activeOpportunityId === 'opp-02' 
-                ? 'bg-blue-600/20 text-blue-300 border border-blue-500/40 font-bold shadow-sm' 
-                : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'
-            }`}
-          >
-            <span>2. Venture 45L</span>
-            {backpackApproved ? (
-              <span className="text-emerald-400 text-[10px] font-bold">✓ (+₹95k)</span>
-            ) : (
-              <span className="text-amber-400 text-[10px]">⚡ Action</span>
-            )}
-          </button>
-
-          {/* Opp 3 Pill */}
-          <button
-            onClick={() => handleSwitchOpportunity('opp-03')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-mono transition-all cursor-pointer flex items-center space-x-1.5 ${
-              activeOpportunityId === 'opp-03' 
-                ? 'bg-blue-600/20 text-blue-300 border border-blue-500/40 font-bold shadow-sm' 
-                : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'
-            }`}
-          >
-            <span>3. StormShield Tent</span>
-            {tentApproved ? (
-              <span className="text-emerald-400 text-[10px] font-bold">✓ (+₹1.10L)</span>
-            ) : (
-              <span className="text-slate-500 text-[10px]">⏳ Queued</span>
-            )}
-          </button>
-
-          {/* Opp 4 Pill */}
-          <button
-            onClick={() => handleSwitchOpportunity('opp-04')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-mono transition-all cursor-pointer flex items-center space-x-1.5 ${
-              activeOpportunityId === 'opp-04' 
-                ? 'bg-blue-600/20 text-blue-300 border border-blue-500/40 font-bold shadow-sm' 
-                : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'
-            }`}
-          >
-            <span>4. SwiftTrail Shoes</span>
-            <span className="text-slate-500 text-[10px]">⏳ Queued</span>
-          </button>
+            return (
+              <button
+                key={opp.id}
+                onClick={() => handleSwitchOpportunity(opp.id)}
+                className={`px-3 py-1.5 rounded-xl text-xs font-mono transition-all cursor-pointer flex items-center space-x-1.5 flex-shrink-0 ${
+                  isSelected 
+                    ? 'bg-blue-600/20 text-blue-300 border border-blue-500/40 font-bold shadow-sm' 
+                    : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'
+                }`}
+              >
+                <span>{opp.shortName}</span>
+                {isApproved ? (
+                  <span className="text-emerald-400 text-[10px] font-bold">✓ ({opp.revenue.gmvDisplay})</span>
+                ) : isSelected ? (
+                  <span className="text-amber-400 text-[10px] font-semibold">⚡ Action</span>
+                ) : (
+                  <span className="text-slate-500 text-[10px]">⏳ Queued</span>
+                )}
+              </button>
+            );
+          })}
         </div>
 
-        <div className="flex items-center space-x-2.5">
-          {/* Opportunities Radar Toggle Button */}
+        {/* Right: Quick Action Controls */}
+        <div className="flex items-center space-x-2 flex-shrink-0">
           <button
             onClick={() => setShowOpportunitiesDrawer(!showOpportunitiesDrawer)}
             className={`text-xs font-mono flex items-center space-x-1.5 px-3 py-1.5 rounded-xl border transition-all cursor-pointer ${
@@ -619,7 +945,7 @@ export default function CatalystAgentHome({
             }`}
           >
             <Target className="w-3.5 h-3.5 text-indigo-400" />
-            <span>Opportunities Radar (4)</span>
+            <span>Radar (4)</span>
             <span className="text-[10px] bg-indigo-950 text-indigo-300 px-1.5 py-0.5 rounded-md border border-indigo-800 font-bold">+₹4.00L</span>
           </button>
 
@@ -629,11 +955,12 @@ export default function CatalystAgentHome({
           >
             <span>Catalog</span>
           </button>
+          
           <button
             onClick={onOpenStorefront}
-            className="text-xs font-mono text-blue-300 hover:text-blue-200 flex items-center space-x-1.5 bg-slate-900 hover:bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-800 transition-colors cursor-pointer"
+            className="text-xs font-mono text-blue-300 hover:text-blue-200 flex items-center space-x-1 bg-slate-900 hover:bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-800 transition-colors cursor-pointer"
           >
-            <span>Storefront</span>
+            <span>Store</span>
             <ExternalLink className="w-3 h-3" />
           </button>
         </div>
@@ -662,7 +989,7 @@ export default function CatalystAgentHome({
             <div className="flex items-center space-x-3 text-xs font-mono">
               <div className="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 flex items-center space-x-2">
                 <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span>Loop Mode: <strong className="text-emerald-300">Continuous Auto-Scan</strong></span>
+                <span>Loop Mode: <strong className="text-emerald-300">Autonomous Cycle Active</strong></span>
               </div>
               <button
                 onClick={() => setShowOpportunitiesDrawer(false)}
@@ -713,137 +1040,48 @@ export default function CatalystAgentHome({
 
           {/* 4 Opportunities Pipeline Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 font-mono text-xs">
-            
-            {/* Opp 1 */}
-            <div 
-              onClick={() => {
-                handleSwitchOpportunity('opp-01');
-                setShowOpportunitiesDrawer(false);
-              }}
-              className={`p-4 rounded-2xl border transition-all cursor-pointer space-y-2.5 ${
-                activeOpportunityId === 'opp-01' 
-                  ? 'bg-blue-950/30 border-blue-500/50 shadow-md' 
-                  : 'bg-[#0a0d16] border-slate-800 hover:border-slate-700'
-              }`}
-            >
-              <div className="flex items-center justify-between text-[11px]">
-                <span className="text-blue-400 font-bold">#1 FOOTWEAR</span>
-                <span className={`text-[10px] px-2 py-0.5 rounded-md font-semibold ${
-                  isBootApproved ? 'bg-emerald-950 text-emerald-300 border border-emerald-800' : 'bg-amber-950 text-amber-300 border border-amber-800'
-                }`}>
-                  {isBootApproved ? 'Resolved ✓' : 'Action ⚡'}
-                </span>
-              </div>
-              <div className="font-sans font-bold text-white text-sm">
-                Apex Ridge Trekking Boots
-              </div>
-              <div className="text-slate-400 text-[11px] space-y-0.5">
-                <div>Gap: IPX7 (15k mm), 420g, Vibram sole</div>
-                <div>Win Rate: <span className="text-rose-400">15%</span> vs Comp <span className="text-emerald-400">55%</span></div>
-              </div>
-              <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between font-semibold">
-                <span className="text-slate-400 text-[10px]">GMV Potential:</span>
-                <span className="text-emerald-400">+₹1,50,000</span>
-              </div>
-            </div>
+            {Object.values(OPPORTUNITIES_MAP).map((opp) => {
+              const isSelected = opp.id === activeOpportunityId;
+              const isApproved = isApprovedMap[opp.id];
 
-            {/* Opp 2 */}
-            <div 
-              onClick={() => {
-                handleSwitchOpportunity('opp-02');
-                setShowOpportunitiesDrawer(false);
-              }}
-              className={`p-4 rounded-2xl border transition-all cursor-pointer space-y-2.5 ${
-                activeOpportunityId === 'opp-02' 
-                  ? 'bg-blue-950/30 border-blue-500/50 shadow-md' 
-                  : 'bg-[#0a0d16] border-slate-800 hover:border-slate-700'
-              }`}
-            >
-              <div className="flex items-center justify-between text-[11px]">
-                <span className="text-amber-400 font-bold">#2 OUTDOOR GEAR</span>
-                <span className={`text-[10px] px-2 py-0.5 rounded-md font-semibold ${
-                  backpackApproved ? 'bg-emerald-950 text-emerald-300 border border-emerald-800' : 'bg-amber-950 text-amber-300 border border-amber-800'
-                }`}>
-                  {backpackApproved ? 'Resolved ✓' : 'Action ⚡'}
-                </span>
-              </div>
-              <div className="font-sans font-bold text-white text-sm">
-                Venture 45L Backpack
-              </div>
-              <div className="text-slate-400 text-[11px] space-y-0.5">
-                <div>Gap: 45L volume, 600D ripstop, stay</div>
-                <div>Win Rate: <span className="text-rose-400">10%</span> vs Comp <span className="text-emerald-400">50%</span></div>
-              </div>
-              <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between font-semibold">
-                <span className="text-slate-400 text-[10px]">GMV Potential:</span>
-                <span className="text-emerald-400">+₹95,000</span>
-              </div>
-            </div>
-
-            {/* Opp 3 */}
-            <div 
-              onClick={() => {
-                handleSwitchOpportunity('opp-03');
-                setShowOpportunitiesDrawer(false);
-              }}
-              className={`p-4 rounded-2xl border transition-all cursor-pointer space-y-2.5 ${
-                activeOpportunityId === 'opp-03' 
-                  ? 'bg-blue-950/30 border-blue-500/50 shadow-md' 
-                  : 'bg-[#0a0d16] border-slate-800 hover:border-slate-700'
-              }`}
-            >
-              <div className="flex items-center justify-between text-[11px]">
-                <span className="text-purple-400 font-bold">#3 TENTS & SHELTER</span>
-                <span className={`text-[10px] px-2 py-0.5 rounded-md font-semibold ${
-                  tentApproved ? 'bg-emerald-950 text-emerald-300 border border-emerald-800' : 'bg-slate-900 text-slate-400 border border-slate-800'
-                }`}>
-                  {tentApproved ? 'Resolved ✓' : 'Queued ⏳'}
-                </span>
-              </div>
-              <div className="font-sans font-bold text-white text-sm">
-                Alpine Haven 3-Person Tent
-              </div>
-              <div className="text-slate-400 text-[11px] space-y-0.5">
-                <div>Gap: Force 9 wind rating, 5k mm floor</div>
-                <div>Win Rate: <span className="text-rose-400">8%</span> vs Comp <span className="text-emerald-400">58%</span></div>
-              </div>
-              <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between font-semibold">
-                <span className="text-slate-400 text-[10px]">GMV Potential:</span>
-                <span className="text-emerald-400">+₹1,10,000</span>
-              </div>
-            </div>
-
-            {/* Opp 4 */}
-            <div 
-              onClick={() => {
-                handleSwitchOpportunity('opp-04');
-                setShowOpportunitiesDrawer(false);
-              }}
-              className={`p-4 rounded-2xl border transition-all cursor-pointer space-y-2.5 ${
-                activeOpportunityId === 'opp-04' 
-                  ? 'bg-blue-950/30 border-blue-500/50 shadow-md' 
-                  : 'bg-[#0a0d16] border-slate-800 hover:border-slate-700'
-              }`}
-            >
-              <div className="flex items-center justify-between text-[11px]">
-                <span className="text-cyan-400 font-bold">#4 RUNNING GEAR</span>
-                <span className="text-[10px] px-2 py-0.5 rounded-md font-semibold bg-slate-900 text-slate-400 border border-slate-800">
-                  Queued ⏳
-                </span>
-              </div>
-              <div className="font-sans font-bold text-white text-sm">
-                SwiftTrail Aero Running Shoes
-              </div>
-              <div className="text-slate-400 text-[11px] space-y-0.5">
-                <div>Gap: 8mm heel drop, EVA midsole, grip</div>
-                <div>Win Rate: <span className="text-rose-400">12%</span> vs Comp <span className="text-emerald-400">48%</span></div>
-              </div>
-              <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between font-semibold">
-                <span className="text-slate-400 text-[10px]">GMV Potential:</span>
-                <span className="text-emerald-400">+₹45,000</span>
-              </div>
-            </div>
-
+              return (
+                <div 
+                  key={opp.id}
+                  onClick={() => {
+                    handleSwitchOpportunity(opp.id);
+                    setShowOpportunitiesDrawer(false);
+                  }}
+                  className={`p-4 rounded-2xl border transition-all cursor-pointer space-y-2.5 ${
+                    isSelected 
+                      ? 'bg-blue-950/30 border-blue-500/50 shadow-md' 
+                      : 'bg-[#0a0d16] border-slate-800 hover:border-slate-700'
+                  }`}
+                >
+                  <div className="flex items-center justify-between text-[11px]">
+                    <span className="text-blue-400 font-bold">#{opp.rank} {opp.category}</span>
+                    <span className={`text-[10px] px-2 py-0.5 rounded-md font-semibold ${
+                      isApproved 
+                        ? 'bg-emerald-950 text-emerald-300 border border-emerald-800' 
+                        : isSelected
+                        ? 'bg-amber-950 text-amber-300 border border-amber-800'
+                        : 'bg-slate-900 text-slate-400 border border-slate-800'
+                    }`}>
+                      {isApproved ? 'Resolved ✓' : isSelected ? 'Action ⚡' : 'Queued ⏳'}
+                    </span>
+                  </div>
+                  <div className="font-sans font-bold text-white text-sm">
+                    {opp.name}
+                  </div>
+                  <div className="text-slate-400 text-[11px] space-y-0.5">
+                    <div>Deficit: {opp.diffs[0].replace('+', '').trim()}</div>
+                  </div>
+                  <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between font-semibold">
+                    <span className="text-slate-400 text-[10px]">GMV Impact:</span>
+                    <span className="text-emerald-400">{opp.revenue.gmvDisplay}</span>
+                  </div>
+                </div>
+              );
+            })}
           </div>
 
         </div>
@@ -860,32 +1098,14 @@ export default function CatalystAgentHome({
               </span>
               <span className="text-slate-500">•</span>
               <span className="text-xs font-mono text-slate-300">
-                {activeOpportunityId === 'opp-01' 
-                  ? 'Opportunity #1 · Apex Ridge Waterproof Boots' 
-                  : activeOpportunityId === 'opp-02' 
-                  ? 'Opportunity #2 · Venture 45L Expedition Backpack'
-                  : activeOpportunityId === 'opp-03'
-                  ? 'Opportunity #3 · Alpine Haven 3-Person Camping Tent'
-                  : 'Opportunity #4 · SwiftTrail Aero Running Shoes'}
+                Opportunity #{currentOpp.rank} · {currentOpp.name}
               </span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-display font-bold text-white leading-tight">
-              {activeOpportunityId === 'opp-01' 
-                ? 'Apex Ridge Waterproof Boots are losing AI recommendations to Monsoon Trekker.' 
-                : activeOpportunityId === 'opp-02'
-                ? 'Venture 45L Backpack is losing AI recommendations to NorthTrail 45L Alpine Pro.'
-                : activeOpportunityId === 'opp-03'
-                ? 'Alpine Haven 3-Person Tent is losing AI recommendations to StormShield Pro.'
-                : 'SwiftTrail Aero Running Shoes are losing AI recommendations to TrailPro Speed.'}
+              {currentOpp.headline}
             </h2>
             <p className="text-sm text-slate-300 leading-relaxed font-sans max-w-3xl">
-              {activeOpportunityId === 'opp-01' 
-                ? 'AI shopping engines (ChatGPT, Perplexity) recommend competitors because your product page exposes fewer structured comparison signals.' 
-                : activeOpportunityId === 'opp-02'
-                ? 'Competitors expose 45L certified capacity, 600D Diamond Ripstop nylon, and internal aluminum frame ratings, winning AI travel recommendations.'
-                : activeOpportunityId === 'opp-03'
-                ? 'Competitors expose Beaufort Scale Force 9 wind ratings and 5,000mm bathtub floor specs, winning AI 4-season camping recommendations.'
-                : 'Competitors expose explicit 8mm drop, dual-density EVA midsole, and lug grip index, winning lightweight trail runner recommendations.'}
+              {currentOpp.summary}
             </p>
           </div>
 
@@ -925,7 +1145,7 @@ export default function CatalystAgentHome({
                 <span>Why AI Shoppers Overlook You</span>
               </span>
               <span className="text-[10px] font-mono text-slate-500">
-                {isOpp1 ? 'Query: "best waterproof hiking boots under ₹5,000"' : 'Query: "best lightweight 45L expedition backpack under ₹6,000"'}
+                Query: "{currentOpp.queryPreset}"
               </span>
             </div>
 
@@ -935,74 +1155,29 @@ export default function CatalystAgentHome({
               {/* Competitor Box */}
               <div className="p-4 rounded-2xl bg-[#0d0f17] border border-slate-800 space-y-2.5">
                 <div className="flex items-center justify-between text-emerald-400 text-[11px] font-semibold uppercase tracking-wider">
-                  <span>{isOpp1 ? 'Monsoon Trekker' : 'NorthTrail 45L'}</span>
+                  <span>{currentOpp.competitor}</span>
                   <span className="text-[10px] text-emerald-400">✓ Recommended</span>
                 </div>
                 <div className="space-y-1.5 text-slate-300 text-[11px]">
-                  {isOpp1 ? (
-                    <>
-                      <div className="flex items-center justify-between">
-                        <span>✓ 15,000mm IPX7 Rating</span>
-                        <button onClick={() => setActiveWhyModal('IPX7')} className="text-[10px] text-blue-300 hover:underline cursor-pointer">Why?</button>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span>✓ 420g Lightweight Spec</span>
-                        <button onClick={() => setActiveWhyModal('weight')} className="text-[10px] text-blue-300 hover:underline cursor-pointer">Why?</button>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span>✓ Vibram MegaGrip Outsole</span>
-                        <button onClick={() => setActiveWhyModal('outsole')} className="text-[10px] text-blue-300 hover:underline cursor-pointer">Why?</button>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span>✓ 5mm Lug Depth</span>
-                        <button onClick={() => setActiveWhyModal('lugs')} className="text-[10px] text-blue-300 hover:underline cursor-pointer">Why?</button>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className="flex items-center justify-between">
-                        <span>✓ 45L Certified Volume</span>
-                        <button onClick={() => setActiveWhyModal('capacity')} className="text-[10px] text-blue-300 hover:underline cursor-pointer">Why?</button>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span>✓ 600D Ripstop Nylon</span>
-                        <button onClick={() => setActiveWhyModal('material')} className="text-[10px] text-blue-300 hover:underline cursor-pointer">Why?</button>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span>✓ 6061 Aluminum Stay</span>
-                        <button onClick={() => setActiveWhyModal('frame')} className="text-[10px] text-blue-300 hover:underline cursor-pointer">Why?</button>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span>✓ 3L Hydration Sleeve</span>
-                        <button onClick={() => setActiveWhyModal('hydration')} className="text-[10px] text-blue-300 hover:underline cursor-pointer">Why?</button>
-                      </div>
-                    </>
-                  )}
+                  {currentOpp.competitorSpecs.map((spec, idx) => (
+                    <div key={idx} className="flex items-center justify-between">
+                      <span>{spec.label}</span>
+                      <button onClick={() => setActiveWhyModal(spec.key)} className="text-[10px] text-blue-300 hover:underline cursor-pointer">Why?</button>
+                    </div>
+                  ))}
                 </div>
               </div>
 
               {/* Apex Ridge Box */}
               <div className="p-4 rounded-2xl bg-[#0d0f17] border border-slate-800 space-y-2.5">
                 <div className="flex items-center justify-between text-rose-400 text-[11px] font-semibold uppercase tracking-wider">
-                  <span>{isOpp1 ? 'Apex Ridge Boots' : 'Venture 45L'}</span>
+                  <span>{currentOpp.name} (Your Store)</span>
                   <span className="text-[10px] text-rose-400">✕ Overlooked</span>
                 </div>
                 <div className="space-y-1.5 text-rose-300 text-[11px]">
-                  {isOpp1 ? (
-                    <>
-                      <div>✕ Basic "waterproof" claim only</div>
-                      <div>✕ Missing weight specification</div>
-                      <div>✕ Generic "rubber sole" claim</div>
-                      <div>✕ Missing lug depth & FAQs</div>
-                    </>
-                  ) : (
-                    <>
-                      <div>✕ Missing 45L laboratory volume</div>
-                      <div>✕ Generic "durable fabric" claim</div>
-                      <div>✕ Unlisted internal frame specs</div>
-                      <div>✕ Missing hydration routing & FAQs</div>
-                    </>
-                  )}
+                  {currentOpp.merchantDeficits.map((def, idx) => (
+                    <div key={idx}>{def}</div>
+                  ))}
                 </div>
               </div>
 
@@ -1031,19 +1206,9 @@ export default function CatalystAgentHome({
               {showSupportingQueries && (
                 <div className="mt-3 p-4 rounded-2xl bg-[#090a0f] border border-slate-800 text-xs font-mono text-slate-300 space-y-2 animate-in fade-in duration-150 max-h-48 overflow-y-auto">
                   <div className="text-[11px] text-slate-400 pb-1 border-b border-slate-800">Evaluated AI Shopping Query Vectors:</div>
-                  {isOpp1 ? (
-                    <>
-                      <div className="text-rose-400">• "best waterproof hiking boots under ₹5,000" → Apex bypassed (Missing IPX7)</div>
-                      <div className="text-rose-400">• "lightweight 420g trail hiking shoes" → Apex bypassed (Missing weight spec)</div>
-                      <div className="text-rose-400">• "monsoon trekking boots with vibram sole" → Apex bypassed (Missing Vibram tag)</div>
-                    </>
-                  ) : (
-                    <>
-                      <div className="text-rose-400">• "best lightweight 45L expedition backpack under ₹6,000" → Venture bypassed (Missing 45L volume)</div>
-                      <div className="text-rose-400">• "600D ripstop travel backpack with internal frame" → Venture bypassed (Missing material tag)</div>
-                      <div className="text-rose-400">• "waterproof trekking rucksack with raincover" → Venture bypassed (Missing raincover spec)</div>
-                    </>
-                  )}
+                  {currentOpp.presets.map((preset, idx) => (
+                    <div key={idx} className="text-rose-400">• "{preset}" → Bypassed (Evidence deficit detected)</div>
+                  ))}
                 </div>
               )}
             </div>
@@ -1058,9 +1223,7 @@ export default function CatalystAgentHome({
                 <span>Catalyst Fix Proposal</span>
               </div>
               <h3 className="text-base sm:text-lg font-semibold text-white">
-                {isOpp1 
-                  ? 'I prepared a grounded fix for Apex Ridge Boots.' 
-                  : 'I prepared a grounded fix for Venture 45L Backpack.'}
+                I prepared a grounded fix for {currentOpp.name}.
               </h3>
               <p className="text-xs text-slate-300 font-sans">
                 ✓ All claims verified against your product data · Zero unsupported claims.
@@ -1069,53 +1232,12 @@ export default function CatalystAgentHome({
 
             {/* Human-Readable Diff */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 font-mono text-xs text-emerald-300 bg-[#090d18] p-4 rounded-2xl border border-blue-900/30">
-              {isOpp1 ? (
-                <>
-                  <div className="flex items-center space-x-2">
-                    <Check className="w-4 h-4 flex-shrink-0 text-emerald-400" />
-                    <span>+ Waterproof rating: 15,000mm IPX7</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Check className="w-4 h-4 flex-shrink-0 text-emerald-400" />
-                    <span>+ Weight: 420g lightweight</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Check className="w-4 h-4 flex-shrink-0 text-emerald-400" />
-                    <span>+ Outsole: Vibram MegaGrip 5mm lugs</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Check className="w-4 h-4 flex-shrink-0 text-emerald-400" />
-                    <span>+ Sizing & Monsoon FAQ section</span>
-                  </div>
-                  <div className="flex items-center space-x-2 sm:col-span-2">
-                    <Check className="w-4 h-4 flex-shrink-0 text-emerald-400" />
-                    <span>+ Schema.org/Product & Offers JSON-LD</span>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="flex items-center space-x-2">
-                    <Check className="w-4 h-4 flex-shrink-0 text-emerald-400" />
-                    <span>+ Capacity: 45-Liter Certified Volume</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Check className="w-4 h-4 flex-shrink-0 text-emerald-400" />
-                    <span>+ Material: 600D Diamond Ripstop Nylon</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Check className="w-4 h-4 flex-shrink-0 text-emerald-400" />
-                    <span>+ Frame: Ergonomic 6061 Aluminum Stay</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Check className="w-4 h-4 flex-shrink-0 text-emerald-400" />
-                    <span>+ 3L Hydration Port & Raincover FAQs</span>
-                  </div>
-                  <div className="flex items-center space-x-2 sm:col-span-2">
-                    <Check className="w-4 h-4 flex-shrink-0 text-emerald-400" />
-                    <span>+ Schema.org/Product & Offers JSON-LD</span>
-                  </div>
-                </>
-              )}
+              {currentOpp.diffs.map((diffItem, idx) => (
+                <div key={idx} className={`flex items-center space-x-2 ${idx === currentOpp.diffs.length - 1 ? 'sm:col-span-2' : ''}`}>
+                  <Check className="w-4 h-4 flex-shrink-0 text-emerald-400" />
+                  <span>{diffItem}</span>
+                </div>
+              ))}
             </div>
 
             {/* Technical Changes Toggle (Progressive Disclosure) */}
@@ -1130,21 +1252,9 @@ export default function CatalystAgentHome({
 
               {showTechnicalDiff && (
                 <div className="mt-3 p-4 rounded-xl bg-[#090a0f] border border-slate-800 text-[11px] font-mono text-slate-300 space-y-2 animate-in fade-in duration-150">
-                  {isOpp1 ? (
-                    <>
-                      <div className="text-emerald-400">+ "waterproof_rating": "15,000mm IPX7"</div>
-                      <div className="text-emerald-400">+ "weight": "420g"</div>
-                      <div className="text-emerald-400">+ "outsole": "Vibram MegaGrip 5mm lugs"</div>
-                      <div className="text-blue-300">+ "@context": "https://schema.org/", "@type": "Product", "offers": "₹4499"</div>
-                    </>
-                  ) : (
-                    <>
-                      <div className="text-emerald-400">+ "capacity": "45L"</div>
-                      <div className="text-emerald-400">+ "fabric": "600D Diamond Ripstop Nylon"</div>
-                      <div className="text-emerald-400">+ "frame": "6061 Anodized Aluminum"</div>
-                      <div className="text-blue-300">+ "@context": "https://schema.org/", "@type": "Product", "offers": "₹3999"</div>
-                    </>
-                  )}
+                  {currentOpp.technicalDiffs.map((tech, idx) => (
+                    <div key={idx} className={tech.includes('@context') ? 'text-blue-300' : 'text-emerald-400'}>{tech}</div>
+                  ))}
                 </div>
               )}
             </div>
@@ -1153,7 +1263,7 @@ export default function CatalystAgentHome({
             {!isCurrentApproved ? (
               <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
                 <button
-                  onClick={isOpp1 ? onApproveFix : handleApproveBackpack}
+                  onClick={handleApproveCurrent}
                   disabled={isCurrentApproving}
                   className="w-full sm:w-auto flex-1 py-4 px-6 rounded-xl bg-blue-600 hover:bg-blue-500 active:scale-[0.99] text-white text-sm font-semibold transition-all flex items-center justify-center space-x-2 cursor-pointer shadow-lg disabled:opacity-50"
                 >
@@ -1165,7 +1275,7 @@ export default function CatalystAgentHome({
                   ) : (
                     <>
                       <Sparkles className="w-4 h-4 text-blue-200" />
-                      <span>Approve & Deploy Fix</span>
+                      <span>Approve & Deploy Fix for {currentOpp.shortName}</span>
                     </>
                   )}
                 </button>
@@ -1181,7 +1291,7 @@ export default function CatalystAgentHome({
               <div className="rounded-2xl bg-emerald-950/40 border border-emerald-800/60 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono">
                 <div className="flex items-center space-x-2 text-emerald-300 font-semibold">
                   <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0" />
-                  <span>Your store is now Catalyst Enhanced ✓</span>
+                  <span>{currentOpp.name} is now Catalyst Enhanced ✓</span>
                 </div>
                 <button
                   onClick={onOpenStorefront}
@@ -1225,7 +1335,7 @@ export default function CatalystAgentHome({
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder={isOpp1 ? "e.g. best waterproof hiking boots under ₹5,000" : "e.g. best lightweight 45L expedition backpack under ₹6,000"}
+                    placeholder={`e.g. ${currentOpp.queryPreset}`}
                     className="w-full pl-10 pr-3 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-white text-xs font-mono focus:outline-none focus:border-blue-400"
                   />
                 </div>
@@ -1251,15 +1361,7 @@ export default function CatalystAgentHome({
               {/* Preset Query Chips */}
               <div className="flex flex-wrap items-center gap-1.5 pt-0.5 text-[11px] font-mono">
                 <span className="text-slate-500">Presets:</span>
-                {(isOpp1 ? [
-                  'best waterproof hiking boots under ₹5,000',
-                  'monsoon trekking boots with vibram sole',
-                  'lightweight 420g trail hiking shoes'
-                ] : [
-                  'best lightweight 45L expedition backpack under ₹6,000',
-                  '600D ripstop travel backpack with internal frame',
-                  'waterproof trekking rucksack with raincover'
-                ]).map((preset, idx) => (
+                {currentOpp.presets.map((preset, idx) => (
                   <button
                     key={idx}
                     type="button"
@@ -1295,16 +1397,16 @@ export default function CatalystAgentHome({
                   </div>
                   <div className="text-xs text-slate-300 space-y-1.5">
                     <div className="p-2 rounded-lg bg-slate-800/80 border border-slate-700 text-white font-semibold flex items-center justify-between">
-                      <span>#1 🎒 {isOpp1 ? 'Monsoon Trekker' : 'NorthTrail 45L'}</span>
-                      <span className="text-[10px] text-emerald-400 font-normal">{isOpp1 ? 'IPX7 Match' : '45L Match'}</span>
+                      <span>{currentOpp.simBefore.first}</span>
+                      <span className="text-[10px] text-emerald-400 font-normal">{currentOpp.simBefore.firstTag}</span>
                     </div>
                     <div className="p-2 rounded-lg bg-slate-800/40 border border-slate-800 text-slate-300 flex items-center justify-between">
-                      <span>#2 🎒 {isOpp1 ? 'TrailPro Extreme' : 'Alpine Summit'}</span>
-                      <span className="text-[10px] text-slate-400 font-normal">{isOpp1 ? 'Vibram Sole' : '600D Nylon'}</span>
+                      <span>{currentOpp.simBefore.second}</span>
+                      <span className="text-[10px] text-slate-400 font-normal">{currentOpp.simBefore.secondTag}</span>
                     </div>
                     <div className="text-rose-400 pt-1 text-[11px] font-bold flex items-center gap-1">
                       <XCircle className="w-3.5 h-3.5 flex-shrink-0" />
-                      <span>{isOpp1 ? 'Apex Ridge: Omitted' : 'Venture 45L: Omitted'}</span>
+                      <span>{currentOpp.simBefore.omitted}</span>
                     </div>
                   </div>
                 </div>
@@ -1321,12 +1423,12 @@ export default function CatalystAgentHome({
                   </div>
                   <div className="text-xs text-slate-300 space-y-1.5">
                     <div className="p-2 rounded-lg bg-emerald-900/40 border border-emerald-700/60 text-white font-bold flex items-center justify-between shadow-sm">
-                      <span className="text-emerald-300">#1 🎒 {isOpp1 ? 'Apex Ridge (YOU)' : 'Venture 45L (YOU)'} ✓</span>
-                      <span className="text-[10px] text-emerald-400 font-normal">{isOpp1 ? '15k mm + Vibram' : '45L + 600D'}</span>
+                      <span className="text-emerald-300">{currentOpp.simAfter.first}</span>
+                      <span className="text-[10px] text-emerald-400 font-normal">{currentOpp.simAfter.firstTag}</span>
                     </div>
                     <div className="p-2 rounded-lg bg-slate-900/60 border border-slate-800 text-slate-400 flex items-center justify-between">
-                      <span>#2 🎒 {isOpp1 ? 'Monsoon Trekker' : 'NorthTrail 45L'}</span>
-                      <span className="text-[10px] text-slate-500 font-normal">Alternate</span>
+                      <span>{currentOpp.simAfter.second}</span>
+                      <span className="text-[10px] text-slate-500 font-normal">{currentOpp.simAfter.secondTag}</span>
                     </div>
                     <div className="text-emerald-300 pt-1 text-[11px] font-semibold flex items-center gap-1">
                       <CheckCircle2 className="w-3.5 h-3.5 flex-shrink-0 text-emerald-400" />
@@ -1354,8 +1456,8 @@ export default function CatalystAgentHome({
                   Catalyst detected AI-referred shoppers are abandoning checkout. Recommended action: test targeted instant payment offer.
                 </div>
                 <div className="p-2.5 bg-slate-900 rounded-xl border border-slate-800 text-blue-300 font-semibold flex items-center justify-between">
-                  <span>💳 {isOpp1 ? 'ICICI Instant 10% Off' : 'HDFC Instant ₹500 Off'}</span>
-                  <span className="text-[10px] text-emerald-400">{isOpp1 ? '+18% Lift' : '+15% Lift'}</span>
+                  <span>{currentOpp.offer.name}</span>
+                  <span className="text-[10px] text-emerald-400">{currentOpp.offer.lift}</span>
                 </div>
 
                 <button
@@ -1373,13 +1475,13 @@ export default function CatalystAgentHome({
                       <span>Live Simulation Output:</span>
                     </div>
                     <div className="text-slate-300">
-                      • Checkout payload injected: <code className="text-blue-300">{isOpp1 ? 'rzp_off_monsoon_icici' : 'rzp_off_venture_hdfc'}</code>
+                      • Checkout payload injected: <code className="text-blue-300">{currentOpp.offer.code}</code>
                     </div>
                     <div className="text-slate-300">
-                      • AI Cart Conversion: <span className="line-through text-slate-500">14.2%</span> → <strong className="text-emerald-300">{isOpp1 ? '17.8%' : '17.1%'}</strong> (+3.6% net lift)
+                      • AI Cart Conversion: <span className="line-through text-slate-500">14.2%</span> → <strong className="text-emerald-300">{currentOpp.offer.cartConv}</strong> (+3.6% net lift)
                     </div>
                     <div className="text-slate-300">
-                      • Additional Lifted GMV: <strong className="text-white">{isOpp1 ? '+₹48,000' : '+₹35,000'}</strong>
+                      • Additional Lifted GMV: <strong className="text-white">{currentOpp.offer.revenue}</strong>
                     </div>
                   </div>
                 )}
@@ -1410,13 +1512,13 @@ export default function CatalystAgentHome({
                       <span>Live Recovery Output:</span>
                     </div>
                     <div className="text-slate-300">
-                      • Abandoned AI sessions: <span className="text-white">{isOpp1 ? '24 sessions' : '19 sessions'}</span>
+                      • Abandoned AI sessions: <span className="text-white">{currentOpp.recovery.abandoned}</span>
                     </div>
                     <div className="text-slate-300">
-                      • Recovered via Razorpay Link: <strong className="text-emerald-300">{isOpp1 ? '18 orders (75%)' : '14 orders (74%)'}</strong>
+                      • Recovered via Razorpay Link: <strong className="text-emerald-300">{currentOpp.recovery.recovered}</strong>
                     </div>
                     <div className="text-slate-300">
-                      • Recovered Revenue: <strong className="text-white">{isOpp1 ? '+₹72,000' : '+₹56,000'}</strong>
+                      • Recovered Revenue: <strong className="text-white">{currentOpp.recovery.revenue}</strong>
                     </div>
                   </div>
                 )}
@@ -1436,16 +1538,16 @@ export default function CatalystAgentHome({
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <span className="text-xs font-mono text-slate-400 uppercase tracking-wider">
-                Controlled Simulation Revenue Impact ({isOpp1 ? 'Boots' : 'Backpacks'})
+                Controlled Simulation Revenue Impact ({currentOpp.category})
               </span>
               <span className="text-xs font-mono text-emerald-400 font-bold bg-emerald-950/60 px-2.5 py-0.5 rounded-full border border-emerald-800/60">
-                {isOpp1 ? '+125% Lift' : '+110% Lift'}
+                {currentOpp.revenue.liftPct}
               </span>
             </div>
 
             <div className="flex items-baseline space-x-3">
               <div className="text-4xl sm:text-5xl font-display font-bold text-emerald-300 tracking-tight">
-                {isOpp1 ? '+₹1.50L' : '+₹95,000'}
+                {currentOpp.revenue.gmvDisplay}
               </div>
               <div className="text-xs font-mono text-slate-300">
                 incremental GMV verified
@@ -1460,37 +1562,18 @@ export default function CatalystAgentHome({
               </div>
 
               <div className="space-y-1 text-[11px]">
-                {isOpp1 ? (
-                  <>
-                    <div className="flex justify-between">
-                      <span className="text-slate-400">Control Arm (1,500 queries):</span>
-                      <span className="text-slate-200">24 orders × ₹5,000 = ₹1.20L</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-emerald-400">Treatment Arm (1,500 queries):</span>
-                      <span className="text-emerald-300 font-bold">54 orders × ₹5,000 = ₹2.70L</span>
-                    </div>
-                    <div className="flex justify-between border-t border-slate-800 pt-1 font-bold">
-                      <span className="text-white">Net Incremental GMV:</span>
-                      <span className="text-emerald-400">+₹1,50,000 (+₹1.50L)</span>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className="flex justify-between">
-                      <span className="text-slate-400">Control Arm (1,500 queries):</span>
-                      <span className="text-slate-200">20 orders × ₹4,000 = ₹80,000</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-emerald-400">Treatment Arm (1,500 queries):</span>
-                      <span className="text-emerald-300 font-bold">44 orders × ₹4,000 = ₹1,75,000</span>
-                    </div>
-                    <div className="flex justify-between border-t border-slate-800 pt-1 font-bold">
-                      <span className="text-white">Net Incremental GMV:</span>
-                      <span className="text-emerald-400">+₹95,000 GMV Lift</span>
-                    </div>
-                  </>
-                )}
+                <div className="flex justify-between">
+                  <span className="text-slate-400">Control Arm (1,500 queries):</span>
+                  <span className="text-slate-200">{currentOpp.revenue.controlText}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-emerald-400">Treatment Arm (1,500 queries):</span>
+                  <span className="text-emerald-300 font-bold">{currentOpp.revenue.treatmentText}</span>
+                </div>
+                <div className="flex justify-between border-t border-slate-800 pt-1 font-bold">
+                  <span className="text-white">Net Incremental GMV:</span>
+                  <span className="text-emerald-400">{currentOpp.revenue.netText}</span>
+                </div>
               </div>
 
               <div className="text-[10px] text-slate-400 leading-relaxed border-t border-slate-800/80 pt-1.5">
@@ -1521,56 +1604,33 @@ export default function CatalystAgentHome({
               </span>
             </div>
 
-            {isOpp1 ? (
-              <>
-                <h4 className="text-xl font-display font-bold text-white">
-                  ⚡ Venture 45L Expedition Backpack
-                </h4>
-                <p className="text-sm text-slate-300 font-sans leading-relaxed">
-                  Catalyst completed the boots fix and automatically discovered your trekking backpacks have the same evidence gap in volume capacity and load-bearing specs.
-                </p>
+            <h4 className="text-xl font-display font-bold text-white">
+              {currentOpp.nextAction.title}
+            </h4>
+            <p className="text-sm text-slate-300 font-sans leading-relaxed">
+              {currentOpp.nextAction.desc}
+            </p>
 
-                <div className="p-4 rounded-2xl bg-[#090a0f] border border-slate-800 space-y-2 font-mono text-xs">
-                  <div className="text-slate-400 font-semibold">Identified Deficit on Venture 45L:</div>
-                  <div className="text-rose-300">• Missing 45-liter laboratory volume spec</div>
-                  <div className="text-rose-300">• Missing 600D ripstop nylon material rating</div>
-                  <div className="text-emerald-300 font-semibold pt-1">Estimated revenue potential: +₹95,000 GMV</div>
+            <div className="p-4 rounded-2xl bg-[#090a0f] border border-slate-800 space-y-2 font-mono text-xs">
+              <div className="text-slate-400 font-semibold">Identified Deficits:</div>
+              {currentOpp.nextAction.deficits.map((def, idx) => (
+                <div key={idx} className={def.startsWith('✓') ? 'text-emerald-300 font-semibold' : 'text-rose-300'}>
+                  {def}
                 </div>
-
-                <button
-                  onClick={() => handleSwitchOpportunity('opp-02')}
-                  className="w-full mt-2 py-3.5 px-6 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition-all cursor-pointer shadow-md flex items-center justify-center space-x-2"
-                >
-                  <Sparkles className="w-3.5 h-3.5 text-blue-200" />
-                  <span>Investigate & Fix Venture 45L →</span>
-                </button>
-              </>
-            ) : (
-              <>
-                <h4 className="text-xl font-display font-bold text-white">
-                  ⚡ Summit StormShield 3-Person Tent
-                </h4>
-                <p className="text-sm text-slate-300 font-sans leading-relaxed">
-                  Catalyst verified both Boots & Backpacks, and queued your 4-season tents for wind-rating and hydrostatic floor specs.
-                </p>
-
-                <div className="p-4 rounded-2xl bg-[#090a0f] border border-slate-800 space-y-2 font-mono text-xs">
-                  <div className="text-slate-400 font-semibold">Identified Deficit on StormShield Tent:</div>
-                  <div className="text-rose-300">• Missing Beaufort Scale Force 9 wind rating</div>
-                  <div className="text-rose-300">• Missing 5,000mm bathtub floor waterproofing spec</div>
-                  <div className="text-emerald-300 font-semibold pt-1">Estimated revenue potential: +₹1,10,000 GMV</div>
-                </div>
-
-                <button
-                  onClick={() => handleSwitchOpportunity('opp-01')}
-                  className="w-full mt-2 py-3.5 px-6 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white text-xs font-semibold transition-all cursor-pointer shadow-md flex items-center justify-center space-x-2"
-                >
-                  <Sparkles className="w-3.5 h-3.5 text-blue-200" />
-                  <span>Switch back to Boots (Opportunity #1) ←</span>
-                </button>
-              </>
-            )}
+              ))}
+              <div className="text-emerald-300 font-semibold pt-1">
+                Estimated revenue potential: {currentOpp.nextAction.potential}
+              </div>
+            </div>
           </div>
+
+          <button
+            onClick={() => handleSwitchOpportunity(currentOpp.nextAction.nextOppId)}
+            className="w-full mt-2 py-3.5 px-6 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition-all cursor-pointer shadow-md flex items-center justify-center space-x-2"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-blue-200" />
+            <span>{currentOpp.nextAction.buttonText}</span>
+          </button>
         </div>
 
       </div>
@@ -1578,4 +1638,5 @@ export default function CatalystAgentHome({
     </div>
   );
 }
+
 
