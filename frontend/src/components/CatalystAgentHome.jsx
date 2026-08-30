@@ -49,16 +49,39 @@ export default function CatalystAgentHome({
 }) {
   const [storeUrl, setStoreUrl] = useState('https://apex-outdoor.vercel.app');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [isInvestigatingNext, setIsInvestigatingNext] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
+  const [activeOpportunityId, setActiveOpportunityId] = useState('opp-01'); // 'opp-01' | 'opp-02'
+  const [backpackApproved, setBackpackApproved] = useState(false);
+  const [backpackApproving, setBackpackApproving] = useState(false);
+  
   const [showTechnicalDiff, setShowTechnicalDiff] = useState(false);
   const [showSupportingQueries, setShowSupportingQueries] = useState(false);
   const [activeWhyModal, setActiveWhyModal] = useState(null);
   const [hasTestedOffer, setHasTestedOffer] = useState(false);
   const [hasApprovedReminder, setHasApprovedReminder] = useState(false);
-  const [nextOpportunityActive, setNextOpportunityActive] = useState(false);
   const [searchQuery, setSearchQuery] = useState('best waterproof hiking boots under ₹5,000');
   const [isSimulatingQuery, setIsSimulatingQuery] = useState(false);
   const [showFullCapabilities, setShowFullCapabilities] = useState(false);
+
+  const isBootApproved = 
+    activeDiff?.status === 'approved' || 
+    activeDiff?.status === 'applied' ||
+    (typeof window !== 'undefined' && localStorage.getItem('catalyst_diff_status') === 'approved');
+
+  // Reset internal states when demo is reset
+  useEffect(() => {
+    if (!hasAnalyzed || !isBootApproved) {
+      setActiveOpportunityId('opp-01');
+      setBackpackApproved(false);
+      setHasTestedOffer(false);
+      setHasApprovedReminder(false);
+      setShowTechnicalDiff(false);
+      setShowSupportingQueries(false);
+      setActiveWhyModal(null);
+      setSearchQuery('best waterproof hiking boots under ₹5,000');
+    }
+  }, [hasAnalyzed, isBootApproved]);
 
   const analysisSteps = [
     { label: 'Connecting to storefront...', doneLabel: 'Storefront connected (https://apex-outdoor.vercel.app)' },
@@ -67,23 +90,6 @@ export default function CatalystAgentHome({
     { label: 'Evaluating 40 high-intent shopping queries...', doneLabel: '40 AI shopping queries evaluated (ChatGPT, Perplexity)' },
     { label: 'Synthesizing evidence deficit & preparing grounded fix...', doneLabel: 'Opportunity detected & grounded FixDiff generated' }
   ];
-
-  const isDiffApproved = 
-    activeDiff?.status === 'approved' || 
-    activeDiff?.status === 'applied' ||
-    (typeof window !== 'undefined' && localStorage.getItem('catalyst_diff_status') === 'approved');
-
-  // Reset internal states when demo is reset
-  useEffect(() => {
-    if (!hasAnalyzed || !isDiffApproved) {
-      setHasTestedOffer(false);
-      setHasApprovedReminder(false);
-      setNextOpportunityActive(false);
-      setShowTechnicalDiff(false);
-      setShowSupportingQueries(false);
-      setActiveWhyModal(null);
-    }
-  }, [hasAnalyzed, isDiffApproved]);
 
   const handleStartAnalysis = () => {
     setIsAnalyzing(true);
@@ -107,12 +113,42 @@ export default function CatalystAgentHome({
     }
   }, [isAnalyzing, stepIndex]);
 
+  const handleSwitchOpportunity = (oppId) => {
+    if (oppId === activeOpportunityId) return;
+    setIsInvestigatingNext(true);
+    setTimeout(() => {
+      setActiveOpportunityId(oppId);
+      setIsInvestigatingNext(false);
+      setShowTechnicalDiff(false);
+      setShowSupportingQueries(false);
+      setActiveWhyModal(null);
+      if (oppId === 'opp-02') {
+        setSearchQuery('best lightweight 45L expedition backpack under ₹6,000');
+      } else {
+        setSearchQuery('best waterproof hiking boots under ₹5,000');
+      }
+    }, 600);
+  };
+
+  const handleApproveBackpack = () => {
+    setBackpackApproving(true);
+    setTimeout(() => {
+      setBackpackApproving(false);
+      setBackpackApproved(true);
+    }, 600);
+  };
+
   const handleRunAiSimulator = () => {
     setIsSimulatingQuery(true);
     setTimeout(() => {
       setIsSimulatingQuery(false);
     }, 450);
   };
+
+  // Opportunity 1 (Boots) vs Opportunity 2 (Backpack) data
+  const isOpp1 = activeOpportunityId === 'opp-01';
+  const isCurrentApproved = isOpp1 ? isBootApproved : backpackApproved;
+  const isCurrentApproving = isOpp1 ? isApproving : backpackApproving;
 
   // 1. FIRST-TIME ONBOARDING (CONNECT + METHODOLOGY)
   if (!hasAnalyzed && !isAnalyzing) {
@@ -406,7 +442,7 @@ export default function CatalystAgentHome({
   }
 
   // 2. LIVE ANALYSIS ANIMATION (CATALYST WORKS)
-  if (isAnalyzing) {
+  if (isAnalyzing || isInvestigatingNext) {
     return (
       <div className="max-w-2xl mx-auto my-12 animate-in fade-in duration-300">
         <div className="rounded-3xl bg-[#121624]/90 border border-slate-700/60 p-8 sm:p-12 shadow-2xl space-y-6">
@@ -416,42 +452,63 @@ export default function CatalystAgentHome({
               <Loader2 className="w-7 h-7 animate-spin" />
             </div>
             <h2 className="text-2xl sm:text-3xl font-display font-bold text-white">
-              Catalyst is investigating...
+              {isInvestigatingNext 
+                ? 'Investigating Venture 45L Backpack...' 
+                : 'Catalyst is investigating...'}
             </h2>
             <p className="text-xs sm:text-sm text-slate-400 font-mono">
-              Storefront: <span className="text-blue-200">{storeUrl}</span>
+              {isInvestigatingNext 
+                ? 'Evaluating volume capacity, 600D ripstop specs, and AI query rankings' 
+                : `Storefront: ${storeUrl}`}
             </p>
           </div>
 
           <div className="space-y-3 bg-[#0d0f17] p-6 rounded-2xl border border-slate-800">
-            {analysisSteps.map((step, idx) => {
-              const isDone = idx < stepIndex;
-              const isCurrent = idx === stepIndex;
-
-              return (
-                <div
-                  key={idx}
-                  className={`flex items-start space-x-3 text-xs sm:text-sm transition-all duration-200 ${
-                    isDone
-                      ? 'text-slate-200 font-medium'
-                      : isCurrent
-                      ? 'text-blue-200 font-semibold scale-[1.01]'
-                      : 'text-slate-500 font-mono'
-                  }`}
-                >
-                  <div className="mt-0.5 flex-shrink-0">
-                    {isDone ? (
-                      <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                    ) : isCurrent ? (
-                      <div className="w-4 h-4 rounded-full border-2 border-blue-400 border-t-transparent animate-spin" />
-                    ) : (
-                      <div className="w-4 h-4 rounded-full border border-slate-800" />
-                    )}
-                  </div>
-                  <span className="font-mono">{isDone ? step.doneLabel : step.label}</span>
+            {isInvestigatingNext ? (
+              <>
+                <div className="flex items-center space-x-3 text-xs sm:text-sm text-slate-200 font-medium font-mono">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                  <span>Inspected catalog SKU: Venture 45L (merch-bag-01)</span>
                 </div>
-              );
-            })}
+                <div className="flex items-center space-x-3 text-xs sm:text-sm text-slate-200 font-medium font-mono">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                  <span>Benchmarked competitor: NorthTrail 45L Alpine Pro</span>
+                </div>
+                <div className="flex items-center space-x-3 text-xs sm:text-sm text-blue-300 font-semibold font-mono animate-pulse">
+                  <div className="w-4 h-4 rounded-full border-2 border-blue-400 border-t-transparent animate-spin flex-shrink-0" />
+                  <span>Synthesizing evidence deficit & grounded fix...</span>
+                </div>
+              </>
+            ) : (
+              analysisSteps.map((step, idx) => {
+                const isDone = idx < stepIndex;
+                const isCurrent = idx === stepIndex;
+
+                return (
+                  <div
+                    key={idx}
+                    className={`flex items-start space-x-3 text-xs sm:text-sm transition-all duration-200 ${
+                      isDone
+                        ? 'text-slate-200 font-medium'
+                        : isCurrent
+                        ? 'text-blue-200 font-semibold scale-[1.01]'
+                        : 'text-slate-500 font-mono'
+                    }`}
+                  >
+                    <div className="mt-0.5 flex-shrink-0">
+                      {isDone ? (
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                      ) : isCurrent ? (
+                        <div className="w-4 h-4 rounded-full border-2 border-blue-400 border-t-transparent animate-spin" />
+                      ) : (
+                        <div className="w-4 h-4 rounded-full border border-slate-800" />
+                      )}
+                    </div>
+                    <span className="font-mono">{isDone ? step.doneLabel : step.label}</span>
+                  </div>
+                );
+              })
+            )}
           </div>
 
         </div>
@@ -459,17 +516,51 @@ export default function CatalystAgentHome({
     );
   }
 
-  // 3. MAIN AGENT WORKSPACE (10-Second Comprehension + Progressive Disclosure)
+  // 3. MAIN AGENT WORKSPACE (10-Second Comprehension + Multi-Opportunity Switcher)
   return (
     <div className="max-w-7xl mx-auto space-y-6 animate-in fade-in duration-300">
       
-      {/* Agent Status Bar */}
+      {/* Agent Status Bar & Opportunity Selector */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#121624]/90 border border-slate-800 p-4 rounded-2xl">
-        <div className="flex items-center space-x-3">
-          <div className="w-3 h-3 rounded-full bg-emerald-400 animate-pulse" />
-          <div className="text-xs sm:text-sm font-mono text-slate-300">
-            Connected to <strong className="text-white font-semibold">Apex Ridge Outdoors</strong> <span className="text-slate-500">(12 active SKUs)</span>
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="flex items-center space-x-2 mr-2">
+            <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-xs font-mono text-slate-400">Opportunities:</span>
           </div>
+
+          {/* Opp 1 Pill */}
+          <button
+            onClick={() => handleSwitchOpportunity('opp-01')}
+            className={`px-3 py-1.5 rounded-xl text-xs font-mono transition-all cursor-pointer flex items-center space-x-1.5 ${
+              isOpp1 
+                ? 'bg-blue-600/20 text-blue-300 border border-blue-500/40 font-bold shadow-sm' 
+                : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'
+            }`}
+          >
+            <span>1. Apex Ridge Boots</span>
+            {isBootApproved ? (
+              <span className="text-emerald-400 text-[10px] font-bold">✓ (+₹1.50L)</span>
+            ) : (
+              <span className="text-amber-400 text-[10px]">⚡ Action</span>
+            )}
+          </button>
+
+          {/* Opp 2 Pill */}
+          <button
+            onClick={() => handleSwitchOpportunity('opp-02')}
+            className={`px-3 py-1.5 rounded-xl text-xs font-mono transition-all cursor-pointer flex items-center space-x-1.5 ${
+              !isOpp1 
+                ? 'bg-blue-600/20 text-blue-300 border border-blue-500/40 font-bold shadow-sm' 
+                : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'
+            }`}
+          >
+            <span>2. Venture 45L Backpack</span>
+            {backpackApproved ? (
+              <span className="text-emerald-400 text-[10px] font-bold">✓ (+₹95k)</span>
+            ) : (
+              <span className="text-amber-400 text-[10px]">⚡ Action</span>
+            )}
+          </button>
         </div>
 
         <div className="flex items-center space-x-3">
@@ -496,26 +587,32 @@ export default function CatalystAgentHome({
             <div className="flex items-center space-x-2">
               <span className="text-xs font-mono font-semibold uppercase tracking-wider text-blue-400 flex items-center gap-1.5">
                 <Bot className="w-4 h-4" />
-                <span>Good morning</span>
+                <span>Catalyst Diagnosis</span>
               </span>
               <span className="text-slate-500">•</span>
-              <span className="text-xs font-mono text-slate-300">I found 1 high-value opportunity</span>
+              <span className="text-xs font-mono text-slate-300">
+                {isOpp1 ? 'Opportunity #1 · Apex Ridge Waterproof Boots' : 'Opportunity #2 · Venture 45L Expedition Backpack'}
+              </span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-display font-bold text-white leading-tight">
-              Apex Ridge Waterproof Boots are losing AI recommendations to Monsoon Trekker.
+              {isOpp1 
+                ? 'Apex Ridge Waterproof Boots are losing AI recommendations to Monsoon Trekker.' 
+                : 'Venture 45L Backpack is losing AI recommendations to NorthTrail 45L Alpine Pro.'}
             </h2>
             <p className="text-sm text-slate-300 leading-relaxed font-sans max-w-3xl">
-              AI shopping engines (ChatGPT, Perplexity) recommend competitors because your product page exposes fewer structured comparison signals.
+              {isOpp1 
+                ? 'AI shopping engines (ChatGPT, Perplexity) recommend competitors because your product page exposes fewer structured comparison signals.' 
+                : 'Competitors expose 45L certified capacity, 600D Diamond Ripstop nylon, and internal aluminum frame ratings, winning AI travel recommendations.'}
             </p>
           </div>
 
           <div className="flex-shrink-0">
             <span className={`text-xs font-mono px-4 py-2 rounded-xl border inline-flex items-center gap-2 ${
-              isDiffApproved 
+              isCurrentApproved 
                 ? 'bg-emerald-950/60 text-emerald-300 border-emerald-800/60 font-semibold'
                 : 'bg-amber-950/60 text-amber-300 border-amber-800/60'
             }`}>
-              {isDiffApproved ? (
+              {isCurrentApproved ? (
                 <>
                   <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                   <span>Fix Deployed & Verified</span>
@@ -544,7 +641,9 @@ export default function CatalystAgentHome({
                 <Search className="w-3.5 h-3.5 text-blue-400" />
                 <span>Why AI Shoppers Overlook You</span>
               </span>
-              <span className="text-[10px] font-mono text-slate-500">Query: "best waterproof hiking boots under ₹5,000"</span>
+              <span className="text-[10px] font-mono text-slate-500">
+                {isOpp1 ? 'Query: "best waterproof hiking boots under ₹5,000"' : 'Query: "best lightweight 45L expedition backpack under ₹6,000"'}
+              </span>
             </div>
 
             {/* Competitor vs Merchant Evidence Comparison */}
@@ -553,40 +652,74 @@ export default function CatalystAgentHome({
               {/* Competitor Box */}
               <div className="p-4 rounded-2xl bg-[#0d0f17] border border-slate-800 space-y-2.5">
                 <div className="flex items-center justify-between text-emerald-400 text-[11px] font-semibold uppercase tracking-wider">
-                  <span>Monsoon Trekker</span>
+                  <span>{isOpp1 ? 'Monsoon Trekker' : 'NorthTrail 45L'}</span>
                   <span className="text-[10px] text-emerald-400">✓ Recommended</span>
                 </div>
                 <div className="space-y-1.5 text-slate-300 text-[11px]">
-                  <div className="flex items-center justify-between">
-                    <span>✓ 15,000mm IPX7 Rating</span>
-                    <button onClick={() => setActiveWhyModal('IPX7')} className="text-[10px] text-blue-300 hover:underline cursor-pointer">Why?</button>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span>✓ 420g Lightweight Spec</span>
-                    <button onClick={() => setActiveWhyModal('weight')} className="text-[10px] text-blue-300 hover:underline cursor-pointer">Why?</button>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span>✓ Vibram MegaGrip Outsole</span>
-                    <button onClick={() => setActiveWhyModal('outsole')} className="text-[10px] text-blue-300 hover:underline cursor-pointer">Why?</button>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span>✓ 5mm Lug Depth</span>
-                    <button onClick={() => setActiveWhyModal('lugs')} className="text-[10px] text-blue-300 hover:underline cursor-pointer">Why?</button>
-                  </div>
+                  {isOpp1 ? (
+                    <>
+                      <div className="flex items-center justify-between">
+                        <span>✓ 15,000mm IPX7 Rating</span>
+                        <button onClick={() => setActiveWhyModal('IPX7')} className="text-[10px] text-blue-300 hover:underline cursor-pointer">Why?</button>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span>✓ 420g Lightweight Spec</span>
+                        <button onClick={() => setActiveWhyModal('weight')} className="text-[10px] text-blue-300 hover:underline cursor-pointer">Why?</button>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span>✓ Vibram MegaGrip Outsole</span>
+                        <button onClick={() => setActiveWhyModal('outsole')} className="text-[10px] text-blue-300 hover:underline cursor-pointer">Why?</button>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span>✓ 5mm Lug Depth</span>
+                        <button onClick={() => setActiveWhyModal('lugs')} className="text-[10px] text-blue-300 hover:underline cursor-pointer">Why?</button>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="flex items-center justify-between">
+                        <span>✓ 45L Certified Volume</span>
+                        <button onClick={() => setActiveWhyModal('capacity')} className="text-[10px] text-blue-300 hover:underline cursor-pointer">Why?</button>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span>✓ 600D Ripstop Nylon</span>
+                        <button onClick={() => setActiveWhyModal('material')} className="text-[10px] text-blue-300 hover:underline cursor-pointer">Why?</button>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span>✓ 6061 Aluminum Stay</span>
+                        <button onClick={() => setActiveWhyModal('frame')} className="text-[10px] text-blue-300 hover:underline cursor-pointer">Why?</button>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span>✓ 3L Hydration Sleeve</span>
+                        <button onClick={() => setActiveWhyModal('hydration')} className="text-[10px] text-blue-300 hover:underline cursor-pointer">Why?</button>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
 
               {/* Apex Ridge Box */}
               <div className="p-4 rounded-2xl bg-[#0d0f17] border border-slate-800 space-y-2.5">
                 <div className="flex items-center justify-between text-rose-400 text-[11px] font-semibold uppercase tracking-wider">
-                  <span>Apex Ridge (Your Store)</span>
+                  <span>{isOpp1 ? 'Apex Ridge Boots' : 'Venture 45L'}</span>
                   <span className="text-[10px] text-rose-400">✕ Overlooked</span>
                 </div>
                 <div className="space-y-1.5 text-rose-300 text-[11px]">
-                  <div>✕ Basic "waterproof" claim only</div>
-                  <div>✕ Missing weight specification</div>
-                  <div>✕ Generic "rubber sole" claim</div>
-                  <div>✕ Missing lug depth & monsoon FAQs</div>
+                  {isOpp1 ? (
+                    <>
+                      <div>✕ Basic "waterproof" claim only</div>
+                      <div>✕ Missing weight specification</div>
+                      <div>✕ Generic "rubber sole" claim</div>
+                      <div>✕ Missing lug depth & FAQs</div>
+                    </>
+                  ) : (
+                    <>
+                      <div>✕ Missing 45L laboratory volume</div>
+                      <div>✕ Generic "durable fabric" claim</div>
+                      <div>✕ Unlisted internal frame specs</div>
+                      <div>✕ Missing hydration routing & FAQs</div>
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -596,7 +729,7 @@ export default function CatalystAgentHome({
             {activeWhyModal && (
               <div className="p-3.5 bg-slate-900 border border-slate-700 rounded-2xl text-xs font-mono text-slate-300 flex items-start justify-between gap-2 animate-in fade-in duration-150">
                 <div>
-                  <strong className="text-blue-300">Why {activeWhyModal}?</strong> This laboratory specification is already verified in your merchant catalog records and is the exact criteria AI shopping assistants use to rank boots.
+                  <strong className="text-blue-300">Why {activeWhyModal}?</strong> This spec exists in your raw catalog records and is the exact criteria AI shopping assistants use to recommend products for this query.
                 </div>
                 <button onClick={() => setActiveWhyModal(null)} className="text-slate-400 hover:text-white font-bold cursor-pointer">✕</button>
               </div>
@@ -614,11 +747,20 @@ export default function CatalystAgentHome({
 
               {showSupportingQueries && (
                 <div className="mt-3 p-4 rounded-2xl bg-[#090a0f] border border-slate-800 text-xs font-mono text-slate-300 space-y-2 animate-in fade-in duration-150 max-h-48 overflow-y-auto">
-                  <div className="text-[11px] text-slate-400 pb-1 border-b border-slate-800">Evaluated AI Shopping Query Vectors (ChatGPT, Perplexity, Claude):</div>
-                  <div className="text-rose-400">• "best waterproof hiking boots under ₹5,000" → Apex bypassed (Missing IPX7)</div>
-                  <div className="text-rose-400">• "lightweight 420g trail hiking shoes" → Apex bypassed (Missing weight spec)</div>
-                  <div className="text-rose-400">• "monsoon trekking boots with vibram sole" → Apex bypassed (Missing Vibram tag)</div>
-                  <div className="text-emerald-400">• "durable high ankle trek shoes" → Apex matched #2 pick</div>
+                  <div className="text-[11px] text-slate-400 pb-1 border-b border-slate-800">Evaluated AI Shopping Query Vectors:</div>
+                  {isOpp1 ? (
+                    <>
+                      <div className="text-rose-400">• "best waterproof hiking boots under ₹5,000" → Apex bypassed (Missing IPX7)</div>
+                      <div className="text-rose-400">• "lightweight 420g trail hiking shoes" → Apex bypassed (Missing weight spec)</div>
+                      <div className="text-rose-400">• "monsoon trekking boots with vibram sole" → Apex bypassed (Missing Vibram tag)</div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="text-rose-400">• "best lightweight 45L expedition backpack under ₹6,000" → Venture bypassed (Missing 45L volume)</div>
+                      <div className="text-rose-400">• "600D ripstop travel backpack with internal frame" → Venture bypassed (Missing material tag)</div>
+                      <div className="text-rose-400">• "waterproof trekking rucksack with raincover" → Venture bypassed (Missing raincover spec)</div>
+                    </>
+                  )}
                 </div>
               )}
             </div>
@@ -633,7 +775,9 @@ export default function CatalystAgentHome({
                 <span>Catalyst Fix Proposal</span>
               </div>
               <h3 className="text-base sm:text-lg font-semibold text-white">
-                I prepared a grounded fix from your catalog records.
+                {isOpp1 
+                  ? 'I prepared a grounded fix for Apex Ridge Boots.' 
+                  : 'I prepared a grounded fix for Venture 45L Backpack.'}
               </h3>
               <p className="text-xs text-slate-300 font-sans">
                 ✓ All claims verified against your product data · Zero unsupported claims.
@@ -642,26 +786,53 @@ export default function CatalystAgentHome({
 
             {/* Human-Readable Diff */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 font-mono text-xs text-emerald-300 bg-[#090d18] p-4 rounded-2xl border border-blue-900/30">
-              <div className="flex items-center space-x-2">
-                <Check className="w-4 h-4 flex-shrink-0 text-emerald-400" />
-                <span>+ Waterproof rating: 15,000mm IPX7</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Check className="w-4 h-4 flex-shrink-0 text-emerald-400" />
-                <span>+ Weight: 420g lightweight</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Check className="w-4 h-4 flex-shrink-0 text-emerald-400" />
-                <span>+ Outsole: Vibram MegaGrip 5mm lugs</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Check className="w-4 h-4 flex-shrink-0 text-emerald-400" />
-                <span>+ Sizing & Monsoon FAQ section</span>
-              </div>
-              <div className="flex items-center space-x-2 sm:col-span-2">
-                <Check className="w-4 h-4 flex-shrink-0 text-emerald-400" />
-                <span>+ Schema.org/Product & Offers JSON-LD</span>
-              </div>
+              {isOpp1 ? (
+                <>
+                  <div className="flex items-center space-x-2">
+                    <Check className="w-4 h-4 flex-shrink-0 text-emerald-400" />
+                    <span>+ Waterproof rating: 15,000mm IPX7</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Check className="w-4 h-4 flex-shrink-0 text-emerald-400" />
+                    <span>+ Weight: 420g lightweight</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Check className="w-4 h-4 flex-shrink-0 text-emerald-400" />
+                    <span>+ Outsole: Vibram MegaGrip 5mm lugs</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Check className="w-4 h-4 flex-shrink-0 text-emerald-400" />
+                    <span>+ Sizing & Monsoon FAQ section</span>
+                  </div>
+                  <div className="flex items-center space-x-2 sm:col-span-2">
+                    <Check className="w-4 h-4 flex-shrink-0 text-emerald-400" />
+                    <span>+ Schema.org/Product & Offers JSON-LD</span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="flex items-center space-x-2">
+                    <Check className="w-4 h-4 flex-shrink-0 text-emerald-400" />
+                    <span>+ Capacity: 45-Liter Certified Volume</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Check className="w-4 h-4 flex-shrink-0 text-emerald-400" />
+                    <span>+ Material: 600D Diamond Ripstop Nylon</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Check className="w-4 h-4 flex-shrink-0 text-emerald-400" />
+                    <span>+ Frame: Ergonomic 6061 Aluminum Stay</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Check className="w-4 h-4 flex-shrink-0 text-emerald-400" />
+                    <span>+ 3L Hydration Port & Raincover FAQs</span>
+                  </div>
+                  <div className="flex items-center space-x-2 sm:col-span-2">
+                    <Check className="w-4 h-4 flex-shrink-0 text-emerald-400" />
+                    <span>+ Schema.org/Product & Offers JSON-LD</span>
+                  </div>
+                </>
+              )}
             </div>
 
             {/* Technical Changes Toggle (Progressive Disclosure) */}
@@ -676,23 +847,34 @@ export default function CatalystAgentHome({
 
               {showTechnicalDiff && (
                 <div className="mt-3 p-4 rounded-xl bg-[#090a0f] border border-slate-800 text-[11px] font-mono text-slate-300 space-y-2 animate-in fade-in duration-150">
-                  <div className="text-emerald-400">+ "waterproof_rating": "15,000mm IPX7"</div>
-                  <div className="text-emerald-400">+ "weight": "420g"</div>
-                  <div className="text-emerald-400">+ "outsole": "Vibram MegaGrip 5mm lugs"</div>
-                  <div className="text-blue-300">+ "@context": "https://schema.org/", "@type": "Product", "offers": "₹4499"</div>
+                  {isOpp1 ? (
+                    <>
+                      <div className="text-emerald-400">+ "waterproof_rating": "15,000mm IPX7"</div>
+                      <div className="text-emerald-400">+ "weight": "420g"</div>
+                      <div className="text-emerald-400">+ "outsole": "Vibram MegaGrip 5mm lugs"</div>
+                      <div className="text-blue-300">+ "@context": "https://schema.org/", "@type": "Product", "offers": "₹4499"</div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="text-emerald-400">+ "capacity": "45L"</div>
+                      <div className="text-emerald-400">+ "fabric": "600D Diamond Ripstop Nylon"</div>
+                      <div className="text-emerald-400">+ "frame": "6061 Anodized Aluminum"</div>
+                      <div className="text-blue-300">+ "@context": "https://schema.org/", "@type": "Product", "offers": "₹3999"</div>
+                    </>
+                  )}
                 </div>
               )}
             </div>
 
             {/* Mandatory Approval Gate */}
-            {!isDiffApproved ? (
+            {!isCurrentApproved ? (
               <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
                 <button
-                  onClick={onApproveFix}
-                  disabled={isApproving}
+                  onClick={isOpp1 ? onApproveFix : handleApproveBackpack}
+                  disabled={isCurrentApproving}
                   className="w-full sm:w-auto flex-1 py-4 px-6 rounded-xl bg-blue-600 hover:bg-blue-500 active:scale-[0.99] text-white text-sm font-semibold transition-all flex items-center justify-center space-x-2 cursor-pointer shadow-lg disabled:opacity-50"
                 >
-                  {isApproving ? (
+                  {isCurrentApproving ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin" />
                       <span>Deploying approved changes to store...</span>
@@ -760,7 +942,7 @@ export default function CatalystAgentHome({
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="e.g. best waterproof hiking boots under ₹5,000"
+                    placeholder={isOpp1 ? "e.g. best waterproof hiking boots under ₹5,000" : "e.g. best lightweight 45L expedition backpack under ₹6,000"}
                     className="w-full pl-10 pr-3 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-white text-xs font-mono focus:outline-none focus:border-blue-400"
                   />
                 </div>
@@ -786,11 +968,15 @@ export default function CatalystAgentHome({
               {/* Preset Query Chips */}
               <div className="flex flex-wrap items-center gap-1.5 pt-0.5 text-[11px] font-mono">
                 <span className="text-slate-500">Presets:</span>
-                {[
+                {(isOpp1 ? [
                   'best waterproof hiking boots under ₹5,000',
                   'monsoon trekking boots with vibram sole',
                   'lightweight 420g trail hiking shoes'
-                ].map((preset, idx) => (
+                ] : [
+                  'best lightweight 45L expedition backpack under ₹6,000',
+                  '600D ripstop travel backpack with internal frame',
+                  'waterproof trekking rucksack with raincover'
+                ]).map((preset, idx) => (
                   <button
                     key={idx}
                     type="button"
@@ -822,41 +1008,41 @@ export default function CatalystAgentHome({
                 <div className="p-4 rounded-2xl bg-[#0d0f17] border border-slate-800 space-y-2">
                   <div className="flex items-center justify-between text-slate-400 text-[11px] font-semibold uppercase tracking-wider">
                     <span>BEFORE FIX</span>
-                    <span className="text-[10px] text-rose-400 font-normal">Apex Omitted</span>
+                    <span className="text-[10px] text-rose-400 font-normal">Omitted</span>
                   </div>
                   <div className="text-xs text-slate-300 space-y-1.5">
                     <div className="p-2 rounded-lg bg-slate-800/80 border border-slate-700 text-white font-semibold flex items-center justify-between">
-                      <span>#1 🥾 Monsoon Trekker</span>
-                      <span className="text-[10px] text-emerald-400 font-normal">IPX7 Match</span>
+                      <span>#1 🎒 {isOpp1 ? 'Monsoon Trekker' : 'NorthTrail 45L'}</span>
+                      <span className="text-[10px] text-emerald-400 font-normal">{isOpp1 ? 'IPX7 Match' : '45L Match'}</span>
                     </div>
                     <div className="p-2 rounded-lg bg-slate-800/40 border border-slate-800 text-slate-300 flex items-center justify-between">
-                      <span>#2 🥾 TrailPro Extreme</span>
-                      <span className="text-[10px] text-slate-400 font-normal">Vibram Sole</span>
+                      <span>#2 🎒 {isOpp1 ? 'TrailPro Extreme' : 'Alpine Summit'}</span>
+                      <span className="text-[10px] text-slate-400 font-normal">{isOpp1 ? 'Vibram Sole' : '600D Nylon'}</span>
                     </div>
                     <div className="text-rose-400 pt-1 text-[11px] font-bold flex items-center gap-1">
                       <XCircle className="w-3.5 h-3.5 flex-shrink-0" />
-                      <span>Apex Ridge: Omitted (Missing IPX7)</span>
+                      <span>{isOpp1 ? 'Apex Ridge: Omitted' : 'Venture 45L: Omitted'}</span>
                     </div>
                   </div>
                 </div>
 
                 {/* AFTER FIX */}
                 <div className={`p-4 rounded-2xl border space-y-2 transition-all ${
-                  isDiffApproved 
+                  isCurrentApproved 
                     ? 'bg-emerald-950/30 border-emerald-800/60 shadow-sm'
                     : 'bg-[#0d0f17] border-slate-800/60 opacity-60'
                 }`}>
                   <div className="flex items-center justify-between text-emerald-400 text-[11px] font-semibold uppercase tracking-wider">
                     <span>AFTER CATALYST FIX</span>
-                    <span className="text-[10px] font-bold text-emerald-300">Apex #1 Pick ✓</span>
+                    <span className="text-[10px] font-bold text-emerald-300">#1 Pick ✓</span>
                   </div>
                   <div className="text-xs text-slate-300 space-y-1.5">
                     <div className="p-2 rounded-lg bg-emerald-900/40 border border-emerald-700/60 text-white font-bold flex items-center justify-between shadow-sm">
-                      <span className="text-emerald-300">#1 🥾 Apex Ridge (YOU) ✓</span>
-                      <span className="text-[10px] text-emerald-400 font-normal">15k mm + Vibram</span>
+                      <span className="text-emerald-300">#1 🎒 {isOpp1 ? 'Apex Ridge (YOU)' : 'Venture 45L (YOU)'} ✓</span>
+                      <span className="text-[10px] text-emerald-400 font-normal">{isOpp1 ? '15k mm + Vibram' : '45L + 600D'}</span>
                     </div>
                     <div className="p-2 rounded-lg bg-slate-900/60 border border-slate-800 text-slate-400 flex items-center justify-between">
-                      <span>#2 🥾 Monsoon Trekker</span>
+                      <span>#2 🎒 {isOpp1 ? 'Monsoon Trekker' : 'NorthTrail 45L'}</span>
                       <span className="text-[10px] text-slate-500 font-normal">Alternate</span>
                     </div>
                     <div className="text-emerald-300 pt-1 text-[11px] font-semibold flex items-center gap-1">
@@ -885,8 +1071,8 @@ export default function CatalystAgentHome({
                   Catalyst detected AI-referred shoppers are abandoning checkout. Recommended action: test targeted instant payment offer.
                 </div>
                 <div className="p-2.5 bg-slate-900 rounded-xl border border-slate-800 text-blue-300 font-semibold flex items-center justify-between">
-                  <span>💳 ICICI Instant 10% Off</span>
-                  <span className="text-[10px] text-emerald-400">+18% Lift</span>
+                  <span>💳 {isOpp1 ? 'ICICI Instant 10% Off' : 'HDFC Instant ₹500 Off'}</span>
+                  <span className="text-[10px] text-emerald-400">{isOpp1 ? '+18% Lift' : '+15% Lift'}</span>
                 </div>
 
                 <button
@@ -904,13 +1090,13 @@ export default function CatalystAgentHome({
                       <span>Live Simulation Output:</span>
                     </div>
                     <div className="text-slate-300">
-                      • Checkout payload injected: <code className="text-blue-300">rzp_off_monsoon_icici</code>
+                      • Checkout payload injected: <code className="text-blue-300">{isOpp1 ? 'rzp_off_monsoon_icici' : 'rzp_off_venture_hdfc'}</code>
                     </div>
                     <div className="text-slate-300">
-                      • AI Cart Conversion: <span className="line-through text-slate-500">14.2%</span> → <strong className="text-emerald-300">17.8%</strong> (+3.6% net lift)
+                      • AI Cart Conversion: <span className="line-through text-slate-500">14.2%</span> → <strong className="text-emerald-300">{isOpp1 ? '17.8%' : '17.1%'}</strong> (+3.6% net lift)
                     </div>
                     <div className="text-slate-300">
-                      • Additional Lifted GMV: <strong className="text-white">+₹48,000</strong>
+                      • Additional Lifted GMV: <strong className="text-white">{isOpp1 ? '+₹48,000' : '+₹35,000'}</strong>
                     </div>
                   </div>
                 )}
@@ -941,13 +1127,13 @@ export default function CatalystAgentHome({
                       <span>Live Recovery Output:</span>
                     </div>
                     <div className="text-slate-300">
-                      • Abandoned AI sessions: <span className="text-white">24 sessions</span>
+                      • Abandoned AI sessions: <span className="text-white">{isOpp1 ? '24 sessions' : '19 sessions'}</span>
                     </div>
                     <div className="text-slate-300">
-                      • Recovered via Razorpay Link: <strong className="text-emerald-300">18 orders (75% recovery)</strong>
+                      • Recovered via Razorpay Link: <strong className="text-emerald-300">{isOpp1 ? '18 orders (75%)' : '14 orders (74%)'}</strong>
                     </div>
                     <div className="text-slate-300">
-                      • Recovered Revenue: <strong className="text-white">+₹72,000</strong>
+                      • Recovered Revenue: <strong className="text-white">{isOpp1 ? '+₹72,000' : '+₹56,000'}</strong>
                     </div>
                   </div>
                 )}
@@ -967,16 +1153,16 @@ export default function CatalystAgentHome({
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <span className="text-xs font-mono text-slate-400 uppercase tracking-wider">
-                Controlled Simulation Revenue Impact
+                Controlled Simulation Revenue Impact ({isOpp1 ? 'Boots' : 'Backpacks'})
               </span>
               <span className="text-xs font-mono text-emerald-400 font-bold bg-emerald-950/60 px-2.5 py-0.5 rounded-full border border-emerald-800/60">
-                +125% Lift
+                {isOpp1 ? '+125% Lift' : '+110% Lift'}
               </span>
             </div>
 
             <div className="flex items-baseline space-x-3">
               <div className="text-4xl sm:text-5xl font-display font-bold text-emerald-300 tracking-tight">
-                +₹1.50L
+                {isOpp1 ? '+₹1.50L' : '+₹95,000'}
               </div>
               <div className="text-xs font-mono text-slate-300">
                 incremental GMV verified
@@ -991,18 +1177,37 @@ export default function CatalystAgentHome({
               </div>
 
               <div className="space-y-1 text-[11px]">
-                <div className="flex justify-between">
-                  <span className="text-slate-400">Control Arm (1,500 queries):</span>
-                  <span className="text-slate-200">24 orders × ₹5,000 = ₹1.20L</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-emerald-400">Treatment Arm (1,500 queries):</span>
-                  <span className="text-emerald-300 font-bold">54 orders × ₹5,000 = ₹2.70L</span>
-                </div>
-                <div className="flex justify-between border-t border-slate-800 pt-1 font-bold">
-                  <span className="text-white">Net Incremental GMV:</span>
-                  <span className="text-emerald-400">+₹1,50,000 (+₹1.50L)</span>
-                </div>
+                {isOpp1 ? (
+                  <>
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">Control Arm (1,500 queries):</span>
+                      <span className="text-slate-200">24 orders × ₹5,000 = ₹1.20L</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-emerald-400">Treatment Arm (1,500 queries):</span>
+                      <span className="text-emerald-300 font-bold">54 orders × ₹5,000 = ₹2.70L</span>
+                    </div>
+                    <div className="flex justify-between border-t border-slate-800 pt-1 font-bold">
+                      <span className="text-white">Net Incremental GMV:</span>
+                      <span className="text-emerald-400">+₹1,50,000 (+₹1.50L)</span>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">Control Arm (1,500 queries):</span>
+                      <span className="text-slate-200">20 orders × ₹4,000 = ₹80,000</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-emerald-400">Treatment Arm (1,500 queries):</span>
+                      <span className="text-emerald-300 font-bold">44 orders × ₹4,000 = ₹1,75,000</span>
+                    </div>
+                    <div className="flex justify-between border-t border-slate-800 pt-1 font-bold">
+                      <span className="text-white">Net Incremental GMV:</span>
+                      <span className="text-emerald-400">+₹95,000 GMV Lift</span>
+                    </div>
+                  </>
+                )}
               </div>
 
               <div className="text-[10px] text-slate-400 leading-relaxed border-t border-slate-800/80 pt-1.5">
@@ -1033,28 +1238,56 @@ export default function CatalystAgentHome({
               </span>
             </div>
 
-            <h4 className="text-xl font-display font-bold text-white">
-              ⚡ Venture 45L Expedition Backpack
-            </h4>
-            <p className="text-sm text-slate-300 font-sans leading-relaxed">
-              Catalyst completed the boots fix and automatically discovered your trekking backpacks have the same evidence gap in volume capacity and load-bearing specs.
-            </p>
+            {isOpp1 ? (
+              <>
+                <h4 className="text-xl font-display font-bold text-white">
+                  ⚡ Venture 45L Expedition Backpack
+                </h4>
+                <p className="text-sm text-slate-300 font-sans leading-relaxed">
+                  Catalyst completed the boots fix and automatically discovered your trekking backpacks have the same evidence gap in volume capacity and load-bearing specs.
+                </p>
 
-            <div className="p-4 rounded-2xl bg-[#090a0f] border border-slate-800 space-y-2 font-mono text-xs">
-              <div className="text-slate-400 font-semibold">Identified Deficit on Venture 45L:</div>
-              <div className="text-rose-300">• Missing 45-liter laboratory volume spec</div>
-              <div className="text-rose-300">• Missing 600D ripstop nylon material rating</div>
-              <div className="text-emerald-300 font-semibold pt-1">Estimated revenue potential: +₹95,000 GMV</div>
-            </div>
+                <div className="p-4 rounded-2xl bg-[#090a0f] border border-slate-800 space-y-2 font-mono text-xs">
+                  <div className="text-slate-400 font-semibold">Identified Deficit on Venture 45L:</div>
+                  <div className="text-rose-300">• Missing 45-liter laboratory volume spec</div>
+                  <div className="text-rose-300">• Missing 600D ripstop nylon material rating</div>
+                  <div className="text-emerald-300 font-semibold pt-1">Estimated revenue potential: +₹95,000 GMV</div>
+                </div>
+
+                <button
+                  onClick={() => handleSwitchOpportunity('opp-02')}
+                  className="w-full mt-2 py-3.5 px-6 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition-all cursor-pointer shadow-md flex items-center justify-center space-x-2"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-blue-200" />
+                  <span>Investigate & Fix Venture 45L →</span>
+                </button>
+              </>
+            ) : (
+              <>
+                <h4 className="text-xl font-display font-bold text-white">
+                  ⚡ Summit StormShield 3-Person Tent
+                </h4>
+                <p className="text-sm text-slate-300 font-sans leading-relaxed">
+                  Catalyst verified both Boots & Backpacks, and queued your 4-season tents for wind-rating and hydrostatic floor specs.
+                </p>
+
+                <div className="p-4 rounded-2xl bg-[#090a0f] border border-slate-800 space-y-2 font-mono text-xs">
+                  <div className="text-slate-400 font-semibold">Identified Deficit on StormShield Tent:</div>
+                  <div className="text-rose-300">• Missing Beaufort Scale Force 9 wind rating</div>
+                  <div className="text-rose-300">• Missing 5,000mm bathtub floor waterproofing spec</div>
+                  <div className="text-emerald-300 font-semibold pt-1">Estimated revenue potential: +₹1,10,000 GMV</div>
+                </div>
+
+                <button
+                  onClick={() => handleSwitchOpportunity('opp-01')}
+                  className="w-full mt-2 py-3.5 px-6 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white text-xs font-semibold transition-all cursor-pointer shadow-md flex items-center justify-center space-x-2"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-blue-200" />
+                  <span>Switch back to Boots (Opportunity #1) ←</span>
+                </button>
+              </>
+            )}
           </div>
-
-          <button
-            onClick={() => setNextOpportunityActive(true)}
-            className="w-full mt-2 py-3.5 px-6 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition-all cursor-pointer shadow-md flex items-center justify-center space-x-2"
-          >
-            <Sparkles className="w-3.5 h-3.5 text-blue-200" />
-            <span>{nextOpportunityActive ? '✓ Opportunity Queued for Fix' : 'Investigate & Fix Venture 45L →'}</span>
-          </button>
         </div>
 
       </div>
