@@ -158,8 +158,8 @@ export default function App() {
         agentStatus={getAgentStatus()}
       />
 
-      {/* Main Experience Flow */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      {/* Main Experience Flow with Fixed Navbar Offset */}
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-8">
         
         {/* 1. CATALYST TAB (Primary Agent Flow) */}
         {activeTab === 'catalyst' && (

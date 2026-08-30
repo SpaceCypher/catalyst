@@ -45,7 +45,7 @@ export default function Navbar({
   const status = getStatusDisplay();
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-surface-border bg-[#090a0f]/90 backdrop-blur-xl">
+    <header className="fixed top-0 left-0 right-0 z-50 w-full border-b border-surface-border bg-[#090a0f]/95 backdrop-blur-xl shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
         
         {/* Left: Brand Identity & Status */}
