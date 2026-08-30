@@ -51,9 +51,13 @@ export default function CatalystAgentHome({
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isInvestigatingNext, setIsInvestigatingNext] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
-  const [activeOpportunityId, setActiveOpportunityId] = useState('opp-01'); // 'opp-01' | 'opp-02'
+  const [activeOpportunityId, setActiveOpportunityId] = useState('opp-01'); // 'opp-01' | 'opp-02' | 'opp-03' | 'opp-04'
   const [backpackApproved, setBackpackApproved] = useState(false);
   const [backpackApproving, setBackpackApproving] = useState(false);
+  const [tentApproved, setTentApproved] = useState(false);
+  const [tentApproving, setTentApproving] = useState(false);
+  const [showOpportunitiesDrawer, setShowOpportunitiesDrawer] = useState(false);
+  const [isContinuousLoopActive, setIsContinuousLoopActive] = useState(true);
   
   const [showTechnicalDiff, setShowTechnicalDiff] = useState(false);
   const [showSupportingQueries, setShowSupportingQueries] = useState(false);
@@ -74,6 +78,7 @@ export default function CatalystAgentHome({
     if (!hasAnalyzed || !isBootApproved) {
       setActiveOpportunityId('opp-01');
       setBackpackApproved(false);
+      setTentApproved(false);
       setHasTestedOffer(false);
       setHasApprovedReminder(false);
       setShowTechnicalDiff(false);
@@ -124,6 +129,8 @@ export default function CatalystAgentHome({
       setActiveWhyModal(null);
       if (oppId === 'opp-02') {
         setSearchQuery('best lightweight 45L expedition backpack under ₹6,000');
+      } else if (oppId === 'opp-03') {
+        setSearchQuery('4 season waterproof 3-person camping tent under ₹7,000');
       } else {
         setSearchQuery('best waterproof hiking boots under ₹5,000');
       }
@@ -135,6 +142,14 @@ export default function CatalystAgentHome({
     setTimeout(() => {
       setBackpackApproving(false);
       setBackpackApproved(true);
+    }, 600);
+  };
+
+  const handleApproveTent = () => {
+    setTentApproving(true);
+    setTimeout(() => {
+      setTentApproving(false);
+      setTentApproved(true);
     }, 600);
   };
 
@@ -521,23 +536,23 @@ export default function CatalystAgentHome({
     <div className="max-w-7xl mx-auto space-y-6 animate-in fade-in duration-300">
       
       {/* Agent Status Bar & Opportunity Selector */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#121624]/90 border border-slate-800 p-4 rounded-2xl">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 bg-[#121624]/90 border border-slate-800 p-4 rounded-2xl">
         <div className="flex flex-wrap items-center gap-2">
           <div className="flex items-center space-x-2 mr-2">
             <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-xs font-mono text-slate-400">Opportunities:</span>
+            <span className="text-xs font-mono text-slate-400 font-semibold">Autonomous Loop:</span>
           </div>
 
           {/* Opp 1 Pill */}
           <button
             onClick={() => handleSwitchOpportunity('opp-01')}
             className={`px-3 py-1.5 rounded-xl text-xs font-mono transition-all cursor-pointer flex items-center space-x-1.5 ${
-              isOpp1 
+              activeOpportunityId === 'opp-01' 
                 ? 'bg-blue-600/20 text-blue-300 border border-blue-500/40 font-bold shadow-sm' 
                 : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'
             }`}
           >
-            <span>1. Apex Ridge Boots</span>
+            <span>1. Apex Boots</span>
             {isBootApproved ? (
               <span className="text-emerald-400 text-[10px] font-bold">✓ (+₹1.50L)</span>
             ) : (
@@ -549,36 +564,290 @@ export default function CatalystAgentHome({
           <button
             onClick={() => handleSwitchOpportunity('opp-02')}
             className={`px-3 py-1.5 rounded-xl text-xs font-mono transition-all cursor-pointer flex items-center space-x-1.5 ${
-              !isOpp1 
+              activeOpportunityId === 'opp-02' 
                 ? 'bg-blue-600/20 text-blue-300 border border-blue-500/40 font-bold shadow-sm' 
                 : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'
             }`}
           >
-            <span>2. Venture 45L Backpack</span>
+            <span>2. Venture 45L</span>
             {backpackApproved ? (
               <span className="text-emerald-400 text-[10px] font-bold">✓ (+₹95k)</span>
             ) : (
               <span className="text-amber-400 text-[10px]">⚡ Action</span>
             )}
           </button>
+
+          {/* Opp 3 Pill */}
+          <button
+            onClick={() => handleSwitchOpportunity('opp-03')}
+            className={`px-3 py-1.5 rounded-xl text-xs font-mono transition-all cursor-pointer flex items-center space-x-1.5 ${
+              activeOpportunityId === 'opp-03' 
+                ? 'bg-blue-600/20 text-blue-300 border border-blue-500/40 font-bold shadow-sm' 
+                : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'
+            }`}
+          >
+            <span>3. StormShield Tent</span>
+            {tentApproved ? (
+              <span className="text-emerald-400 text-[10px] font-bold">✓ (+₹1.10L)</span>
+            ) : (
+              <span className="text-slate-500 text-[10px]">⏳ Queued</span>
+            )}
+          </button>
+
+          {/* Opp 4 Pill */}
+          <button
+            onClick={() => handleSwitchOpportunity('opp-04')}
+            className={`px-3 py-1.5 rounded-xl text-xs font-mono transition-all cursor-pointer flex items-center space-x-1.5 ${
+              activeOpportunityId === 'opp-04' 
+                ? 'bg-blue-600/20 text-blue-300 border border-blue-500/40 font-bold shadow-sm' 
+                : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'
+            }`}
+          >
+            <span>4. SwiftTrail Shoes</span>
+            <span className="text-slate-500 text-[10px]">⏳ Queued</span>
+          </button>
         </div>
 
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-2.5">
+          {/* Opportunities Radar Toggle Button */}
+          <button
+            onClick={() => setShowOpportunitiesDrawer(!showOpportunitiesDrawer)}
+            className={`text-xs font-mono flex items-center space-x-1.5 px-3 py-1.5 rounded-xl border transition-all cursor-pointer ${
+              showOpportunitiesDrawer 
+                ? 'bg-indigo-600/30 text-indigo-200 border-indigo-500/50 shadow-sm' 
+                : 'bg-slate-900 hover:bg-slate-800 text-indigo-300 border-slate-700'
+            }`}
+          >
+            <Target className="w-3.5 h-3.5 text-indigo-400" />
+            <span>Opportunities Radar (4)</span>
+            <span className="text-[10px] bg-indigo-950 text-indigo-300 px-1.5 py-0.5 rounded-md border border-indigo-800 font-bold">+₹4.00L</span>
+          </button>
+
           <button
             onClick={onNavigateToStore}
             className="text-xs font-mono text-slate-300 hover:text-white flex items-center space-x-1.5 bg-slate-900 hover:bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-800 transition-colors cursor-pointer"
           >
-            <span>Store catalog</span>
+            <span>Catalog</span>
           </button>
           <button
             onClick={onOpenStorefront}
-            className="text-xs font-mono text-blue-300 hover:text-blue-200 flex items-center space-x-1.5 bg-slate-900 hover:bg-slate-800 px-3.5 py-1.5 rounded-xl border border-slate-800 transition-colors cursor-pointer"
+            className="text-xs font-mono text-blue-300 hover:text-blue-200 flex items-center space-x-1.5 bg-slate-900 hover:bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-800 transition-colors cursor-pointer"
           >
-            <span>Open live storefront</span>
-            <ExternalLink className="w-3.5 h-3.5" />
+            <span>Storefront</span>
+            <ExternalLink className="w-3 h-3" />
           </button>
         </div>
       </div>
+
+      {/* Identified Opportunities Radar Drawer / Panel */}
+      {showOpportunitiesDrawer && (
+        <div className="rounded-3xl bg-[#0f1422] border border-indigo-500/30 p-6 sm:p-7 shadow-2xl space-y-5 animate-in fade-in duration-200">
+          
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+            <div className="space-y-1">
+              <div className="flex items-center space-x-2">
+                <Target className="w-5 h-5 text-indigo-400" />
+                <h3 className="text-lg font-display font-bold text-white">
+                  Identified Opportunities Radar & Loop Engine
+                </h3>
+                <span className="text-xs font-mono bg-indigo-950 text-indigo-300 px-2 py-0.5 rounded-full border border-indigo-800 font-semibold">
+                  4 Catalog Gaps
+                </span>
+              </div>
+              <p className="text-xs text-slate-300 font-mono">
+                Continuous autonomous cycle benchmarks 12 store SKUs across AI search query vectors
+              </p>
+            </div>
+
+            <div className="flex items-center space-x-3 text-xs font-mono">
+              <div className="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 flex items-center space-x-2">
+                <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span>Loop Mode: <strong className="text-emerald-300">Continuous Auto-Scan</strong></span>
+              </div>
+              <button
+                onClick={() => setShowOpportunitiesDrawer(false)}
+                className="text-slate-400 hover:text-white p-1 cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+
+          {/* Autonomous Loop Cycle Flow Diagram */}
+          <div className="p-4 rounded-2xl bg-[#090c14] border border-slate-800 space-y-3 font-mono text-xs">
+            <div className="flex items-center justify-between text-slate-400 text-[11px] font-semibold uppercase tracking-wider">
+              <span className="flex items-center gap-1.5 text-blue-400">
+                <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                <span>6-Stage Autonomous Closed Loop Cycle</span>
+              </span>
+              <span className="text-emerald-400 font-normal">Next Best Action Auto-Triggered</span>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 text-[11px]">
+              <div className="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1">
+                <div className="text-blue-400 font-bold">1. Ingest</div>
+                <div className="text-slate-300 text-[10px]">Auto-crawl 12 catalog SKUs</div>
+              </div>
+              <div className="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1">
+                <div className="text-blue-400 font-bold">2. Discover</div>
+                <div className="text-slate-300 text-[10px]">Test 40 shopping queries</div>
+              </div>
+              <div className="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1">
+                <div className="text-amber-400 font-bold">3. Diagnose</div>
+                <div className="text-slate-300 text-[10px]">Detect spec/schema gap</div>
+              </div>
+              <div className="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1">
+                <div className="text-emerald-400 font-bold">4. Grounded Fix</div>
+                <div className="text-slate-300 text-[10px]">Generate verified diff</div>
+              </div>
+              <div className="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1">
+                <div className="text-emerald-400 font-bold">5. Approve Gate</div>
+                <div className="text-slate-300 text-[10px]">WAIT_FOR_APPROVAL</div>
+              </div>
+              <div className="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1">
+                <div className="text-purple-400 font-bold">6. Realize & Loop</div>
+                <div className="text-slate-300 text-[10px]">Razorpay Lift ⟲ Next SKU</div>
+              </div>
+            </div>
+          </div>
+
+          {/* 4 Opportunities Pipeline Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 font-mono text-xs">
+            
+            {/* Opp 1 */}
+            <div 
+              onClick={() => {
+                handleSwitchOpportunity('opp-01');
+                setShowOpportunitiesDrawer(false);
+              }}
+              className={`p-4 rounded-2xl border transition-all cursor-pointer space-y-2.5 ${
+                activeOpportunityId === 'opp-01' 
+                  ? 'bg-blue-950/30 border-blue-500/50 shadow-md' 
+                  : 'bg-[#0a0d16] border-slate-800 hover:border-slate-700'
+              }`}
+            >
+              <div className="flex items-center justify-between text-[11px]">
+                <span className="text-blue-400 font-bold">#1 FOOTWEAR</span>
+                <span className={`text-[10px] px-2 py-0.5 rounded-md font-semibold ${
+                  isBootApproved ? 'bg-emerald-950 text-emerald-300 border border-emerald-800' : 'bg-amber-950 text-amber-300 border border-amber-800'
+                }`}>
+                  {isBootApproved ? 'Resolved ✓' : 'Action ⚡'}
+                </span>
+              </div>
+              <div className="font-sans font-bold text-white text-sm">
+                Apex Ridge Trekking Boots
+              </div>
+              <div className="text-slate-400 text-[11px] space-y-0.5">
+                <div>Gap: IPX7 (15k mm), 420g, Vibram sole</div>
+                <div>Win Rate: <span className="text-rose-400">15%</span> vs Comp <span className="text-emerald-400">55%</span></div>
+              </div>
+              <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between font-semibold">
+                <span className="text-slate-400 text-[10px]">GMV Potential:</span>
+                <span className="text-emerald-400">+₹1,50,000</span>
+              </div>
+            </div>
+
+            {/* Opp 2 */}
+            <div 
+              onClick={() => {
+                handleSwitchOpportunity('opp-02');
+                setShowOpportunitiesDrawer(false);
+              }}
+              className={`p-4 rounded-2xl border transition-all cursor-pointer space-y-2.5 ${
+                activeOpportunityId === 'opp-02' 
+                  ? 'bg-blue-950/30 border-blue-500/50 shadow-md' 
+                  : 'bg-[#0a0d16] border-slate-800 hover:border-slate-700'
+              }`}
+            >
+              <div className="flex items-center justify-between text-[11px]">
+                <span className="text-amber-400 font-bold">#2 OUTDOOR GEAR</span>
+                <span className={`text-[10px] px-2 py-0.5 rounded-md font-semibold ${
+                  backpackApproved ? 'bg-emerald-950 text-emerald-300 border border-emerald-800' : 'bg-amber-950 text-amber-300 border border-amber-800'
+                }`}>
+                  {backpackApproved ? 'Resolved ✓' : 'Action ⚡'}
+                </span>
+              </div>
+              <div className="font-sans font-bold text-white text-sm">
+                Venture 45L Backpack
+              </div>
+              <div className="text-slate-400 text-[11px] space-y-0.5">
+                <div>Gap: 45L volume, 600D ripstop, stay</div>
+                <div>Win Rate: <span className="text-rose-400">10%</span> vs Comp <span className="text-emerald-400">50%</span></div>
+              </div>
+              <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between font-semibold">
+                <span className="text-slate-400 text-[10px]">GMV Potential:</span>
+                <span className="text-emerald-400">+₹95,000</span>
+              </div>
+            </div>
+
+            {/* Opp 3 */}
+            <div 
+              onClick={() => {
+                handleSwitchOpportunity('opp-03');
+                setShowOpportunitiesDrawer(false);
+              }}
+              className={`p-4 rounded-2xl border transition-all cursor-pointer space-y-2.5 ${
+                activeOpportunityId === 'opp-03' 
+                  ? 'bg-blue-950/30 border-blue-500/50 shadow-md' 
+                  : 'bg-[#0a0d16] border-slate-800 hover:border-slate-700'
+              }`}
+            >
+              <div className="flex items-center justify-between text-[11px]">
+                <span className="text-purple-400 font-bold">#3 TENTS & SHELTER</span>
+                <span className={`text-[10px] px-2 py-0.5 rounded-md font-semibold ${
+                  tentApproved ? 'bg-emerald-950 text-emerald-300 border border-emerald-800' : 'bg-slate-900 text-slate-400 border border-slate-800'
+                }`}>
+                  {tentApproved ? 'Resolved ✓' : 'Queued ⏳'}
+                </span>
+              </div>
+              <div className="font-sans font-bold text-white text-sm">
+                Alpine Haven 3-Person Tent
+              </div>
+              <div className="text-slate-400 text-[11px] space-y-0.5">
+                <div>Gap: Force 9 wind rating, 5k mm floor</div>
+                <div>Win Rate: <span className="text-rose-400">8%</span> vs Comp <span className="text-emerald-400">58%</span></div>
+              </div>
+              <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between font-semibold">
+                <span className="text-slate-400 text-[10px]">GMV Potential:</span>
+                <span className="text-emerald-400">+₹1,10,000</span>
+              </div>
+            </div>
+
+            {/* Opp 4 */}
+            <div 
+              onClick={() => {
+                handleSwitchOpportunity('opp-04');
+                setShowOpportunitiesDrawer(false);
+              }}
+              className={`p-4 rounded-2xl border transition-all cursor-pointer space-y-2.5 ${
+                activeOpportunityId === 'opp-04' 
+                  ? 'bg-blue-950/30 border-blue-500/50 shadow-md' 
+                  : 'bg-[#0a0d16] border-slate-800 hover:border-slate-700'
+              }`}
+            >
+              <div className="flex items-center justify-between text-[11px]">
+                <span className="text-cyan-400 font-bold">#4 RUNNING GEAR</span>
+                <span className="text-[10px] px-2 py-0.5 rounded-md font-semibold bg-slate-900 text-slate-400 border border-slate-800">
+                  Queued ⏳
+                </span>
+              </div>
+              <div className="font-sans font-bold text-white text-sm">
+                SwiftTrail Aero Running Shoes
+              </div>
+              <div className="text-slate-400 text-[11px] space-y-0.5">
+                <div>Gap: 8mm heel drop, EVA midsole, grip</div>
+                <div>Win Rate: <span className="text-rose-400">12%</span> vs Comp <span className="text-emerald-400">48%</span></div>
+              </div>
+              <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between font-semibold">
+                <span className="text-slate-400 text-[10px]">GMV Potential:</span>
+                <span className="text-emerald-400">+₹45,000</span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      )}
 
       {/* Primary Agent Headline Card (10-Second Comprehension) */}
       <div className="rounded-3xl bg-[#121624]/95 border border-slate-700/80 p-6 sm:p-8 shadow-xl">
@@ -591,18 +860,32 @@ export default function CatalystAgentHome({
               </span>
               <span className="text-slate-500">•</span>
               <span className="text-xs font-mono text-slate-300">
-                {isOpp1 ? 'Opportunity #1 · Apex Ridge Waterproof Boots' : 'Opportunity #2 · Venture 45L Expedition Backpack'}
+                {activeOpportunityId === 'opp-01' 
+                  ? 'Opportunity #1 · Apex Ridge Waterproof Boots' 
+                  : activeOpportunityId === 'opp-02' 
+                  ? 'Opportunity #2 · Venture 45L Expedition Backpack'
+                  : activeOpportunityId === 'opp-03'
+                  ? 'Opportunity #3 · Alpine Haven 3-Person Camping Tent'
+                  : 'Opportunity #4 · SwiftTrail Aero Running Shoes'}
               </span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-display font-bold text-white leading-tight">
-              {isOpp1 
+              {activeOpportunityId === 'opp-01' 
                 ? 'Apex Ridge Waterproof Boots are losing AI recommendations to Monsoon Trekker.' 
-                : 'Venture 45L Backpack is losing AI recommendations to NorthTrail 45L Alpine Pro.'}
+                : activeOpportunityId === 'opp-02'
+                ? 'Venture 45L Backpack is losing AI recommendations to NorthTrail 45L Alpine Pro.'
+                : activeOpportunityId === 'opp-03'
+                ? 'Alpine Haven 3-Person Tent is losing AI recommendations to StormShield Pro.'
+                : 'SwiftTrail Aero Running Shoes are losing AI recommendations to TrailPro Speed.'}
             </h2>
             <p className="text-sm text-slate-300 leading-relaxed font-sans max-w-3xl">
-              {isOpp1 
+              {activeOpportunityId === 'opp-01' 
                 ? 'AI shopping engines (ChatGPT, Perplexity) recommend competitors because your product page exposes fewer structured comparison signals.' 
-                : 'Competitors expose 45L certified capacity, 600D Diamond Ripstop nylon, and internal aluminum frame ratings, winning AI travel recommendations.'}
+                : activeOpportunityId === 'opp-02'
+                ? 'Competitors expose 45L certified capacity, 600D Diamond Ripstop nylon, and internal aluminum frame ratings, winning AI travel recommendations.'
+                : activeOpportunityId === 'opp-03'
+                ? 'Competitors expose Beaufort Scale Force 9 wind ratings and 5,000mm bathtub floor specs, winning AI 4-season camping recommendations.'
+                : 'Competitors expose explicit 8mm drop, dual-density EVA midsole, and lug grip index, winning lightweight trail runner recommendations.'}
             </p>
           </div>
 
