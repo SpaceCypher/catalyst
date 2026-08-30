@@ -109,66 +109,189 @@ export default function CatalystAgentHome({
     }, 450);
   };
 
-  // 1. FIRST-TIME ONBOARDING (CONNECT)
+  // 1. FIRST-TIME ONBOARDING (CONNECT + METHODOLOGY)
   if (!hasAnalyzed && !isAnalyzing) {
     return (
-      <div className="max-w-2xl mx-auto my-12 animate-in fade-in duration-300">
-        <div className="rounded-3xl bg-[#121624]/90 border border-slate-700/60 p-8 sm:p-12 shadow-2xl text-center space-y-6">
+      <div className="max-w-6xl mx-auto my-6 space-y-6 animate-in fade-in duration-300">
+        
+        {/* Top Header */}
+        <div className="text-center space-y-2 max-w-2xl mx-auto pt-2">
+          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-300 text-xs font-mono">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Autonomous Commerce Intelligence for AI Search Engines</span>
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-display font-black text-white tracking-tight">
+            Meet Catalyst
+          </h1>
+          <p className="text-sm sm:text-base text-slate-300">
+            An autonomous AI employee that finds where AI shoppers are choosing someone else — and generates bounded fixes to win the sale.
+          </p>
+        </div>
+
+        {/* 2-Column Bento: Connect Card + Methodology */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
           
-          <div className="w-14 h-14 rounded-2xl bg-slate-800 border border-slate-700 mx-auto flex items-center justify-center text-blue-300 shadow-md">
-            <Zap className="w-7 h-7" />
-          </div>
+          {/* Left Column: Connect Store Input (5 Cols) */}
+          <div className="lg:col-span-5 flex flex-col">
+            <div className="rounded-3xl bg-[#121624]/95 border border-slate-700/80 p-6 sm:p-8 shadow-2xl flex-1 flex flex-col justify-between space-y-6">
+              
+              <div className="space-y-4">
+                <div className="w-12 h-12 rounded-2xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400 shadow-md">
+                  <Zap className="w-6 h-6" />
+                </div>
 
-          <div className="space-y-2">
-            <h1 className="text-3xl sm:text-4xl font-display font-bold text-white tracking-tight">
-              Connect your store
-            </h1>
-            <p className="text-sm sm:text-base text-slate-300 max-w-lg mx-auto leading-relaxed">
-              I'll find where AI shoppers are choosing someone else — and fix it.
-            </p>
-          </div>
+                <div className="space-y-1">
+                  <h2 className="text-2xl font-display font-bold text-white tracking-tight">
+                    Connect your store
+                  </h2>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    Paste your ecommerce store URL to benchmark your technical catalog signals against top competitors.
+                  </p>
+                </div>
 
-          <div className="space-y-4 text-left pt-2">
-            <div>
-              <div className="relative">
-                <Globe className="w-5 h-5 text-slate-500 absolute left-4 top-1/2 -translate-y-1/2" />
-                <input
-                  type="text"
-                  value={storeUrl}
-                  onChange={(e) => setStoreUrl(e.target.value)}
-                  placeholder="https://yourstore.com"
-                  className="w-full pl-12 pr-4 py-4 rounded-xl bg-[#0d0f17] border border-slate-700 text-white text-sm font-mono focus:outline-none focus:border-blue-400 shadow-inner"
-                />
+                <div className="space-y-3 pt-2">
+                  <div className="relative">
+                    <Globe className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                    <input
+                      type="text"
+                      value={storeUrl}
+                      onChange={(e) => setStoreUrl(e.target.value)}
+                      placeholder="https://yourstore.com"
+                      className="w-full pl-10 pr-3 py-3 rounded-xl bg-[#0a0d14] border border-slate-700 text-white text-xs font-mono focus:outline-none focus:border-blue-400 shadow-inner"
+                    />
+                  </div>
+
+                  <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono">
+                    <div className="flex items-center space-x-1.5 text-slate-400">
+                      <span>Preset:</span>
+                      <button
+                        type="button"
+                        onClick={() => setStoreUrl('https://apex-outdoor.vercel.app')}
+                        className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-600 text-blue-300 hover:text-white transition-colors cursor-pointer"
+                      >
+                        Apex Outdoor · Demo
+                      </button>
+                    </div>
+
+                    <div className="flex items-center space-x-1 text-slate-400">
+                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
+                      <span>Safe · Read-only audit</span>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
 
-            <div className="flex flex-wrap items-center justify-between gap-2 pt-1 text-xs">
-              <div className="flex items-center space-x-2">
-                <span className="text-slate-400 font-mono">Sample store:</span>
+              <div className="pt-2">
                 <button
-                  type="button"
-                  onClick={() => setStoreUrl('https://apex-outdoor.vercel.app')}
-                  className="font-mono px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white transition-colors cursor-pointer"
+                  onClick={handleStartAnalysis}
+                  className="w-full py-3.5 px-5 rounded-xl bg-blue-600 hover:bg-blue-500 active:scale-[0.99] text-white text-sm font-semibold transition-all flex items-center justify-center space-x-2 cursor-pointer shadow-lg shadow-blue-600/25"
                 >
-                  Apex Outdoor · Demo
+                  <Sparkles className="w-4 h-4" />
+                  <span>Analyze my store →</span>
                 </button>
+                <p className="text-center text-[11px] text-slate-400 font-mono mt-2.5">
+                  Takes ~3 seconds · Evaluates 40 AI shopping query vectors
+                </p>
               </div>
 
-              <div className="flex items-center space-x-1.5 text-slate-400 font-mono">
-                <ShieldCheck className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                <span>No automatic changes</span>
-              </div>
             </div>
+          </div>
 
-            <button
-              onClick={handleStartAnalysis}
-              className="w-full mt-4 py-4 px-6 rounded-xl bg-blue-600 hover:bg-blue-500 active:scale-[0.99] text-white text-base font-semibold transition-all flex items-center justify-center space-x-2 cursor-pointer shadow-lg"
-            >
-              <span>Analyze my store →</span>
-            </button>
+          {/* Right Column: Methodology & Architecture (7 Cols) */}
+          <div className="lg:col-span-7 flex flex-col">
+            <div className="rounded-3xl bg-[#121624]/95 border border-slate-700/80 p-6 sm:p-8 shadow-2xl flex-1 space-y-5">
+              
+              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="text-xs font-mono font-bold text-slate-200 uppercase tracking-wider">
+                    Our Methodology & Operating Invariants
+                  </span>
+                </div>
+                <span className="text-[11px] font-mono text-slate-400">
+                  4-Step Closed Loop
+                </span>
+              </div>
+
+              {/* 4 Methodology Cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                
+                {/* Step 1 */}
+                <div className="p-3.5 rounded-2xl bg-[#0c101c] border border-slate-800/80 space-y-1.5">
+                  <div className="flex items-center space-x-2">
+                    <span className="w-5 h-5 rounded-full bg-blue-500/20 text-blue-300 font-mono text-[11px] font-bold flex items-center justify-center">
+                      1
+                    </span>
+                    <span className="text-xs font-bold text-white">
+                      Evidence Extraction
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-300 leading-relaxed">
+                    AI search engines (Perplexity, ChatGPT) require structured technical tokens (e.g., 15k mm waterproof rating, Vibram sole), not generic marketing fluff.
+                  </p>
+                </div>
+
+                {/* Step 2 */}
+                <div className="p-3.5 rounded-2xl bg-[#0c101c] border border-slate-800/80 space-y-1.5">
+                  <div className="flex items-center space-x-2">
+                    <span className="w-5 h-5 rounded-full bg-amber-500/20 text-amber-300 font-mono text-[11px] font-bold flex items-center justify-center">
+                      2
+                    </span>
+                    <span className="text-xs font-bold text-white">
+                      40-Query Benchmark Panel
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-300 leading-relaxed">
+                    We benchmark your store against competitor catalogs across 40 high-intent shopping queries to identify exact omitted specifications.
+                  </p>
+                </div>
+
+                {/* Step 3 */}
+                <div className="p-3.5 rounded-2xl bg-[#0c101c] border border-slate-800/80 space-y-1.5">
+                  <div className="flex items-center space-x-2">
+                    <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono text-[11px] font-bold flex items-center justify-center">
+                      3
+                    </span>
+                    <span className="text-xs font-bold text-white">
+                      Deterministic Safety Gate
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-300 leading-relaxed">
+                    Catalyst enforces the <code className="text-amber-300 font-mono">WAIT_FOR_APPROVAL</code> invariant. Bounded Schema.org JSON-LD diffs require explicit merchant confirmation.
+                  </p>
+                </div>
+
+                {/* Step 4 */}
+                <div className="p-3.5 rounded-2xl bg-[#0c101c] border border-slate-800/80 space-y-1.5">
+                  <div className="flex items-center space-x-2">
+                    <span className="w-5 h-5 rounded-full bg-purple-500/20 text-purple-300 font-mono text-[11px] font-bold flex items-center justify-center">
+                      4
+                    </span>
+                    <span className="text-xs font-bold text-white">
+                      Razorpay Revenue Loop
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-300 leading-relaxed">
+                    Dynamic checkout offer injection (<code className="text-emerald-300 font-mono">rzp_off_monsoon</code>) and automated recovery notifications recover abandoned AI shopping carts.
+                  </p>
+                </div>
+
+              </div>
+
+              {/* Bottom Guarantee Banner */}
+              <div className="p-3 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-between text-xs font-mono text-slate-300">
+                <div className="flex items-center space-x-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                  <span>5-Signal Anti-Spoofing Classifier eliminates false GMV attribution</span>
+                </div>
+                <span className="text-emerald-400 font-bold hidden sm:inline">100% Grounded</span>
+              </div>
+
+            </div>
           </div>
 
         </div>
+
       </div>
     );
   }
