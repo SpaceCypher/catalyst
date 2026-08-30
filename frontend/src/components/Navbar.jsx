@@ -30,16 +30,16 @@ export default function Navbar({
   const getStatusDisplay = () => {
     switch(agentStatus) {
       case 'analyzing':
-        return { label: 'Analyzing store...', color: 'bg-blue-400', textColor: 'text-blue-300', pulse: true };
+        return { label: 'Catalyst is analyzing store...', color: 'bg-blue-400', textColor: 'text-blue-300', pulse: true };
       case 'waiting_approval':
-        return { label: 'Waiting for your approval', color: 'bg-amber-400', textColor: 'text-amber-300', pulse: true };
+        return { label: 'Catalyst has 1 recommendation for you', color: 'bg-amber-400', textColor: 'text-amber-300', pulse: true };
       case 'measuring':
-        return { label: 'Measuring revenue lift...', color: 'bg-purple-400', textColor: 'text-purple-300', pulse: true };
+        return { label: 'Catalyst is measuring the result...', color: 'bg-purple-400', textColor: 'text-purple-300', pulse: true };
       case 'complete':
-        return { label: 'Fix verified • Monitoring', color: 'bg-emerald-400', textColor: 'text-emerald-300', pulse: false };
+        return { label: 'Catalyst verified +₹1.50L revenue impact', color: 'bg-emerald-400', textColor: 'text-emerald-300', pulse: false };
       case 'ready':
       default:
-        return { label: 'Ready', color: 'bg-emerald-400', textColor: 'text-emerald-300', pulse: false };
+        return { label: 'Catalyst Ready', color: 'bg-emerald-400', textColor: 'text-emerald-300', pulse: false };
     }
   };
 
