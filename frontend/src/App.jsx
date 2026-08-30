@@ -23,10 +23,19 @@ import {
   resetDemo
 } from './api/client';
 
+const getTabFromPath = () => {
+  if (typeof window === 'undefined') return 'catalyst';
+  const path = window.location.pathname.toLowerCase().replace(/^\/+|\/+$/g, '');
+  if (path === 'store' || path === 'storefront') return 'store';
+  if (path === 'proof' || path === 'evidence' || path === 'attribution' || path === 'experiment' || path === 'experiments') return 'proof';
+  if (path === 'activity' || path === 'timeline' || path === 'audit') return 'activity';
+  return 'catalyst';
+};
+
 export default function App() {
   const [currentView, setCurrentView] = useState('catalyst'); // 'catalyst' | 'storefront'
   const [hasAnalyzed, setHasAnalyzed] = useState(true);
-  const [activeTab, setActiveTab] = useState('catalyst'); // 'catalyst' | 'store' | 'activity' | 'proof'
+  const [activeTab, setActiveTab] = useState(getTabFromPath);
   const [opportunities, setOpportunities] = useState([]);
   const [selectedOpp, setSelectedOpp] = useState(null);
   const [activeDiff, setActiveDiff] = useState(null);
@@ -43,6 +52,30 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [isApproving, setIsApproving] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
+
+  // Synchronize browser URL pathname with active tab
+  const navigateToTab = (tab, replace = false) => {
+    setActiveTab(tab);
+    if (typeof window !== 'undefined' && window.history) {
+      const newPath = tab === 'catalyst' ? '/' : `/${tab}`;
+      if (window.location.pathname !== newPath) {
+        if (replace) {
+          window.history.replaceState({ tab }, '', newPath);
+        } else {
+          window.history.pushState({ tab }, '', newPath);
+        }
+      }
+    }
+  };
+
+  // Listen to browser Back / Forward navigation
+  useEffect(() => {
+    const handlePopState = () => {
+      setActiveTab(getTabFromPath());
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   const loadAllData = async () => {
     try {
@@ -131,7 +164,7 @@ export default function App() {
       setActiveDiff({ diff_id: 'diff-apex-01', status: 'proposed' });
       setExperimentResult(null);
       setHasAnalyzed(false);
-      setActiveTab('catalyst');
+      navigateToTab('catalyst', true);
       await loadAllData();
       setActiveDiff({ diff_id: 'diff-apex-01', status: 'proposed' });
     } catch (e) {
@@ -162,7 +195,7 @@ export default function App() {
       {/* Top Navigation */}
       <Navbar
         activeTab={activeTab}
-        setActiveTab={setActiveTab}
+        setActiveTab={navigateToTab}
         onResetDemo={handleResetDemo}
         onOpenDemoModal={() => setIsDemoModalOpen(true)}
         onOpenStorefront={handleOpenStorefront}
@@ -190,8 +223,8 @@ export default function App() {
             onRunExperiment={() => runExperiment('diff-apex-01')}
             experimentResult={experimentResult}
             onOpenStorefront={handleOpenStorefront}
-            onNavigateToProof={() => setActiveTab('proof')}
-            onNavigateToStore={() => setActiveTab('store')}
+            onNavigateToProof={() => navigateToTab('proof')}
+            onNavigateToStore={() => navigateToTab('store')}
             onOpenDiffModal={() => setIsDiffModalOpen(true)}
           />
         )}
@@ -243,9 +276,9 @@ export default function App() {
         <DemoWalkthroughModal
           onClose={() => setIsDemoModalOpen(false)}
           onNavigateTab={(tab) => {
-            if (tab === 'inbox' || tab === 'opportunities') setActiveTab('catalyst');
-            else if (tab === 'experiments' || tab === 'attribution' || tab === 'console') setActiveTab('proof');
-            else setActiveTab('catalyst');
+            if (tab === 'inbox' || tab === 'opportunities') navigateToTab('catalyst');
+            else if (tab === 'experiments' || tab === 'attribution' || tab === 'console') navigateToTab('proof');
+            else navigateToTab('catalyst');
             setIsDemoModalOpen(false);
           }}
           onOpenDiff={() => {
