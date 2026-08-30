@@ -21,9 +21,9 @@ export default function App() {
   const [isEnhanced, setIsEnhanced] = useState(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
-      if (params.get('enhanced') === 'true') return true;
-      if (params.get('enhanced') === 'false') return false;
-      return localStorage.getItem('catalyst_diff_status') === 'approved';
+      if (params.get('enhanced') === 'true' || params.get('catalyst') === 'patched') return true;
+      if (params.get('enhanced') === 'false' || params.get('catalyst') === 'baseline') return false;
+      return false; // Default to Baseline (Control)
     }
     return false;
   });
@@ -31,6 +31,16 @@ export default function App() {
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [viewJsonLd, setViewJsonLd] = useState(false);
+
+  // Sync state when URL changes or button is clicked
+  const handleToggleEnhanced = (val) => {
+    setIsEnhanced(val);
+    if (typeof window !== 'undefined' && window.history?.replaceState) {
+      const url = new URL(window.location.href);
+      url.searchParams.set('enhanced', val ? 'true' : 'false');
+      window.history.replaceState({}, '', url.toString());
+    }
+  };
 
   const products = isEnhanced ? richCatalog : thinCatalog;
   const currentProduct = products.find(p => p.product_id === selectedProduct?.product_id) || products[0];
@@ -69,7 +79,7 @@ export default function App() {
             {/* Catalyst Lifecycle Switcher */}
             <div className="flex items-center bg-slate-900/90 border border-slate-700 p-1 rounded-xl">
               <button
-                onClick={() => setIsEnhanced(false)}
+                onClick={() => handleToggleEnhanced(false)}
                 className={`px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all ${
                   !isEnhanced ? 'bg-amber-600 text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'
                 }`}
@@ -77,7 +87,7 @@ export default function App() {
                 1. Baseline (Control)
               </button>
               <button
-                onClick={() => setIsEnhanced(true)}
+                onClick={() => handleToggleEnhanced(true)}
                 className={`px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all flex items-center gap-1 ${
                   isEnhanced ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'
                 }`}
