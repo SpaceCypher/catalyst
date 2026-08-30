@@ -23,7 +23,6 @@ export default function Navbar({
   const navItems = [
     { id: 'catalyst', label: 'Catalyst', icon: Zap },
     { id: 'store', label: 'Store', icon: ShoppingBag },
-    { id: 'activity', label: 'Activity', icon: Activity },
     { id: 'proof', label: 'Proof', icon: ShieldCheck },
   ];
 
@@ -69,12 +68,17 @@ export default function Navbar({
           </div>
 
           {/* Dynamic Agent Status Indicator */}
-          <div className="hidden sm:flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-slate-900 border border-slate-800 text-xs font-mono">
+          <button 
+            onClick={() => setActiveTab('proof')}
+            className="hidden sm:flex items-center space-x-1.5 px-3 py-1 rounded-full bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-xs font-mono transition-colors cursor-pointer"
+            title="Click to view agent tool execution trace"
+          >
             <span className={`w-2 h-2 rounded-full ${status.color} ${status.pulse ? 'animate-pulse' : ''}`} />
             <span className={status.textColor}>{status.label}</span>
-          </div>
+            <span className="text-[10px] text-slate-500 ml-1">trace →</span>
+          </button>
 
-          {/* Navigation Tabs (Catalyst, Store, Activity, Proof) */}
+          {/* Navigation Tabs (Catalyst, Store, Proof) */}
           {hasAnalyzed && (
             <nav className="hidden md:flex items-center space-x-1 pl-4 border-l border-surface-border flex-shrink-0">
               {navItems.map((item) => {
