@@ -496,8 +496,8 @@ export default function CatalystAgentHome({
 
           {/* 2. Measured Revenue Payoff (Grounded Payoff) */}
           {isDiffApproved && (
-            <div className="rounded-3xl bg-[#121624]/95 border border-slate-700/80 p-6 sm:p-8 shadow-xl space-y-4 text-center animate-in fade-in duration-300">
-              <div className="space-y-1">
+            <div className="rounded-3xl bg-[#121624]/95 border border-slate-700/80 p-6 sm:p-8 shadow-xl space-y-4 animate-in fade-in duration-300">
+              <div className="text-center space-y-1">
                 <div className="text-xs font-mono text-slate-400 uppercase tracking-wider">
                   Controlled Simulation Revenue Impact
                 </div>
@@ -510,13 +510,40 @@ export default function CatalystAgentHome({
               </div>
 
               <div className="grid grid-cols-2 gap-2 text-xs font-mono text-slate-400 pt-1">
-                <div className="bg-[#0d0f17] p-2 rounded-xl border border-slate-800 flex items-center justify-center space-x-1">
+                <div className="bg-[#0d0f17] p-2.5 rounded-xl border border-slate-800 flex items-center justify-center space-x-1.5">
                   <Check className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>AI Win-Rate ↑</span>
+                  <span>AI Win-Rate: 8% → 18%</span>
                 </div>
-                <div className="bg-[#0d0f17] p-2 rounded-xl border border-slate-800 flex items-center justify-center space-x-1">
-                  <Check className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>348 Spoofs Excluded</span>
+                <div className="bg-[#0d0f17] p-2.5 rounded-xl border border-slate-800 flex items-center justify-center space-x-1.5">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>348 Spoofs Filtered</span>
+                </div>
+              </div>
+
+              {/* Exact Formula & Arithmetic Breakdown */}
+              <div className="p-4 rounded-2xl bg-[#090a0f] border border-slate-800 text-left space-y-3 font-mono text-xs text-slate-300">
+                <div className="flex items-center justify-between text-slate-400 font-semibold border-b border-slate-800 pb-2">
+                  <span>How +₹1.50L was calculated:</span>
+                  <span className="text-[10px] text-blue-300">A/B Arithmetic</span>
+                </div>
+
+                <div className="space-y-1.5 text-[11px]">
+                  <div className="flex justify-between">
+                    <span className="text-slate-400">Control (1,500 queries):</span>
+                    <span className="text-slate-200">24 orders × ₹5,000 = ₹1.20L</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-emerald-400">Treatment (1,500 queries):</span>
+                    <span className="text-emerald-300 font-bold">54 orders × ₹5,000 = ₹2.70L</span>
+                  </div>
+                  <div className="flex justify-between border-t border-slate-800 pt-1.5 font-bold">
+                    <span className="text-white">Net Incremental GMV:</span>
+                    <span className="text-emerald-400">+₹1,50,000 (+125%)</span>
+                  </div>
+                </div>
+
+                <div className="text-[10px] text-slate-400 leading-relaxed border-t border-slate-800/80 pt-2">
+                  * 348 sessions forged <code className="text-amber-300">utm_source=chatgpt</code> headers but scored &lt;0 on the 5-signal classifier (missing referrer & velocity), contributing ₹0 false GMV.
                 </div>
               </div>
 
@@ -524,7 +551,7 @@ export default function CatalystAgentHome({
                 onClick={onNavigateToProof}
                 className="w-full py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white text-xs font-semibold transition-all flex items-center justify-center space-x-2 cursor-pointer shadow-sm"
               >
-                <span>View technical proof & data →</span>
+                <span>View deep technical proof & traces →</span>
                 <ArrowRight className="w-3.5 h-3.5 text-blue-300" />
               </button>
             </div>
@@ -538,6 +565,7 @@ export default function CatalystAgentHome({
                 <span>Razorpay Payment Intelligence</span>
               </div>
 
+              {/* Offer Card */}
               <div className="bg-[#0d0f17] border border-slate-800 p-4 rounded-2xl space-y-2.5">
                 <div className="text-[11px] text-slate-400 font-semibold">AI SHOPPER DETECTED</div>
                 <div className="text-slate-300 font-sans text-xs">
@@ -547,28 +575,69 @@ export default function CatalystAgentHome({
                   <span>💳 ICICI Instant 10% Off</span>
                   <span className="text-[10px] text-emerald-400">+18% Lift</span>
                 </div>
+
                 <button
-                  onClick={() => setHasTestedOffer(true)}
-                  className="w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-semibold transition-all cursor-pointer"
+                  onClick={() => setHasTestedOffer(!hasTestedOffer)}
+                  className="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition-all cursor-pointer shadow-sm"
                 >
                   {hasTestedOffer ? '✓ Offer Applied to AI Traffic' : 'Test offer on AI traffic'}
                 </button>
+
+                {/* Offer Live Output Panel */}
+                {hasTestedOffer && (
+                  <div className="mt-2 p-3 rounded-xl bg-[#090a0f] border border-emerald-800/40 text-[11px] space-y-1.5 animate-in fade-in duration-150">
+                    <div className="text-emerald-400 font-bold flex items-center gap-1">
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                      <span>Live Simulation Output:</span>
+                    </div>
+                    <div className="text-slate-300">
+                      • Checkout payload injected: <code className="text-blue-300">rzp_off_monsoon_icici</code>
+                    </div>
+                    <div className="text-slate-300">
+                      • AI Cart Conversion: <span className="line-through text-slate-500">14.2%</span> → <strong className="text-emerald-300">17.8%</strong> (+3.6% net lift)
+                    </div>
+                    <div className="text-slate-300">
+                      • Additional Lifted GMV: <strong className="text-white">+₹48,000</strong>
+                    </div>
+                  </div>
+                )}
               </div>
 
+              {/* Recovery Card */}
               <div className="bg-[#0d0f17] border border-slate-800 p-4 rounded-2xl space-y-2.5">
                 <div className="text-[11px] text-slate-400 font-semibold flex items-center space-x-1">
                   <Bell className="w-3.5 h-3.5 text-amber-400" />
                   <span>CHECKOUT RECOVERY</span>
                 </div>
                 <div className="text-slate-300 font-sans text-xs">
-                  AI-referred customer abandoned cart at payment step.
+                  AI-referred customer abandoned cart at payment selection step.
                 </div>
+
                 <button
-                  onClick={() => setHasApprovedReminder(true)}
-                  className="w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-semibold transition-all cursor-pointer"
+                  onClick={() => setHasApprovedReminder(!hasApprovedReminder)}
+                  className="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-semibold transition-all cursor-pointer"
                 >
-                  {hasApprovedReminder ? '✓ Recovery Reminder Scheduled' : 'Approve reminder'}
+                  {hasApprovedReminder ? '✓ Recovery Reminder Active' : 'Approve reminder'}
                 </button>
+
+                {/* Recovery Live Output Panel */}
+                {hasApprovedReminder && (
+                  <div className="mt-2 p-3 rounded-xl bg-[#090a0f] border border-emerald-800/40 text-[11px] space-y-1.5 animate-in fade-in duration-150">
+                    <div className="text-emerald-400 font-bold flex items-center gap-1">
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                      <span>Live Recovery Output:</span>
+                    </div>
+                    <div className="text-slate-300">
+                      • Abandoned AI sessions: <span className="text-white">24 sessions</span>
+                    </div>
+                    <div className="text-slate-300">
+                      • Recovered via Razorpay Link: <strong className="text-emerald-300">18 orders (75% recovery)</strong>
+                    </div>
+                    <div className="text-slate-300">
+                      • Recovered Revenue: <strong className="text-white">+₹72,000</strong>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           )}
