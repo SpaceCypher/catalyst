@@ -15,7 +15,8 @@ class Settings(BaseSettings):
     SESSIONS_HELDOUT_COUNT: int = 1500
     CONTROL_TRAFFIC_VOLUME: int = 2000
     TREATMENT_TRAFFIC_VOLUME: int = 2000
-    DB_PATH: str = str(BASE_DIR / "data" / "generated" / "catalyst.db")
+    DB_PATH: str = os.environ.get("DB_PATH", str(BASE_DIR / "data" / "generated" / "catalyst.db"))
+
     
     # Versioning tags for reproducibility
     CATALOG_VERSION: str = "v1.2"

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   ShoppingBag, 
   Sparkles, 
@@ -11,27 +11,47 @@ import {
   HelpCircle,
   Code2,
   Info,
-  Layers,
-  ArrowRight
+  Loader2
 } from 'lucide-react';
 import thinCatalog from './catalog_thin.json';
 import richCatalog from './catalog_rich.json';
 
+// Backend URL — set VITE_API_BASE in Vercel env vars for the store project
+// e.g. https://catalyst-backend.onrender.com
+const API_BASE = import.meta.env.VITE_API_BASE || '';
+
 export default function App() {
-  const [isEnhanced, setIsEnhanced] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      if (params.get('enhanced') === 'true' || params.get('catalyst') === 'patched') return true;
-      if (params.get('enhanced') === 'false' || params.get('catalyst') === 'baseline') return false;
-      return false; // Default to Baseline (Control)
-    }
-    return false;
-  });
+  const [isEnhanced, setIsEnhanced] = useState(false);
+  const [storeStatus, setStoreStatus] = useState(null); // null = loading
   const [selectedProduct, setSelectedProduct] = useState(thinCatalog[0]);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [viewJsonLd, setViewJsonLd] = useState(false);
 
+  // On load: ask the backend whether any fix has been approved/applied.
+  // If backend is unreachable, fall back to the ?enhanced URL param (dev convenience).
+  useEffect(() => {
+    const fetchStatus = async () => {
+      try {
+        const res = await fetch(`${API_BASE}/api/store/status`, { cache: 'no-store' });
+        if (res.ok) {
+          const data = await res.json();
+          setStoreStatus(data);
+          setIsEnhanced(data.is_any_patched);
+          return;
+        }
+      } catch (_) {}
+      // Fallback: read URL param if backend is unreachable (local dev)
+      const params = new URLSearchParams(window.location.search);
+      const urlEnhanced = params.get('enhanced') === 'true' || params.get('catalyst') === 'patched';
+      setIsEnhanced(urlEnhanced);
+      setStoreStatus({ is_any_patched: urlEnhanced, fallback: true });
+    };
+    fetchStatus();
+    // Recheck every 30s so the page updates after Catalyst approval without manual refresh
+    const interval = setInterval(fetchStatus, 30000);
+    return () => clearInterval(interval);
+  }, []);
 
   const products = isEnhanced ? richCatalog : thinCatalog;
   const currentProduct = products.find(p => p.product_id === selectedProduct?.product_id) || products[0];
@@ -114,12 +134,9 @@ export default function App() {
             </span>
           </div>
 
-          <button
-            onClick={() => handleToggleEnhanced(!isEnhanced)}
-            className="text-xs font-bold underline font-mono flex-shrink-0 hover:text-white"
-          >
-            {isEnhanced ? 'Switch to Baseline (Before) ←' : 'Switch to Catalyst Patched (After) →'}
-          </button>
+          <div className="text-[10px] font-mono text-slate-500 flex-shrink-0">
+            {storeStatus?.fallback ? 'backend offline — url param mode' : storeStatus === null ? 'checking…' : `auto-synced with Catalyst DB`}
+          </div>
         </div>
 
         {/* Product Page */}

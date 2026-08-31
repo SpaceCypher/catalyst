@@ -39,6 +39,21 @@ def init_db():
             """)
         conn.commit()
 
+def reset_db():
+    """Wipe all mutable data and re-initialize to a clean baseline state."""
+    with get_connection() as conn:
+        # Delete all rows from every mutable table (preserve schema)
+        conn.execute("DELETE FROM fix_diffs")
+        conn.execute("DELETE FROM experiments")
+        conn.execute("DELETE FROM agent_events")
+        conn.execute("DELETE FROM sessions")
+        conn.execute("DELETE FROM query_results")
+        conn.execute("DELETE FROM agent_state")
+        conn.commit()
+    # Re-create the default agent_state seed row
+    init_db()
+
 if __name__ == "__main__":
     init_db()
     print("Database initialized successfully at", get_db_path())
+
