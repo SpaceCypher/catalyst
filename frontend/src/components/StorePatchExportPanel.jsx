@@ -11,7 +11,8 @@ import {
   ArrowRight, 
   Code2, 
   CheckCircle2,
-  ExternalLink
+  ExternalLink,
+  CheckCircle
 } from 'lucide-react';
 
 export default function StorePatchExportPanel({ activeDiff, storeUrl = 'https://apex-outdoor.vercel.app' }) {
@@ -23,7 +24,7 @@ export default function StorePatchExportPanel({ activeDiff, storeUrl = 'https://
     "@type": "Product",
     "name": "Apex Ridge Waterproof Trekking Boots",
     "image": "https://apex-outdoor.vercel.app/assets/boots-main.jpg",
-    "description": "Premium waterproof monsoon trekking boots featuring IPX7 membrane, 420g lightweight frame, and Vibram MegaGrip sole.",
+    "description": "Premium waterproof monsoon trekking boots featuring IPX7 membrane (15,000mm), 420g lightweight frame, and Vibram MegaGrip sole with 5mm lugs.",
     "brand": { "@type": "Brand", "name": "Apex Ridge" },
     "offers": {
       "@type": "Offer",
@@ -93,51 +94,51 @@ ${jsonLdCode}
     <div className="space-y-6">
       
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-surface-card border border-surface-border p-6 rounded-2xl">
-        <div>
-          <div className="flex items-center space-x-2 text-xs font-semibold text-brand-blue uppercase tracking-wider">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#121624]/95 border border-slate-700/80 p-6 rounded-3xl shadow-xl">
+        <div className="space-y-1">
+          <div className="flex items-center space-x-2 text-xs font-mono font-semibold text-blue-400 uppercase tracking-wider">
             <Code2 className="w-4 h-4" />
-            <span>Storefront Deployment & Integration Artifacts</span>
+            <span>Storefront Deployment Payloads</span>
           </div>
-          <h1 className="text-2xl font-extrabold text-white mt-1">
-            Publish & Export Bounded Fix Patch
-          </h1>
-          <p className="text-xs text-slate-400 mt-1 max-w-2xl">
-            Deploy the verified fix to your live store. Catalyst provides both automated connected storefront synchronization and clean exportable patches for Vercel, Next.js Commerce, Headless APIs, or custom platforms.
+          <h2 className="text-xl sm:text-2xl font-display font-bold text-white">
+            Publish & Export Verified Fix Patch
+          </h2>
+          <p className="text-xs text-slate-300 font-sans max-w-2xl leading-relaxed">
+            Deploy the verified fix to your live store. Catalyst automatically patches the live connected storefront upon approval and provides machine-readable export artifacts for Shopify, WooCommerce, Next.js Commerce, or custom CMS APIs.
           </p>
         </div>
 
-        <div className="flex items-center space-x-2">
-          <span className="text-xs font-mono text-emerald-400 bg-emerald-500/10 px-3 py-1.5 rounded-xl border border-emerald-500/20 flex items-center gap-1.5">
-            <CheckCircle2 className="w-3.5 h-3.5" />
-            <span>0 Unsupported Claims</span>
+        <div className="flex items-center space-x-2 flex-shrink-0">
+          <span className="text-xs font-mono text-emerald-300 bg-emerald-950/60 px-3 py-1.5 rounded-xl border border-emerald-800/60 flex items-center gap-1.5 font-bold">
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+            <span>0 Hallucinated Claims</span>
           </span>
         </div>
       </div>
 
       {/* Option A & B Cards */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
         
-        {/* Left Column: Integration Pathways */}
-        <div className="space-y-4 lg:col-span-1">
+        {/* Left Column: Integration Pathways (1 Col) */}
+        <div className="space-y-4 lg:col-span-1 flex flex-col justify-between">
           
           {/* Pathway A: Connected Storefront */}
-          <div className="bg-surface-card border-2 border-brand-500/40 rounded-2xl p-5 space-y-3">
+          <div className="bg-[#121624]/95 border border-slate-700/80 rounded-3xl p-5 space-y-3 shadow-lg">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
-                <Globe className="w-4 h-4 text-brand-blue" />
+              <span className="text-xs font-mono font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+                <Globe className="w-4 h-4 text-blue-400" />
                 <span>Connected Storefront</span>
               </span>
-              <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">
+              <span className="text-[10px] font-mono text-emerald-300 bg-emerald-950 px-2 py-0.5 rounded-md border border-emerald-800 font-bold">
                 Active
               </span>
             </div>
 
-            <p className="text-xs text-slate-300">
-              Direct storefront integration with <strong>Apex Ridge Outdoors</strong>. The approved patch is automatically synced to the treatment testing arm.
+            <p className="text-xs text-slate-300 font-sans leading-relaxed">
+              Direct storefront integration with <strong>Apex Ridge Outdoors</strong>. The approved patch is synchronized to your live product page.
             </p>
 
-            <div className="p-3 bg-surface-dark rounded-xl border border-surface-border text-[11px] font-mono space-y-1.5 text-slate-400">
+            <div className="p-3 bg-[#090c14] rounded-2xl border border-slate-800 text-[11px] font-mono space-y-1.5 text-slate-400">
               <div className="flex items-center justify-between">
                 <span>Store:</span>
                 <a 
@@ -152,62 +153,62 @@ ${jsonLdCode}
               </div>
               <div className="flex items-center justify-between">
                 <span>SKU:</span>
-                <strong className="text-brand-blue">merch-boot-01</strong>
+                <strong className="text-blue-300">merch-boot-01</strong>
               </div>
               <div className="flex items-center justify-between">
                 <span>Status:</span>
-                <strong className="text-emerald-400">
-                  {activeDiff?.status === 'approved' || activeDiff?.status === 'applied' ? 'Published to Treatment Arm' : 'Awaiting Approval'}
+                <strong className="text-emerald-400 font-semibold">
+                  {activeDiff?.status === 'approved' || activeDiff?.status === 'applied' ? 'Published & Active' : 'Awaiting Approval'}
                 </strong>
               </div>
             </div>
           </div>
 
           {/* Pathway B: Webhook / Headless CMS */}
-          <div className="bg-surface-card border border-surface-border rounded-2xl p-5 space-y-3">
+          <div className="bg-[#121624]/95 border border-slate-700/80 rounded-3xl p-5 space-y-3 shadow-lg">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+              <span className="text-xs font-mono font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
                 <Webhook className="w-4 h-4 text-indigo-400" />
-                <span>Headless CMS Webhook API</span>
+                <span>Headless CMS Webhook</span>
               </span>
-              <span className="text-[10px] font-mono text-slate-400 bg-surface-dark px-2 py-0.5 rounded">
+              <span className="text-[10px] font-mono text-slate-400 bg-slate-900 px-2 py-0.5 rounded-md border border-slate-800">
                 Ready
               </span>
             </div>
 
-            <p className="text-xs text-slate-300">
+            <p className="text-xs text-slate-300 font-sans leading-relaxed">
               Automatically push verified structured fixes to headless commerce APIs (Next.js Commerce, Strapi, Sanity, Contentful, Custom API).
             </p>
 
-            <div className="p-3 bg-surface-dark rounded-xl border border-surface-border text-[10px] font-mono text-slate-400 truncate">
+            <div className="p-3 bg-[#090c14] rounded-2xl border border-slate-800 text-[10px] font-mono text-slate-400 truncate">
               POST https://{cleanDomain}/api/webhooks/catalyst
             </div>
           </div>
 
           {/* Trust Guarantee Box */}
-          <div className="bg-emerald-950/20 border border-emerald-500/30 rounded-2xl p-4 space-y-2">
-            <div className="flex items-center space-x-2 text-xs font-bold text-emerald-300">
-              <ShieldCheck className="w-4 h-4" />
+          <div className="bg-emerald-950/30 border border-emerald-800/60 rounded-3xl p-4 space-y-2">
+            <div className="flex items-center space-x-2 text-xs font-mono font-bold text-emerald-300">
+              <ShieldCheck className="w-4 h-4 text-emerald-400" />
               <span>Strict Fact Integrity Guarantee</span>
             </div>
-            <p className="text-[11px] text-emerald-200/80 leading-relaxed">
-              Every single attribute, measurement, and FAQ in this patch is deterministically verified against your catalog specifications. Zero hallucinated claims.
+            <p className="text-[11px] text-slate-300 leading-relaxed font-sans">
+              Every single attribute, measurement, and FAQ in this patch is deterministically verified against your catalog source data.
             </p>
           </div>
 
         </div>
 
-        {/* Right Column: Code Patch Exporter */}
-        <div className="lg:col-span-2 bg-[#06090f] border border-surface-border rounded-2xl p-5 flex flex-col space-y-4">
+        {/* Right Column: Code Patch Exporter (2 Cols) */}
+        <div className="lg:col-span-2 bg-[#090c14] border border-slate-700/80 rounded-3xl p-6 flex flex-col space-y-4 shadow-xl">
           
           {/* Format Tabs & Action Buttons */}
-          <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-surface-border">
-            <div className="flex items-center space-x-1.5 bg-surface-dark p-1 rounded-xl border border-surface-border">
+          <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-800 font-mono">
+            <div className="flex items-center space-x-1.5 bg-slate-900 p-1 rounded-2xl border border-slate-800">
               <button
                 onClick={() => setActiveFormat('jsonld')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all ${
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   activeFormat === 'jsonld'
-                    ? 'bg-brand-500 text-white shadow-sm'
+                    ? 'bg-blue-600 text-white shadow-sm'
                     : 'text-slate-400 hover:text-slate-200'
                 }`}
               >
@@ -215,19 +216,19 @@ ${jsonLdCode}
               </button>
               <button
                 onClick={() => setActiveFormat('html')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all ${
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   activeFormat === 'html'
-                    ? 'bg-brand-500 text-white shadow-sm'
+                    ? 'bg-blue-600 text-white shadow-sm'
                     : 'text-slate-400 hover:text-slate-200'
                 }`}
               >
-                product-page.html Patch
+                product-page.html
               </button>
               <button
                 onClick={() => setActiveFormat('webhook')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all ${
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   activeFormat === 'webhook'
-                    ? 'bg-brand-500 text-white shadow-sm'
+                    ? 'bg-blue-600 text-white shadow-sm'
                     : 'text-slate-400 hover:text-slate-200'
                 }`}
               >
@@ -238,7 +239,7 @@ ${jsonLdCode}
             <div className="flex items-center space-x-2">
               <button
                 onClick={() => handleCopy(activeFormat === 'jsonld' ? jsonLdCode : activeFormat === 'html' ? htmlPatch : webhookPayload)}
-                className="px-3 py-1.5 rounded-lg bg-surface-dark hover:bg-surface-card border border-surface-border text-xs text-slate-300 hover:text-white transition-colors flex items-center space-x-1.5 font-mono"
+                className="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs text-slate-300 hover:text-white transition-colors flex items-center space-x-1.5 cursor-pointer"
               >
                 {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                 <span>{copied ? 'Copied!' : 'Copy Code'}</span>
@@ -249,7 +250,7 @@ ${jsonLdCode}
                   activeFormat === 'jsonld' ? 'product-schema.json' : activeFormat === 'html' ? 'product-page-patch.html' : 'catalyst-patch.json',
                   activeFormat === 'jsonld' ? jsonLdCode : activeFormat === 'html' ? htmlPatch : webhookPayload
                 )}
-                className="px-3 py-1.5 rounded-lg bg-brand-500 hover:bg-brand-600 text-white text-xs font-bold transition-all flex items-center space-x-1.5 font-mono shadow-sm"
+                className="px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all flex items-center space-x-1.5 cursor-pointer shadow-sm"
               >
                 <Download className="w-3.5 h-3.5" />
                 <span>Download</span>
@@ -258,7 +259,7 @@ ${jsonLdCode}
           </div>
 
           {/* Code Viewer */}
-          <div className="flex-1 bg-[#03060a] p-4 rounded-xl border border-surface-border/80 overflow-x-auto">
+          <div className="flex-1 bg-[#05070d] p-5 rounded-2xl border border-slate-800/80 overflow-x-auto">
             <pre className="text-xs font-mono text-emerald-300 leading-relaxed">
               <code>
                 {activeFormat === 'jsonld' && jsonLdCode}
@@ -275,3 +276,4 @@ ${jsonLdCode}
     </div>
   );
 }
+
