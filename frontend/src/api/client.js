@@ -2,7 +2,10 @@ import thinCatalog from '../data/seed/merchant_catalog_thin.json';
 import richCatalog from '../data/seed/merchant_catalog_rich.json';
 import compCatalog from '../data/seed/competitor_catalog.json';
 
-const API_BASE = '/api';
+const API_BASE = import.meta.env.VITE_API_BASE 
+  ? `${import.meta.env.VITE_API_BASE}/api`
+  : 'https://catalyst-880d.onrender.com/api';
+
 
 export async function fetchCatalog(state = 'thin') {
   try {

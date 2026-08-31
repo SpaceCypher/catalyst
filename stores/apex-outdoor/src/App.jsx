@@ -17,8 +17,8 @@ import thinCatalog from './catalog_thin.json';
 import richCatalog from './catalog_rich.json';
 
 // Backend URL — set VITE_API_BASE in Vercel env vars for the store project
-// e.g. https://catalyst-backend.onrender.com
-const API_BASE = import.meta.env.VITE_API_BASE || '';
+const API_BASE = import.meta.env.VITE_API_BASE || 'https://catalyst-880d.onrender.com';
+
 
 export default function App() {
   const [isEnhanced, setIsEnhanced] = useState(false);
