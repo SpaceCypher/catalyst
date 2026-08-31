@@ -5,7 +5,8 @@ from pydantic_settings import BaseSettings
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 class Settings(BaseSettings):
-    GEMINI_API_KEY: str = "AQ.Ab8RN6LgRf-fn9DPQ7sc4EpOsh7YGJs8q9Wg-5kZStYvUxPyrQ"
+    GEMINI_API_KEY: str = ""  # Set via GEMINI_API_KEY env var — never hardcode here
+
     LLM_MODEL: str = "gemini-2.5-flash"  # Gemini Flash reasoning endpoint
     LLM_DISPLAY_NAME: str = "Gemini 3.5 Flash"
     RANDOM_SEED: int = 42
