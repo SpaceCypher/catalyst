@@ -114,7 +114,15 @@ export default function App() {
     loadAllData();
   }, []);
 
-  const isApproved = activeDiff?.status === 'approved' || activeDiff?.status === 'applied';
+  const [activeOpportunityId, setActiveOpportunityId] = useState('opp-01');
+  const [oppApprovals, setOppApprovals] = useState({
+    'opp-01': false,
+    'opp-02': false,
+    'opp-03': false,
+    'opp-04': false
+  });
+
+  const isApproved = activeDiff?.status === 'approved' || activeDiff?.status === 'applied' || oppApprovals['opp-01'];
 
   // Compute dynamic agent status for Navbar badge
   const getAgentStatus = () => {
@@ -128,6 +136,7 @@ export default function App() {
     try {
       setIsApproving(true);
       setActiveDiff(prev => ({ ...(prev || {}), status: 'approved' }));
+      setOppApprovals(prev => ({ ...prev, 'opp-01': true }));
       const res = await approveFix(diffId);
       setActiveDiff(res || { diff_id: diffId, status: 'approved' });
       setIsDiffModalOpen(false);
@@ -145,6 +154,7 @@ export default function App() {
   const handleRejectDiff = async (diffId = 'diff-apex-01') => {
     try {
       setActiveDiff(prev => ({ ...(prev || {}), status: 'rejected' }));
+      setOppApprovals(prev => ({ ...prev, 'opp-01': false }));
       const res = await rejectFix(diffId);
       setActiveDiff(res || { diff_id: diffId, status: 'rejected' });
       setIsDiffModalOpen(false);
@@ -158,18 +168,25 @@ export default function App() {
     setIsResetting(true);
     try {
       if (typeof window !== 'undefined') {
+        localStorage.removeItem('catalyst_verified_sessions');
         localStorage.removeItem('catalyst_diff_status');
-        localStorage.removeItem('catalyst_has_analyzed');
+        localStorage.removeItem('catalyst_active_tab');
       }
+      setOppApprovals({
+        'opp-01': false,
+        'opp-02': false,
+        'opp-03': false,
+        'opp-04': false
+      });
+      setActiveOpportunityId('opp-01');
       await resetDemo();
       setActiveDiff({ diff_id: 'diff-apex-01', status: 'proposed' });
       setExperimentResult(null);
       setHasAnalyzed(false);
       navigateToTab('catalyst', true);
       await loadAllData();
-      setActiveDiff({ diff_id: 'diff-apex-01', status: 'proposed' });
     } catch (e) {
-      console.error('Reset failed:', e);
+      alert('Error resetting demo: ' + e.message);
     } finally {
       setIsResetting(false);
     }
@@ -185,22 +202,24 @@ export default function App() {
   }
 
   const handleOpenStorefront = () => {
-    window.open('https://apex-outdoor.vercel.app', '_blank');
+    if (typeof window !== 'undefined') {
+      window.open('https://apex-outdoor.vercel.app/?enhanced=true', '_blank', 'noopener,noreferrer');
+    }
   };
 
 
   return (
-    <div className="min-h-screen bg-[#090a0f] text-slate-200 flex flex-col font-sans selection:bg-slate-700 selection:text-white">
+    <div className="min-h-screen bg-[#07090e] text-slate-100 flex flex-col font-sans selection:bg-blue-600 selection:text-white">
       
-      {/* Top Navigation */}
+      {/* Top Navbar */}
       <Navbar
         activeTab={activeTab}
-        setActiveTab={navigateToTab}
+        onSelectTab={navigateToTab}
         onResetDemo={handleResetDemo}
         onOpenDemoModal={() => setIsDemoModalOpen(true)}
         onOpenStorefront={handleOpenStorefront}
         isResetting={isResetting}
-        verifiedRevenue={(activeDiff?.status === 'approved' || activeDiff?.status === 'applied') ? (experimentResult?.summary?.treatment_incremental_revenue || 150000) : 0}
+        verifiedRevenue={isApproved ? (experimentResult?.summary?.treatment_incremental_revenue || 150000) : 0}
         agentStatus={getAgentStatus()}
       />
 
@@ -219,8 +238,12 @@ export default function App() {
             }}
             opportunities={opportunities}
             activeDiff={activeDiff}
-            onApproveFix={() => handleApproveDiff('diff-apex-01')}
-            onRejectFix={() => handleRejectDiff('diff-apex-01')}
+            activeOpportunityId={activeOpportunityId}
+            onSelectOpportunity={setActiveOpportunityId}
+            approvedOpps={oppApprovals}
+            onSetApprovedOpps={setOppApprovals}
+            onApproveFix={() => handleApproveFix('diff-apex-01')}
+            onRejectFix={() => handleRejectFix('diff-apex-01')}
             isApproving={isApproving}
             onRunExperiment={() => runExperiment('diff-apex-01')}
             experimentResult={experimentResult}
@@ -251,6 +274,10 @@ export default function App() {
         {activeTab === 'proof' && (
           <ProofHub
             activeDiff={activeDiff}
+            activeOpportunityId={activeOpportunityId}
+            onSelectOpportunity={setActiveOpportunityId}
+            approvedOpps={oppApprovals}
+            onSetApprovedOpps={setOppApprovals}
             experimentResult={experimentResult}
             evaluationResult={evaluationResult}
             sessions={sessions}

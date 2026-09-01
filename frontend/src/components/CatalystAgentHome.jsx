@@ -250,6 +250,10 @@ export default function CatalystAgentHome({
   onAnalyzeComplete,
   opportunities = [],
   activeDiff,
+  activeOpportunityId = 'opp-01',
+  onSelectOpportunity,
+  approvedOpps = {},
+  onSetApprovedOpps,
   onApproveFix,
   onRejectFix,
   isApproving,
@@ -263,14 +267,10 @@ export default function CatalystAgentHome({
   const [storeUrl, setStoreUrl] = useState('https://apex-outdoor.vercel.app');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
-  const [activeOpportunityId, setActiveOpportunityId] = useState('opp-01');
   
-  // Per-opportunity approval states
-  const [backpackApproved, setBackpackApproved] = useState(false);
+  // Local loading indicators for secondary opportunities
   const [backpackApproving, setBackpackApproving] = useState(false);
-  const [tentApproved, setTentApproved] = useState(false);
   const [tentApproving, setTentApproving] = useState(false);
-  const [shoesApproved, setShoesApproved] = useState(false);
   const [shoesApproving, setShoesApproving] = useState(false);
   
   const [searchQuery, setSearchQuery] = useState('best waterproof hiking boots under ₹5,000');
@@ -283,13 +283,14 @@ export default function CatalystAgentHome({
   const isBootApproved = 
     activeDiff?.status === 'approved' || 
     activeDiff?.status === 'applied' ||
+    !!approvedOpps['opp-01'] ||
     (typeof window !== 'undefined' && localStorage.getItem('catalyst_diff_status') === 'approved');
 
   const isApprovedMap = {
     'opp-01': isBootApproved,
-    'opp-02': backpackApproved,
-    'opp-03': tentApproved,
-    'opp-04': shoesApproved
+    'opp-02': !!approvedOpps['opp-02'],
+    'opp-03': !!approvedOpps['opp-03'],
+    'opp-04': !!approvedOpps['opp-04']
   };
 
   const isCurrentApproved = isApprovedMap[activeOpportunityId] || false;
@@ -304,10 +305,10 @@ export default function CatalystAgentHome({
   // Reset internal states when demo is reset
   useEffect(() => {
     if (!hasAnalyzed || !isBootApproved) {
-      setActiveOpportunityId('opp-01');
-      setBackpackApproved(false);
-      setTentApproved(false);
-      setShoesApproved(false);
+      onSelectOpportunity('opp-01');
+      setBackpackApproving(false);
+      setTentApproving(false);
+      setShoesApproving(false);
       setIsShopperRunning(false);
       setShopperStep(0);
       setShopperLogs([]);
@@ -372,7 +373,9 @@ export default function CatalystAgentHome({
 
   const handleSwitchOpportunity = (oppId) => {
     if (oppId === activeOpportunityId) return;
-    setActiveOpportunityId(oppId);
+    if (typeof onSelectOpportunity === 'function') {
+      onSelectOpportunity(oppId);
+    }
     const targetOpp = OPPORTUNITIES_MAP[oppId] || OPPORTUNITIES_MAP['opp-01'];
     setSearchQuery(targetOpp.queryPreset);
     setIsShopperRunning(false);
@@ -383,26 +386,22 @@ export default function CatalystAgentHome({
   const handleApproveCurrent = () => {
     if (activeOpportunityId === 'opp-01') {
       onApproveFix();
-    } else if (activeOpportunityId === 'opp-02') {
-      setBackpackApproving(true);
+    } else {
+      if (activeOpportunityId === 'opp-02') setBackpackApproving(true);
+      if (activeOpportunityId === 'opp-03') setTentApproving(true);
+      if (activeOpportunityId === 'opp-04') setShoesApproving(true);
+      
       setTimeout(() => {
         setBackpackApproving(false);
-        setBackpackApproved(true);
-      }, 600);
-    } else if (activeOpportunityId === 'opp-03') {
-      setTentApproving(true);
-      setTimeout(() => {
         setTentApproving(false);
-        setTentApproved(true);
-      }, 600);
-    } else if (activeOpportunityId === 'opp-04') {
-      setShoesApproving(true);
-      setTimeout(() => {
         setShoesApproving(false);
-        setShoesApproved(true);
+        if (typeof onSetApprovedOpps === 'function') {
+          onSetApprovedOpps(prev => ({ ...prev, [activeOpportunityId]: true }));
+        }
       }, 600);
     }
   };
+
 
   // Run Autonomous AI Shopper Sandbox Demo
   const handleRunAiShopperDemo = async (queryToRun) => {

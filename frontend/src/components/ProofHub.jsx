@@ -23,6 +23,10 @@ import AgentActivityPanel from './AgentActivityPanel';
 
 export default function ProofHub({
   activeDiff,
+  activeOpportunityId = 'opp-01',
+  onSelectOpportunity,
+  approvedOpps = {},
+  onSetApprovedOpps,
   experimentResult,
   evaluationResult,
   sessions = [],
@@ -31,6 +35,7 @@ export default function ProofHub({
   agentState,
   onOpenDiffModal
 }) {
+
   const [activeProofSection, setActiveProofSection] = useState('experiment');
 
   const proofSections = [
@@ -185,10 +190,15 @@ export default function ProofHub({
               events={agentEvents} 
               agentState={agentState} 
               activeDiff={activeDiff}
+              activeOpportunityId={activeOpportunityId}
+              onSelectOpportunity={onSelectOpportunity}
+              approvedOpps={approvedOpps}
+              onSetApprovedOpps={onSetApprovedOpps}
               onOpenDiffModal={onOpenDiffModal}
             />
           </div>
         )}
+
 
         {activeProofSection === 'patch' && (
           <div className="animate-in fade-in duration-200 space-y-6">

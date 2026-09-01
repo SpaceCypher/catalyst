@@ -345,26 +345,40 @@ function ReasoningStep({ step, isLast }) {
   );
 }
 
-export default function AgentActivityPanel({ events = [], agentState, activeDiff, onOpenDiffModal }) {
-  const [selectedOppId, setSelectedOppId] = useState('opp-01');
-  
-  // Independent approval tracking for secondary opportunities
-  const [approvedOpps, setApprovedOpps] = useState({ 'opp-01': false, 'opp-02': false, 'opp-03': false, 'opp-04': false });
+export default function AgentActivityPanel({ 
+  events = [], 
+  agentState, 
+  activeDiff, 
+  activeOpportunityId = 'opp-01',
+  onSelectOpportunity,
+  approvedOpps = {},
+  onSetApprovedOpps,
+  onOpenDiffModal 
+}) {
   const [isApprovingOpp, setIsApprovingOpp] = useState(false);
 
-  const isBootApproved = activeDiff?.status === 'approved' || activeDiff?.status === 'applied';
-  const isCurrentApproved = selectedOppId === 'opp-01' ? isBootApproved : approvedOpps[selectedOppId];
+  const currentSelectedId = activeOpportunityId || 'opp-01';
+  const isBootApproved = activeDiff?.status === 'approved' || activeDiff?.status === 'applied' || !!approvedOpps['opp-01'];
+  const isCurrentApproved = currentSelectedId === 'opp-01' ? isBootApproved : !!approvedOpps[currentSelectedId];
 
-  const currentAudit = OPPORTUNITY_AUDITS[selectedOppId] || OPPORTUNITY_AUDITS['opp-01'];
+  const currentAudit = OPPORTUNITY_AUDITS[currentSelectedId] || OPPORTUNITY_AUDITS['opp-01'];
+
+  const handleSelectOpp = (id) => {
+    if (typeof onSelectOpportunity === 'function') {
+      onSelectOpportunity(id);
+    }
+  };
 
   const handleApproveSelectedOpp = () => {
-    if (selectedOppId === 'opp-01') {
+    if (currentSelectedId === 'opp-01') {
       if (typeof onOpenDiffModal === 'function') onOpenDiffModal();
     } else {
       setIsApprovingOpp(true);
       setTimeout(() => {
         setIsApprovingOpp(false);
-        setApprovedOpps(prev => ({ ...prev, [selectedOppId]: true }));
+        if (typeof onSetApprovedOpps === 'function') {
+          onSetApprovedOpps(prev => ({ ...prev, [currentSelectedId]: true }));
+        }
       }, 600);
     }
   };
@@ -378,6 +392,43 @@ export default function AgentActivityPanel({ events = [], agentState, activeDiff
     { id: 'EXPERIMENT', num: '06', done: isCurrentApproved, active: false },
     { id: 'VERIFY', num: '07', done: isCurrentApproved, active: false },
     { id: 'REPORT', num: '08', done: false, active: isCurrentApproved },
+  ];
+
+  const defaultEvents = events.length > 0 ? events : [
+    {
+      event_id: 'evt-01',
+      actor: 'catalyst-agent',
+      agent_state: 'OBSERVE',
+      timestamp: new Date(Date.now() - 3600000).toISOString(),
+      reason: `Ingested storefront catalog (12 SKUs) and evaluated 40 shopping queries for ${currentAudit.name}.`,
+      tool_name: 'get_query_results'
+    },
+    {
+      event_id: 'evt-02',
+      actor: 'catalyst-agent',
+      agent_state: 'DIAGNOSE',
+      timestamp: new Date(Date.now() - 3000000).toISOString(),
+      reason: `Diagnosed evidence gap for ${currentAudit.name} vs ${currentAudit.competitor}. Missing verified technical specs and Schema.org JSON-LD.`,
+      tool_name: 'diagnose_gap'
+    },
+    {
+      event_id: 'evt-03',
+      actor: 'catalyst-agent',
+      agent_state: 'PROPOSE',
+      timestamp: new Date(Date.now() - 2400000).toISOString(),
+      reason: `Generated bounded FixDiff #${currentAudit.diff_id}. Verified 4 claims, 0 hallucinations. Paused for merchant approval.`,
+      tool_name: 'generate_fix_diff'
+    },
+    {
+      event_id: 'evt-04',
+      actor: 'catalyst-agent',
+      agent_state: isCurrentApproved ? 'APPLY' : 'WAIT_FOR_APPROVAL',
+      timestamp: new Date(Date.now() - 1800000).toISOString(),
+      reason: isCurrentApproved
+        ? `Merchant approved FixDiff #${currentAudit.diff_id}. Deployed structured Schema.org JSON-LD to live storefront.`
+        : `Mandatory approval gate enforced for ${currentAudit.name}. No changes deployed without merchant sign-off.`,
+      tool_name: isCurrentApproved ? 'apply_fix_patch' : 'enforce_approval_gate'
+    }
   ];
 
   return (
@@ -408,12 +459,12 @@ export default function AgentActivityPanel({ events = [], agentState, activeDiff
         <div className="flex flex-wrap items-center gap-2 pt-3 border-t border-slate-800">
           <span className="text-[11px] font-mono text-slate-400 mr-1">Select SKU:</span>
           {Object.values(OPPORTUNITY_AUDITS).map((opp) => {
-            const isSelected = opp.id === selectedOppId;
-            const isOppApp = opp.id === 'opp-01' ? isBootApproved : approvedOpps[opp.id];
+            const isSelected = opp.id === currentSelectedId;
+            const isOppApp = opp.id === 'opp-01' ? isBootApproved : !!approvedOpps[opp.id];
             return (
               <button
                 key={opp.id}
-                onClick={() => setSelectedOppId(opp.id)}
+                onClick={() => handleSelectOpp(opp.id)}
                 className={`px-3 py-1.5 rounded-xl text-xs font-mono transition-all cursor-pointer flex items-center space-x-1.5 ${
                   isSelected
                     ? 'bg-blue-600 text-white font-bold shadow-md'
@@ -427,6 +478,7 @@ export default function AgentActivityPanel({ events = [], agentState, activeDiff
           })}
         </div>
       </div>
+
 
       {/* State Machine Progress */}
       <div className="bg-[#121624]/95 border border-slate-700/80 rounded-3xl p-5 sm:p-6 shadow-xl">
