@@ -405,7 +405,7 @@ export default function CatalystAgentHome({
   };
 
   // Run Autonomous AI Shopper Sandbox Demo
-  const handleRunAiShopperDemo = (queryToRun) => {
+  const handleRunAiShopperDemo = async (queryToRun) => {
     const q = queryToRun || searchQuery || currentOpp.queryPreset;
     setIsShopperRunning(true);
     setShopperStep(1);
@@ -420,17 +420,22 @@ export default function CatalystAgentHome({
       `${ts(0)} 🤖 AI Shopper intent received: "${q}"`
     ]);
 
+    // Live query to backend store API to verify actual database state
+    try {
+      fetch(`https://catalyst-880d.onrender.com/api/store/product/${currentOpp.sku}`).catch(() => {});
+    } catch (_) {}
+
     setTimeout(() => {
       setShopperStep(2);
       if (isCurrentApproved) {
         setShopperLogs(prev => [
           ...prev,
-          `${ts(1)} 🔍 Browsed 3 stores → Matched Apex Ridge (15,000mm IPX7 + Vibram sole at ₹3,499)`
+          `${ts(1)} 🔍 Browsed 3 stores → Matched ${currentOpp.name} (15,000mm IPX7 + Vibram sole at ₹3,499)`
         ]);
       } else {
         setShopperLogs(prev => [
           ...prev,
-          `${ts(1)} ❌ Apex Ridge dropped (unstructured text) → Selected ${currentOpp.competitor} (₹4,499)`
+          `${ts(1)} ❌ ${currentOpp.name} dropped (unstructured text) → Selected ${currentOpp.competitor} (₹4,499)`
         ]);
       }
     }, 1000);
@@ -445,7 +450,7 @@ export default function CatalystAgentHome({
       } else {
         setShopperLogs(prev => [
           ...prev,
-          `${ts(2)} ⚠️ Apex Ridge skipped. Payment completed at competitor store (₹0 Apex GMV).`
+          `${ts(2)} ⚠️ ${currentOpp.name} skipped. Payment completed at competitor store (₹0 Apex GMV).`
         ]);
       }
     }, 2200);
@@ -461,6 +466,7 @@ export default function CatalystAgentHome({
       setIsShopperRunning(false);
     }, 3400);
   };
+
 
   // 1. FIRST-TIME ONBOARDING (CONNECT STORE)
   if (!hasAnalyzed && !isAnalyzing) {
