@@ -173,7 +173,9 @@ function ReasoningStep({ step, isLast }) {
   );
 }
 
-export default function AgentActivityPanel({ events = [], agentState, onOpenDiffModal }) {
+export default function AgentActivityPanel({ events = [], agentState, activeDiff, onOpenDiffModal }) {
+  const isApproved = activeDiff?.status === 'approved' || activeDiff?.status === 'applied';
+
   const defaultEvents = events.length > 0 ? events : [
     {
       event_id: 'evt-01',
@@ -202,10 +204,12 @@ export default function AgentActivityPanel({ events = [], agentState, onOpenDiff
     {
       event_id: 'evt-04',
       actor: 'catalyst-agent',
-      agent_state: 'WAIT_FOR_APPROVAL',
+      agent_state: isApproved ? 'APPLY' : 'WAIT_FOR_APPROVAL',
       timestamp: new Date(Date.now() - 1800000).toISOString(),
-      reason: 'Mandatory approval gate enforced. No changes deployed without merchant sign-off.',
-      tool_name: 'enforce_approval_gate'
+      reason: isApproved
+        ? 'Merchant approved FixDiff. Deployed structured Schema.org JSON-LD to live storefront.'
+        : 'Mandatory approval gate enforced. No changes deployed without merchant sign-off.',
+      tool_name: isApproved ? 'apply_fix_patch' : 'enforce_approval_gate'
     }
   ];
 
@@ -227,7 +231,7 @@ export default function AgentActivityPanel({ events = [], agentState, onOpenDiff
           </p>
         </div>
         <div className="flex-shrink-0 text-[11px] font-mono text-slate-400 bg-slate-900 border border-slate-800 rounded-2xl px-4 py-2 text-center space-y-0.5">
-          <div className="text-white font-semibold">3 tool calls</div>
+          <div className="text-white font-semibold">{isApproved ? 'Deployed & Verified' : '3 tool calls'}</div>
           <div>0 hallucinated claims</div>
         </div>
       </div>
@@ -236,30 +240,49 @@ export default function AgentActivityPanel({ events = [], agentState, onOpenDiff
       <div className="bg-[#121624]/95 border border-slate-700/80 rounded-3xl p-5 sm:p-6 shadow-xl">
         <p className="text-[10px] font-mono text-slate-500 uppercase tracking-wider mb-3">Agent state machine — current position</p>
         <div className="grid grid-cols-4 sm:grid-cols-8 gap-1.5">
-          {STATE_MACHINE.map(s => (
-            <div
-              key={s.id}
-              className={`py-2 px-1 rounded-xl border text-center transition-all ${
-                s.active
-                  ? 'bg-amber-950/40 border-amber-700/60 ring-1 ring-amber-500/20'
-                  : s.done
-                  ? 'bg-emerald-950/30 border-emerald-800/40'
-                  : 'bg-[#090c14] border-slate-800'
-              }`}
-            >
-              <div className={`text-[9px] font-mono font-bold ${s.active ? 'text-amber-400' : s.done ? 'text-emerald-400' : 'text-slate-600'}`}>
-                {s.done && !s.active ? '✓' : s.num}
+          {STATE_MACHINE.map(s => {
+            const isStateDone = isApproved 
+              ? (s.num <= 7) 
+              : s.done;
+            const isStateActive = isApproved 
+              ? (s.id === 'COMPLETE' || s.id === 'MONITOR') 
+              : s.active;
+
+            return (
+              <div
+                key={s.id}
+                className={`py-2 px-1 rounded-xl border text-center transition-all ${
+                  isStateActive
+                    ? 'bg-emerald-950/50 border-emerald-600/70 ring-1 ring-emerald-500/30'
+                    : isStateDone
+                    ? 'bg-emerald-950/30 border-emerald-800/40'
+                    : 'bg-[#090c14] border-slate-800'
+                }`}
+              >
+                <div className={`text-[9px] font-mono font-bold ${isStateActive ? 'text-emerald-300' : isStateDone ? 'text-emerald-400' : 'text-slate-600'}`}>
+                  {isStateDone && !isStateActive ? '✓' : s.num}
+                </div>
+                <div className={`text-[9px] uppercase tracking-wide font-semibold mt-0.5 truncate ${isStateActive ? 'text-emerald-200' : isStateDone ? 'text-emerald-300' : 'text-slate-600'}`}>
+                  {s.id}
+                </div>
               </div>
-              <div className={`text-[9px] uppercase tracking-wide font-semibold mt-0.5 truncate ${s.active ? 'text-amber-200' : s.done ? 'text-emerald-300' : 'text-slate-600'}`}>
-                {s.id}
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
         <div className="mt-3 flex items-center gap-2 text-xs font-sans">
-          <AlertCircle className="w-3.5 h-3.5 text-amber-400 flex-shrink-0" />
-          <span className="text-amber-300 font-medium">Waiting for your approval</span>
-          <span className="text-slate-500">— agent has paused. No changes have been deployed yet.</span>
+          {isApproved ? (
+            <>
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
+              <span className="text-emerald-300 font-medium">Approved & Deployed</span>
+              <span className="text-slate-400">— Catalog patch active on apex-outdoor.vercel.app with verified schema.</span>
+            </>
+          ) : (
+            <>
+              <AlertCircle className="w-3.5 h-3.5 text-amber-400 flex-shrink-0" />
+              <span className="text-amber-300 font-medium">Waiting for your approval</span>
+              <span className="text-slate-500">— agent has paused. No changes have been deployed yet.</span>
+            </>
+          )}
         </div>
       </div>
 
@@ -279,21 +302,40 @@ export default function AgentActivityPanel({ events = [], agentState, onOpenDiff
           ))}
         </div>
 
-        {/* CTA to approve */}
-        <div className="mt-2 p-4 rounded-2xl bg-blue-950/30 border border-blue-800/50 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="space-y-0.5">
-            <p className="text-sm font-semibold text-white">Ready to deploy FixDiff #diff-apex-01?</p>
-            <p className="text-xs text-slate-400 font-sans">4 verified attributes · 0 hallucinations · Schema.org JSON-LD included</p>
+        {/* CTA to approve or View Deployed Status */}
+        {isApproved ? (
+          <div className="mt-2 p-4 rounded-2xl bg-emerald-950/30 border border-emerald-800/60 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div className="space-y-0.5">
+              <p className="text-sm font-semibold text-emerald-300">FixDiff #diff-apex-01 is Approved & Deployed ✓</p>
+              <p className="text-xs text-slate-400 font-sans">4 verified attributes · Schema.org JSON-LD active on apex-outdoor.vercel.app</p>
+            </div>
+            <a
+              href="https://apex-outdoor.vercel.app/?enhanced=true"
+              target="_blank"
+              rel="noreferrer"
+              className="flex-shrink-0 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all flex items-center gap-2 cursor-pointer shadow-md"
+            >
+              <span>View Live Store</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
           </div>
-          <button
-            onClick={() => typeof onOpenDiffModal === 'function' && onOpenDiffModal()}
-            className="flex-shrink-0 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all flex items-center gap-2 cursor-pointer shadow-md"
-          >
-            <span>Review & Approve Fix</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </button>
-        </div>
+        ) : (
+          <div className="mt-2 p-4 rounded-2xl bg-blue-950/30 border border-blue-800/50 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div className="space-y-0.5">
+              <p className="text-sm font-semibold text-white">Ready to deploy FixDiff #diff-apex-01?</p>
+              <p className="text-xs text-slate-400 font-sans">4 verified attributes · 0 hallucinations · Schema.org JSON-LD included</p>
+            </div>
+            <button
+              onClick={() => typeof onOpenDiffModal === 'function' && onOpenDiffModal()}
+              className="flex-shrink-0 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all flex items-center gap-2 cursor-pointer shadow-md"
+            >
+              <span>Review & Approve Fix</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        )}
       </div>
+
 
       {/* Chronological event log (collapsible) */}
       <details className="bg-[#121624]/95 border border-slate-700/80 rounded-3xl shadow-xl overflow-hidden group">

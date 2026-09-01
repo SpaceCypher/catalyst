@@ -184,6 +184,7 @@ export default function ProofHub({
             <AgentActivityPanel 
               events={agentEvents} 
               agentState={agentState} 
+              activeDiff={activeDiff}
               onOpenDiffModal={onOpenDiffModal}
             />
           </div>
