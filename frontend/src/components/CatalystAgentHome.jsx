@@ -550,51 +550,61 @@ export default function CatalystAgentHome({
   };
 
   // Live AI Simulator Chain-of-Thought State
-  const [simStep, setSimStep] = useState(0); // 0 = idle, 1 = parse, 2 = crawl, 3 = evaluate, 4 = rank
+  const [simStep, setSimStep] = useState(0); // 0 = idle, 1 = parse, 2 = crawl, 3 = evaluate, 4 = patch, 5 = rank
+  const [simProgress, setSimProgress] = useState(0);
   const [simLogs, setSimLogs] = useState([]);
-  const [showCoTDetails, setShowCoTDetails] = useState(true);
 
   const handleRunAiSimulator = (queryToRun) => {
     const q = queryToRun || searchQuery || currentOpp.queryPreset;
     setIsSimulatingQuery(true);
     setSimStep(1);
+    setSimProgress(15);
     setSimLogs([
       `[0.0s] 🔍 Query Parser: Tokenizing intent & constraints for "${q}"...`
     ]);
 
     setTimeout(() => {
       setSimStep(2);
+      setSimProgress(40);
       setSimLogs(prev => [
         ...prev,
-        `[0.6s] 🕷️ Entity Graph: Probing candidate product specs across Apex Ridge vs 2 competitors...`
+        `[0.8s] 🕷️ Multi-Store Crawler: Retrieving catalog vectors across Apex Ridge vs 2 competitors...`
       ]);
-    }, 600);
+    }, 800);
 
     setTimeout(() => {
       setSimStep(3);
+      setSimProgress(65);
       setSimLogs(prev => [
         ...prev,
-        `[1.2s] ⚖️ Schema Evaluator: Baseline Apex Ridge lacks machine-readable JSON-LD and IPX7 rating.`
+        `[1.6s] ⚖️ Schema Evaluator: Baseline Apex Ridge lacks machine-readable JSON-LD and IPX7 rating.`
       ]);
-    }, 1200);
+    }, 1600);
 
     setTimeout(() => {
       setSimStep(4);
+      setSimProgress(88);
       setSimLogs(prev => [
         ...prev,
-        `[1.8s] ⚡ Catalyst Patch: Applying verified HydroGuard 15,000mm + Vibram 5mm lugs spec matrix.`
+        `[2.4s] ⚡ Catalyst Patch: Applying verified HydroGuard 15,000mm + Vibram 5mm lugs spec matrix.`
       ]);
-    }, 1800);
+    }, 2400);
 
     setTimeout(() => {
+      setSimStep(5);
+      setSimProgress(100);
       setSimLogs(prev => [
         ...prev,
-        `[2.4s] 🎯 Decision Synthesizer: Apex Ridge (₹3,499) ranked #1 Top Recommended Choice.`
+        `[3.2s] 🎯 Decision Synthesizer: Apex Ridge (₹3,499) ranked #1 Top Recommended Choice.`
       ]);
+    }, 3200);
+
+    setTimeout(() => {
       setIsSimulatingQuery(false);
       setSimStep(0);
-    }, 2400);
+    }, 3600);
   };
+
 
 
   // 1. FIRST-TIME ONBOARDING (CONNECT + METHODOLOGY)
@@ -1524,14 +1534,24 @@ export default function CatalystAgentHome({
 
             {/* Before vs After Simulation Result Grid with Live Chain-of-Thought Stream */}
             {isSimulatingQuery ? (
-              <div className="p-4 rounded-2xl bg-[#080c14] border border-blue-900/50 space-y-3 animate-in fade-in duration-150 font-mono text-xs">
+              <div className="p-5 rounded-2xl bg-[#080c14] border border-blue-900/60 space-y-3.5 animate-in fade-in duration-150 font-mono text-xs shadow-2xl">
                 
                 <div className="flex items-center justify-between border-b border-slate-800/80 pb-2">
                   <div className="flex items-center space-x-2 text-blue-400 font-bold text-[11px]">
-                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                    <span>AI SHOPPER REASONING TRACE</span>
+                    <Loader2 className="w-3.5 h-3.5 animate-spin text-blue-300" />
+                    <span>AI SHOPPER REASONING IN PROGRESS...</span>
                   </div>
-                  <span className="text-[10px] text-slate-500">Gemini 2.5 Flash Search</span>
+                  <span className="text-[10px] text-emerald-400 font-bold bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800">
+                    Gemini 2.5 Flash Search
+                  </span>
+                </div>
+
+                {/* Animated Progress Bar */}
+                <div className="w-full bg-slate-900 rounded-full h-1.5 overflow-hidden border border-slate-800">
+                  <div 
+                    className="h-full bg-gradient-to-r from-blue-500 via-indigo-400 to-emerald-400 transition-all duration-300 rounded-full shadow-sm"
+                    style={{ width: `${simProgress}%` }}
+                  />
                 </div>
 
                 {/* Progressive Step Indicators */}
@@ -1539,12 +1559,12 @@ export default function CatalystAgentHome({
                   {['1. Parse Intent', '2. Entity Graph', '3. Schema Eval', '4. Rank Match'].map((stepName, i) => (
                     <div 
                       key={i} 
-                      className={`py-1 px-1 rounded transition-all ${
-                        simStep > i 
-                          ? 'bg-emerald-950/60 text-emerald-400 border border-emerald-800/60 font-bold' 
+                      className={`py-1.5 px-1 rounded-lg transition-all ${
+                        simStep > i + 1 
+                          ? 'bg-emerald-950/80 text-emerald-300 border border-emerald-800 font-bold' 
                           : simStep === i + 1 
-                            ? 'bg-blue-950 text-blue-300 border border-blue-700 font-bold animate-pulse' 
-                            : 'bg-slate-900/50 text-slate-600 border border-slate-800'
+                            ? 'bg-blue-950 text-blue-300 border border-blue-500 font-bold animate-pulse' 
+                            : 'bg-slate-900/60 text-slate-500 border border-slate-800'
                       }`}
                     >
                       {stepName}
@@ -1553,7 +1573,7 @@ export default function CatalystAgentHome({
                 </div>
 
                 {/* Live Streaming Logs */}
-                <div className="p-3 bg-[#05070d] rounded-xl border border-slate-800 text-[11px] space-y-1.5 max-h-36 overflow-y-auto">
+                <div className="p-3.5 bg-[#05070d] rounded-xl border border-slate-800 text-[11px] space-y-1.5 max-h-40 overflow-y-auto">
                   {simLogs.map((log, idx) => (
                     <div key={idx} className="text-emerald-300 font-mono leading-relaxed animate-in fade-in">
                       {log}
@@ -1615,29 +1635,35 @@ export default function CatalystAgentHome({
                 </div>
 
                 {/* AI Chain-of-Thought Reasoning Explainer */}
-                <div className="p-3.5 rounded-2xl bg-[#080c14] border border-slate-800 text-[11px] space-y-2">
-                  <div className="flex items-center justify-between text-slate-400 border-b border-slate-800/80 pb-1.5">
-                    <span className="text-blue-400 font-bold flex items-center gap-1">
-                      <Sparkles className="w-3 h-3 text-blue-400" />
-                      <span>AI Model Reasoning Chain</span>
+                <div className="p-4 rounded-2xl bg-[#080c14] border border-slate-800 text-[11px] space-y-2.5 shadow-lg">
+                  <div className="flex items-center justify-between text-slate-400 border-b border-slate-800/80 pb-2">
+                    <span className="text-blue-400 font-bold flex items-center gap-1.5 text-xs">
+                      <Sparkles className="w-3.5 h-3.5 text-blue-400" />
+                      <span>AI Model Chain-of-Thought Reasoning</span>
                     </span>
-                    <span className="text-[10px] text-slate-500 font-mono">
-                      Query: "{searchQuery || currentOpp.queryPreset}"
-                    </span>
+                    <button 
+                      onClick={() => handleRunAiSimulator()}
+                      className="text-[10px] text-blue-300 hover:text-blue-200 underline font-mono cursor-pointer"
+                    >
+                      Re-run Live Trace ↻
+                    </button>
                   </div>
 
-                  <div className="space-y-1.5 text-slate-300 leading-relaxed font-mono text-[11px]">
-                    <div>
-                      <strong className="text-rose-400">Baseline Omission Reason:</strong> AI search bots could not find certified hydrostatic head rating (IPX7) or lug depth in plain text.
+                  <div className="space-y-2 text-slate-300 leading-relaxed font-mono text-[11px]">
+                    <div className="p-2.5 rounded-xl bg-rose-950/20 border border-rose-900/30 text-rose-200">
+                      <strong className="text-rose-400 block mb-0.5">1. Baseline Omission Reason:</strong>
+                      AI shopping assistants dropped Apex Ridge because hydrostatic head rating (IPX7) and lug depth could not be verified from unstructured text. Monsoon Trekker was chosen instead.
                     </div>
-                    <div>
-                      <strong className="text-emerald-400">Patched Ranking Reason:</strong> Catalyst injected machine-readable Schema.org with verified 15,000mm rating + Vibram MegaGrip sole at ₹3,499.
+                    <div className="p-2.5 rounded-xl bg-emerald-950/20 border border-emerald-900/30 text-emerald-200">
+                      <strong className="text-emerald-400 block mb-0.5">2. Patched Recommendation Reason:</strong>
+                      Catalyst injected verified Schema.org JSON-LD (HydroGuard IPX7 15,000mm, Vibram MegaGrip 5mm lugs). Apex Ridge at ₹3,499 now outperforms Monsoon Trekker (₹4,499) across price & specs.
                     </div>
                   </div>
                 </div>
 
               </div>
             )}
+
 
           </div>
 
