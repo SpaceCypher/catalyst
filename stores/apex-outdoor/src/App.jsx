@@ -12,14 +12,18 @@ import {
   Code2,
   Info,
   Loader2,
-  Server
+  Server,
+  QrCode,
+  Smartphone,
+  Building2,
+  Zap,
+  X
 } from 'lucide-react';
 import thinCatalog from './catalog_thin.json';
 import richCatalog from './catalog_rich.json';
 
 // Backend URL — set VITE_API_BASE in Vercel env vars for the store project
 const API_BASE = import.meta.env.VITE_API_BASE || 'https://catalyst-880d.onrender.com';
-
 
 export default function App() {
   const [isEnhanced, setIsEnhanced] = useState(false);
@@ -28,6 +32,9 @@ export default function App() {
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [viewJsonLd, setViewJsonLd] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState('upi'); // 'upi' | 'card' | 'netbanking'
+  const [txnId, setTxnId] = useState('');
+
 
   // On load: ask the backend whether any fix has been approved/applied.
   // If backend is unreachable, fall back to the ?enhanced URL param (dev convenience).
@@ -318,73 +325,211 @@ export default function App() {
 
       </main>
 
-      {/* 3. Razorpay Dummy Checkout Modal */}
+      {/* 3. Razorpay Standard Checkout Modal (Authentic UI) */}
       {isCheckoutOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-6 shadow-2xl relative">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-[#0b121e] border border-slate-700/80 rounded-3xl max-w-md w-full overflow-hidden shadow-2xl relative flex flex-col font-sans">
             
-            <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-              <div className="flex items-center space-x-2">
-                <div className="w-6 h-6 rounded bg-blue-600 flex items-center justify-center font-bold text-white text-xs">
+            {/* Razorpay Top Header */}
+            <div className="p-5 bg-gradient-to-r from-[#072654] via-[#0c2340] to-[#0a192f] border-b border-slate-700/60 text-white flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center font-black text-white text-base shadow-md shadow-blue-600/30">
                   R
                 </div>
-                <span className="font-bold text-white text-sm">Razorpay Checkout</span>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-sm text-white">Razorpay Checkout</span>
+                    <span className="text-[9px] font-mono bg-blue-500/20 text-blue-300 border border-blue-400/30 px-1.5 py-0.5 rounded font-bold uppercase">
+                      Test Mode
+                    </span>
+                  </div>
+                  <div className="text-[11px] text-slate-300 font-mono">
+                    Apex Ridge Outdoors • Trusted Merchant
+                  </div>
+                </div>
               </div>
-              <span className="text-xs font-mono text-slate-400">Apex Ridge Outdoors</span>
+
+              <button
+                onClick={() => setIsCheckoutOpen(false)}
+                className="p-1.5 rounded-lg bg-black/20 hover:bg-black/40 text-slate-300 hover:text-white transition-colors cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
             </div>
 
             {!paymentSuccess ? (
-              <div className="space-y-4">
-                <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 flex justify-between items-center">
+              <div className="p-6 space-y-4">
+                
+                {/* Order Summary Pill */}
+                <div className="p-3.5 rounded-2xl bg-[#070c14] border border-slate-800 flex items-center justify-between">
                   <div>
                     <div className="text-xs font-bold text-white">{currentProduct.name}</div>
-                    <div className="text-[11px] text-slate-400 font-mono">Quantity: 1</div>
+                    <div className="text-[11px] text-slate-400 font-mono">SKU: {currentProduct.product_id} • Qty: 1</div>
                   </div>
-                  <div className="text-lg font-black text-emerald-400">
-                    ₹{currentProduct.price?.toLocaleString('en-IN')}
-                  </div>
-                </div>
-
-                <div className="space-y-2 text-xs font-mono">
-                  <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 text-slate-300">
-                    <span className="text-slate-500 block text-[10px]">Payment Method:</span>
-                    <span>UPI / Cards / NetBanking / Razorpay Magic Checkout</span>
+                  <div className="text-right">
+                    <div className="text-lg font-black text-emerald-400 font-mono">
+                      ₹{currentProduct.price?.toLocaleString('en-IN')}
+                    </div>
+                    <span className="text-[10px] text-slate-500 font-mono">Free express shipping</span>
                   </div>
                 </div>
 
+                {/* Select Payment Method Tabs */}
+                <div className="space-y-1.5">
+                  <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider font-bold block">
+                    Choose Payment Option
+                  </span>
+                  <div className="grid grid-cols-3 gap-1.5 font-mono text-xs">
+                    <button
+                      onClick={() => setPaymentMethod('upi')}
+                      className={`p-2 rounded-xl border flex flex-col items-center justify-center gap-1 transition-all cursor-pointer ${
+                        paymentMethod === 'upi'
+                          ? 'bg-blue-600/20 border-blue-500 text-blue-300 font-bold shadow-sm'
+                          : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200'
+                      }`}
+                    >
+                      <QrCode className="w-4 h-4" />
+                      <span>UPI QR</span>
+                    </button>
+
+                    <button
+                      onClick={() => setPaymentMethod('card')}
+                      className={`p-2 rounded-xl border flex flex-col items-center justify-center gap-1 transition-all cursor-pointer ${
+                        paymentMethod === 'card'
+                          ? 'bg-blue-600/20 border-blue-500 text-blue-300 font-bold shadow-sm'
+                          : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200'
+                      }`}
+                    >
+                      <CreditCard className="w-4 h-4" />
+                      <span>Card</span>
+                    </button>
+
+                    <button
+                      onClick={() => setPaymentMethod('netbanking')}
+                      className={`p-2 rounded-xl border flex flex-col items-center justify-center gap-1 transition-all cursor-pointer ${
+                        paymentMethod === 'netbanking'
+                          ? 'bg-blue-600/20 border-blue-500 text-blue-300 font-bold shadow-sm'
+                          : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200'
+                      }`}
+                    >
+                      <Building2 className="w-4 h-4" />
+                      <span>NetBanking</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Payment Form Content based on tab */}
+                {paymentMethod === 'upi' && (
+                  <div className="p-3.5 rounded-2xl bg-[#070c14] border border-slate-800 space-y-2 text-center">
+                    <div className="w-24 h-24 mx-auto rounded-xl bg-white p-2 flex items-center justify-center shadow-inner">
+                      <QrCode className="w-20 h-20 text-slate-900" />
+                    </div>
+                    <div className="text-[11px] font-mono text-slate-300">
+                      Scan with any UPI App (GPay, PhonePe, Paytm, CRED)
+                    </div>
+                    <div className="text-[10px] text-slate-500 font-mono">
+                      VPA: <span className="text-emerald-400">apexridge@razorpay</span>
+                    </div>
+                  </div>
+                )}
+
+                {paymentMethod === 'card' && (
+                  <div className="p-3.5 rounded-2xl bg-[#070c14] border border-slate-800 space-y-2 text-xs font-mono">
+                    <div>
+                      <span className="text-[10px] text-slate-500 block">Card Number (Test Visa):</span>
+                      <div className="p-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-200">
+                        4111 2222 3333 4444
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <span className="text-[10px] text-slate-500 block">Expiry:</span>
+                        <div className="p-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-200">12/28</div>
+                      </div>
+                      <div>
+                        <span className="text-[10px] text-slate-500 block">CVV:</span>
+                        <div className="p-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-200">123</div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {paymentMethod === 'netbanking' && (
+                  <div className="p-3.5 rounded-2xl bg-[#070c14] border border-slate-800 space-y-2 text-xs font-mono">
+                    <span className="text-[10px] text-slate-500 block">Select Popular Bank:</span>
+                    <div className="grid grid-cols-2 gap-1.5 text-[11px]">
+                      {['HDFC Bank', 'ICICI Bank', 'State Bank of India', 'Axis Bank'].map((bank, i) => (
+                        <div key={i} className="p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 text-center font-semibold">
+                          {bank}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Submit Payment CTA */}
                 <button
-                  onClick={handleRazorpayPay}
-                  className="w-full py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 active:scale-98 text-white font-bold text-sm transition-all flex items-center justify-center space-x-2 shadow-lg shadow-blue-600/25"
+                  onClick={() => {
+                    const simId = 'pay_sim_' + Math.random().toString(36).substring(2, 9);
+                    setTxnId(simId);
+                    setPaymentSuccess(true);
+                  }}
+                  className="w-full py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 active:scale-[0.99] text-white font-bold text-sm transition-all flex items-center justify-center space-x-2 shadow-lg shadow-blue-600/30 cursor-pointer"
                 >
                   <Lock className="w-4 h-4" />
-                  <span>Simulate Payment (₹{currentProduct.price})</span>
+                  <span>Pay ₹{currentProduct.price?.toLocaleString('en-IN')} via Razorpay</span>
                 </button>
 
-                <button
-                  onClick={() => setIsCheckoutOpen(false)}
-                  className="w-full py-2 text-xs text-slate-400 hover:text-slate-200"
-                >
-                  Cancel
-                </button>
+                <div className="flex items-center justify-center space-x-1.5 text-[10px] font-mono text-slate-500 text-center">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>256-Bit SSL Encrypted • Powered by Razorpay Standard Checkout</span>
+                </div>
+
               </div>
             ) : (
-              <div className="text-center py-6 space-y-3 animate-in zoom-in-95">
-                <div className="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center mx-auto">
-                  <Check className="w-6 h-6" />
+              <div className="p-8 text-center space-y-4 animate-in zoom-in-95">
+                <div className="w-14 h-14 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center mx-auto shadow-lg shadow-emerald-500/20">
+                  <Check className="w-7 h-7" />
                 </div>
-                <h4 className="text-lg font-extrabold text-white">Payment Successful!</h4>
-                <p className="text-xs text-slate-400 font-mono">
-                  Razorpay Payment ID: pay_sim_{Math.random().toString(36).substring(7)}
-                </p>
-                <div className="text-[11px] text-emerald-400 font-mono">
-                  Session recorded & attributed deterministically
+                
+                <div className="space-y-1">
+                  <h4 className="text-xl font-extrabold text-white">Payment Authorized & Captured</h4>
+                  <p className="text-xs text-slate-300">
+                    Amount: <strong className="text-emerald-400 font-mono">₹{currentProduct.price?.toLocaleString('en-IN')}</strong>
+                  </p>
                 </div>
+
+                <div className="p-3.5 rounded-2xl bg-[#070c14] border border-slate-800 text-left font-mono text-xs space-y-1.5">
+                  <div className="flex justify-between text-slate-400 text-[11px]">
+                    <span>Razorpay Payment ID:</span>
+                    <strong className="text-blue-300">{txnId || 'pay_sim_880d9a'}</strong>
+                  </div>
+                  <div className="flex justify-between text-slate-400 text-[11px]">
+                    <span>Payment Method:</span>
+                    <span className="text-slate-200 uppercase">{paymentMethod}</span>
+                  </div>
+                  <div className="flex justify-between text-slate-400 text-[11px]">
+                    <span>Attribution Status:</span>
+                    <span className="text-emerald-400 font-bold">Verified AI Referral ✓</span>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => {
+                    setPaymentSuccess(false);
+                    setIsCheckoutOpen(false);
+                  }}
+                  className="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-mono font-bold transition-colors cursor-pointer"
+                >
+                  Done
+                </button>
               </div>
             )}
 
           </div>
         </div>
       )}
+
 
       {/* Footer */}
       <footer className="border-t border-slate-800 py-6 bg-[#040810] text-center text-xs text-slate-500 font-mono space-y-2">

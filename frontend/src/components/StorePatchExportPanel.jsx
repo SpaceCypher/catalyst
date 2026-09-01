@@ -72,11 +72,56 @@ ${jsonLdCode}
     timestamp: new Date().toISOString()
   }, null, 2);
 
+  const uapPayload = JSON.stringify({
+    "$schema": "https://npci.org.in/uap/v1/agentic-commerce.json",
+    "protocol": "UnifiedAgentProtocol/1.0",
+    "standard": "NPCI-UAP / ACP (Agentic Commerce Protocol)",
+    "merchant": {
+      "merchant_id": "mid_apex_outdoor_880d",
+      "name": "Apex Ridge Outdoors",
+      "payment_aggregator": "Razorpay Payment Gateway (Live Test Mode)",
+      "catalog_endpoint": `${storeUrl}/api/store/product/merch-boot-01`,
+      "checkout_action": "https://api.razorpay.com/v1/checkout/embedded"
+    },
+    "agentic_product": {
+      "sku": "merch-boot-01",
+      "name": "Apex Ridge Waterproof Trekking Boots",
+      "price_inr": 3499,
+      "currency": "INR",
+      "stock_status": "IN_STOCK",
+      "verified_attributes": {
+        "waterproof_rating": "IPX7 HydroGuard (15,000mm)",
+        "weight_spec": "420g Ultralight",
+        "outsole_technology": "Vibram MegaGrip with 5mm Lugs",
+        "warranty": "12 Months Comprehensive"
+      },
+      "agent_executable_actions": [
+        {
+          "name": "query_availability",
+          "method": "GET",
+          "url": "https://catalyst-880d.onrender.com/api/store/status"
+        },
+        {
+          "name": "initiate_razorpay_instant_buy",
+          "method": "POST",
+          "url": "https://catalyst-880d.onrender.com/api/store/checkout",
+          "required_params": ["sku", "size", "delivery_pincode"]
+        }
+      ]
+    },
+    "provenance_security": {
+      "fact_checked_by": "Catalyst Deterministic Engine",
+      "hallucination_score": 0.0,
+      "audit_trail_id": "evt-uap-det-880d"
+    }
+  }, null, 2);
+
   const handleCopy = (text) => {
     navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
+
 
   const handleDownload = (filename, content) => {
     const blob = new Blob([content], { type: 'text/plain' });
@@ -215,6 +260,16 @@ ${jsonLdCode}
                 Schema.org JSON-LD
               </button>
               <button
+                onClick={() => setActiveFormat('uap')}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  activeFormat === 'uap'
+                    ? 'bg-indigo-600 text-white shadow-sm'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                NPCI UAP / ACP Protocol
+              </button>
+              <button
                 onClick={() => setActiveFormat('html')}
                 className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   activeFormat === 'html'
@@ -238,7 +293,9 @@ ${jsonLdCode}
 
             <div className="flex items-center space-x-2">
               <button
-                onClick={() => handleCopy(activeFormat === 'jsonld' ? jsonLdCode : activeFormat === 'html' ? htmlPatch : webhookPayload)}
+                onClick={() => handleCopy(
+                  activeFormat === 'jsonld' ? jsonLdCode : activeFormat === 'uap' ? uapPayload : activeFormat === 'html' ? htmlPatch : webhookPayload
+                )}
                 className="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs text-slate-300 hover:text-white transition-colors flex items-center space-x-1.5 cursor-pointer"
               >
                 {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
@@ -247,8 +304,8 @@ ${jsonLdCode}
 
               <button
                 onClick={() => handleDownload(
-                  activeFormat === 'jsonld' ? 'product-schema.json' : activeFormat === 'html' ? 'product-page-patch.html' : 'catalyst-patch.json',
-                  activeFormat === 'jsonld' ? jsonLdCode : activeFormat === 'html' ? htmlPatch : webhookPayload
+                  activeFormat === 'jsonld' ? 'product-schema.json' : activeFormat === 'uap' ? 'agentic-uap-manifest.json' : activeFormat === 'html' ? 'product-page-patch.html' : 'catalyst-patch.json',
+                  activeFormat === 'jsonld' ? jsonLdCode : activeFormat === 'uap' ? uapPayload : activeFormat === 'html' ? htmlPatch : webhookPayload
                 )}
                 className="px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all flex items-center space-x-1.5 cursor-pointer shadow-sm"
               >
@@ -263,11 +320,13 @@ ${jsonLdCode}
             <pre className="text-xs font-mono text-emerald-300 leading-relaxed">
               <code>
                 {activeFormat === 'jsonld' && jsonLdCode}
+                {activeFormat === 'uap' && uapPayload}
                 {activeFormat === 'html' && htmlPatch}
                 {activeFormat === 'webhook' && webhookPayload}
               </code>
             </pre>
           </div>
+
 
         </div>
 
