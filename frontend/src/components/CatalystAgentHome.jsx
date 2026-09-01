@@ -644,7 +644,9 @@ export default function CatalystAgentHome({
               <span>Catalyst Commerce Agent</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-display font-bold text-white tracking-tight">
-              "Good morning, Apex. I found something worth fixing."
+              {isCurrentApproved 
+                ? `"${currentOpp.name} is now Catalyst Enhanced & deployed live ✓"`
+                : `"Good morning, Apex. I found something worth fixing."`}
             </h1>
           </div>
 
@@ -674,34 +676,63 @@ export default function CatalystAgentHome({
         {/* Primary Opportunity Insight Box */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
           <div className="md:col-span-8 space-y-3">
-            <div className="text-xs font-mono text-slate-400 uppercase tracking-wider">
-              {currentOpp.name} • {currentOpp.category}
+            <div className="text-xs font-mono text-slate-400 uppercase tracking-wider flex items-center space-x-2">
+              <span>{currentOpp.name} • {currentOpp.category}</span>
+              {isCurrentApproved && (
+                <span className="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800 text-[10px] font-bold">
+                  Deployed Live
+                </span>
+              )}
             </div>
             <h3 className="text-lg sm:text-xl font-semibold text-white">
-              AI shoppers prefer <span className="text-amber-300">{currentOpp.competitor}</span> over you for "{currentOpp.queryPreset}".
+              {isCurrentApproved ? (
+                <span>
+                  Your catalog is actively winning AI recommendations for <span className="text-emerald-300">"{currentOpp.queryPreset}"</span>.
+                </span>
+              ) : (
+                <span>
+                  AI shoppers prefer <span className="text-amber-300">{currentOpp.competitor}</span> over you for "{currentOpp.queryPreset}".
+                </span>
+              )}
             </h3>
             <p className="text-xs text-slate-300">
-              I diagnosed 4 missing machine-readable specifications and generated a grounded catalog fix from your warehouse records.
+              {isCurrentApproved
+                ? 'All 4 verified specifications and Schema.org JSON-LD are published to apex-outdoor.vercel.app with zero hallucinated claims.'
+                : 'I diagnosed 4 missing machine-readable specifications and generated a grounded catalog fix from your warehouse records.'}
             </p>
           </div>
 
           {/* Win Rate Contrast Score */}
           <div className="md:col-span-4 p-4 rounded-2xl bg-[#090d16] border border-slate-800 text-center space-y-2 font-mono">
-            <div className="text-[10px] text-slate-400 uppercase tracking-wider font-bold">AI Search Win Rate</div>
+            <div className="text-[10px] text-slate-400 uppercase tracking-wider font-bold">
+              {isCurrentApproved ? 'Patched AI Search Win Rate' : 'AI Search Win Rate (Baseline)'}
+            </div>
             <div className="flex items-center justify-around">
               <div>
-                <div className="text-xl font-bold text-rose-400">15%</div>
-                <div className="text-[10px] text-slate-400">You (Baseline)</div>
+                <div className={`text-xl font-bold ${isCurrentApproved ? 'text-emerald-400' : 'text-rose-400'}`}>
+                  {isCurrentApproved ? '28%' : '15%'}
+                </div>
+                <div className="text-[10px] text-slate-400">
+                  {isCurrentApproved ? 'You (Patched ✓)' : 'You (Baseline)'}
+                </div>
               </div>
               <div className="text-xs text-slate-600">vs</div>
               <div>
-                <div className="text-xl font-bold text-emerald-400">55%</div>
+                <div className={`text-xl font-bold ${isCurrentApproved ? 'text-slate-400' : 'text-emerald-400'}`}>
+                  {isCurrentApproved ? '42%' : '55%'}
+                </div>
                 <div className="text-[10px] text-slate-400">Competitor</div>
               </div>
             </div>
+            {isCurrentApproved && (
+              <div className="text-[10px] text-emerald-300 font-bold bg-emerald-950/60 py-0.5 rounded border border-emerald-800/60">
+                +86% Relative Recommendation Lift
+              </div>
+            )}
           </div>
         </div>
       </div>
+
 
       {/* 2. LIVING AGENT ACTIVITY STREAM */}
       <div className="rounded-3xl bg-[#0d101d] border border-blue-900/40 p-5 shadow-lg space-y-3 font-mono text-xs">
