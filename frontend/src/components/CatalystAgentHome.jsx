@@ -549,12 +549,53 @@ export default function CatalystAgentHome({
     }
   };
 
-  const handleRunAiSimulator = () => {
+  // Live AI Simulator Chain-of-Thought State
+  const [simStep, setSimStep] = useState(0); // 0 = idle, 1 = parse, 2 = crawl, 3 = evaluate, 4 = rank
+  const [simLogs, setSimLogs] = useState([]);
+  const [showCoTDetails, setShowCoTDetails] = useState(true);
+
+  const handleRunAiSimulator = (queryToRun) => {
+    const q = queryToRun || searchQuery || currentOpp.queryPreset;
     setIsSimulatingQuery(true);
+    setSimStep(1);
+    setSimLogs([
+      `[0.0s] 🔍 Query Parser: Tokenizing intent & constraints for "${q}"...`
+    ]);
+
     setTimeout(() => {
+      setSimStep(2);
+      setSimLogs(prev => [
+        ...prev,
+        `[0.6s] 🕷️ Entity Graph: Probing candidate product specs across Apex Ridge vs 2 competitors...`
+      ]);
+    }, 600);
+
+    setTimeout(() => {
+      setSimStep(3);
+      setSimLogs(prev => [
+        ...prev,
+        `[1.2s] ⚖️ Schema Evaluator: Baseline Apex Ridge lacks machine-readable JSON-LD and IPX7 rating.`
+      ]);
+    }, 1200);
+
+    setTimeout(() => {
+      setSimStep(4);
+      setSimLogs(prev => [
+        ...prev,
+        `[1.8s] ⚡ Catalyst Patch: Applying verified HydroGuard 15,000mm + Vibram 5mm lugs spec matrix.`
+      ]);
+    }, 1800);
+
+    setTimeout(() => {
+      setSimLogs(prev => [
+        ...prev,
+        `[2.4s] 🎯 Decision Synthesizer: Apex Ridge (₹3,499) ranked #1 Top Recommended Choice.`
+      ]);
       setIsSimulatingQuery(false);
-    }, 450);
+      setSimStep(0);
+    }, 2400);
   };
+
 
   // 1. FIRST-TIME ONBOARDING (CONNECT + METHODOLOGY)
   if (!hasAnalyzed && !isAnalyzing) {
@@ -1471,8 +1512,7 @@ export default function CatalystAgentHome({
                     type="button"
                     onClick={() => {
                       setSearchQuery(preset);
-                      setIsSimulatingQuery(true);
-                      setTimeout(() => setIsSimulatingQuery(false), 350);
+                      handleRunAiSimulator(preset);
                     }}
                     className="px-2 py-0.5 rounded-md bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-slate-200 transition-colors cursor-pointer"
                   >
@@ -1482,67 +1522,123 @@ export default function CatalystAgentHome({
               </div>
             </div>
 
-            {/* Before vs After Simulation Result Grid */}
+            {/* Before vs After Simulation Result Grid with Live Chain-of-Thought Stream */}
             {isSimulatingQuery ? (
-              <div className="p-5 rounded-2xl bg-[#0d0f17] border border-blue-900/40 text-center space-y-2 animate-in fade-in duration-150">
-                <div className="inline-flex items-center space-x-2 text-xs font-mono text-blue-300">
-                  <Loader2 className="w-4 h-4 animate-spin text-blue-400" />
-                  <span>AI crawler evaluating store catalog for: "{searchQuery}"...</span>
+              <div className="p-4 rounded-2xl bg-[#080c14] border border-blue-900/50 space-y-3 animate-in fade-in duration-150 font-mono text-xs">
+                
+                <div className="flex items-center justify-between border-b border-slate-800/80 pb-2">
+                  <div className="flex items-center space-x-2 text-blue-400 font-bold text-[11px]">
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    <span>AI SHOPPER REASONING TRACE</span>
+                  </div>
+                  <span className="text-[10px] text-slate-500">Gemini 2.5 Flash Search</span>
+                </div>
+
+                {/* Progressive Step Indicators */}
+                <div className="grid grid-cols-4 gap-1 text-[9px] text-center">
+                  {['1. Parse Intent', '2. Entity Graph', '3. Schema Eval', '4. Rank Match'].map((stepName, i) => (
+                    <div 
+                      key={i} 
+                      className={`py-1 px-1 rounded transition-all ${
+                        simStep > i 
+                          ? 'bg-emerald-950/60 text-emerald-400 border border-emerald-800/60 font-bold' 
+                          : simStep === i + 1 
+                            ? 'bg-blue-950 text-blue-300 border border-blue-700 font-bold animate-pulse' 
+                            : 'bg-slate-900/50 text-slate-600 border border-slate-800'
+                      }`}
+                    >
+                      {stepName}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Live Streaming Logs */}
+                <div className="p-3 bg-[#05070d] rounded-xl border border-slate-800 text-[11px] space-y-1.5 max-h-36 overflow-y-auto">
+                  {simLogs.map((log, idx) => (
+                    <div key={idx} className="text-emerald-300 font-mono leading-relaxed animate-in fade-in">
+                      {log}
+                    </div>
+                  ))}
                 </div>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 font-mono text-xs pt-1">
+              <div className="space-y-3 font-mono text-xs pt-1">
                 
-                {/* BEFORE FIX */}
-                <div className="p-4 rounded-2xl bg-[#0d0f17] border border-slate-800 space-y-2">
-                  <div className="flex items-center justify-between text-slate-400 text-[11px] font-semibold uppercase tracking-wider">
-                    <span>BEFORE FIX</span>
-                    <span className="text-[10px] text-rose-400 font-normal">Omitted</span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {/* BEFORE FIX */}
+                  <div className="p-4 rounded-2xl bg-[#0d0f17] border border-slate-800 space-y-2">
+                    <div className="flex items-center justify-between text-slate-400 text-[11px] font-semibold uppercase tracking-wider">
+                      <span>BEFORE FIX</span>
+                      <span className="text-[10px] text-rose-400 font-normal">Omitted</span>
+                    </div>
+                    <div className="text-xs text-slate-300 space-y-1.5">
+                      <div className="p-2 rounded-lg bg-slate-800/80 border border-slate-700 text-white font-semibold flex items-center justify-between">
+                        <span>{currentOpp.simBefore.first}</span>
+                        <span className="text-[10px] text-emerald-400 font-normal">{currentOpp.simBefore.firstTag}</span>
+                      </div>
+                      <div className="p-2 rounded-lg bg-slate-800/40 border border-slate-800 text-slate-300 flex items-center justify-between">
+                        <span>{currentOpp.simBefore.second}</span>
+                        <span className="text-[10px] text-slate-400 font-normal">{currentOpp.simBefore.secondTag}</span>
+                      </div>
+                      <div className="text-rose-400 pt-1 text-[11px] font-bold flex items-center gap-1">
+                        <XCircle className="w-3.5 h-3.5 flex-shrink-0" />
+                        <span>{currentOpp.simBefore.omitted}</span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="text-xs text-slate-300 space-y-1.5">
-                    <div className="p-2 rounded-lg bg-slate-800/80 border border-slate-700 text-white font-semibold flex items-center justify-between">
-                      <span>{currentOpp.simBefore.first}</span>
-                      <span className="text-[10px] text-emerald-400 font-normal">{currentOpp.simBefore.firstTag}</span>
+
+                  {/* AFTER FIX */}
+                  <div className={`p-4 rounded-2xl border space-y-2 transition-all ${
+                    isCurrentApproved 
+                      ? 'bg-emerald-950/30 border-emerald-800/60 shadow-sm'
+                      : 'bg-[#0d0f17] border-slate-800/60 opacity-60'
+                  }`}>
+                    <div className="flex items-center justify-between text-emerald-400 text-[11px] font-semibold uppercase tracking-wider">
+                      <span>AFTER CATALYST FIX</span>
+                      <span className="text-[10px] font-bold text-emerald-300">#1 Pick ✓</span>
                     </div>
-                    <div className="p-2 rounded-lg bg-slate-800/40 border border-slate-800 text-slate-300 flex items-center justify-between">
-                      <span>{currentOpp.simBefore.second}</span>
-                      <span className="text-[10px] text-slate-400 font-normal">{currentOpp.simBefore.secondTag}</span>
-                    </div>
-                    <div className="text-rose-400 pt-1 text-[11px] font-bold flex items-center gap-1">
-                      <XCircle className="w-3.5 h-3.5 flex-shrink-0" />
-                      <span>{currentOpp.simBefore.omitted}</span>
+                    <div className="text-xs text-slate-300 space-y-1.5">
+                      <div className="p-2 rounded-lg bg-emerald-900/40 border border-emerald-700/60 text-white font-bold flex items-center justify-between shadow-sm">
+                        <span className="text-emerald-300">{currentOpp.simAfter.first}</span>
+                        <span className="text-[10px] text-emerald-400 font-normal">{currentOpp.simAfter.firstTag}</span>
+                      </div>
+                      <div className="p-2 rounded-lg bg-slate-900/60 border border-slate-800 text-slate-400 flex items-center justify-between">
+                        <span>{currentOpp.simAfter.second}</span>
+                        <span className="text-[10px] text-slate-500 font-normal">{currentOpp.simAfter.secondTag}</span>
+                      </div>
+                      <div className="text-emerald-300 pt-1 text-[11px] font-semibold flex items-center gap-1">
+                        <CheckCircle2 className="w-3.5 h-3.5 flex-shrink-0 text-emerald-400" />
+                        <span>AI engine matched all specifications</span>
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                {/* AFTER FIX */}
-                <div className={`p-4 rounded-2xl border space-y-2 transition-all ${
-                  isCurrentApproved 
-                    ? 'bg-emerald-950/30 border-emerald-800/60 shadow-sm'
-                    : 'bg-[#0d0f17] border-slate-800/60 opacity-60'
-                }`}>
-                  <div className="flex items-center justify-between text-emerald-400 text-[11px] font-semibold uppercase tracking-wider">
-                    <span>AFTER CATALYST FIX</span>
-                    <span className="text-[10px] font-bold text-emerald-300">#1 Pick ✓</span>
+                {/* AI Chain-of-Thought Reasoning Explainer */}
+                <div className="p-3.5 rounded-2xl bg-[#080c14] border border-slate-800 text-[11px] space-y-2">
+                  <div className="flex items-center justify-between text-slate-400 border-b border-slate-800/80 pb-1.5">
+                    <span className="text-blue-400 font-bold flex items-center gap-1">
+                      <Sparkles className="w-3 h-3 text-blue-400" />
+                      <span>AI Model Reasoning Chain</span>
+                    </span>
+                    <span className="text-[10px] text-slate-500 font-mono">
+                      Query: "{searchQuery || currentOpp.queryPreset}"
+                    </span>
                   </div>
-                  <div className="text-xs text-slate-300 space-y-1.5">
-                    <div className="p-2 rounded-lg bg-emerald-900/40 border border-emerald-700/60 text-white font-bold flex items-center justify-between shadow-sm">
-                      <span className="text-emerald-300">{currentOpp.simAfter.first}</span>
-                      <span className="text-[10px] text-emerald-400 font-normal">{currentOpp.simAfter.firstTag}</span>
+
+                  <div className="space-y-1.5 text-slate-300 leading-relaxed font-mono text-[11px]">
+                    <div>
+                      <strong className="text-rose-400">Baseline Omission Reason:</strong> AI search bots could not find certified hydrostatic head rating (IPX7) or lug depth in plain text.
                     </div>
-                    <div className="p-2 rounded-lg bg-slate-900/60 border border-slate-800 text-slate-400 flex items-center justify-between">
-                      <span>{currentOpp.simAfter.second}</span>
-                      <span className="text-[10px] text-slate-500 font-normal">{currentOpp.simAfter.secondTag}</span>
-                    </div>
-                    <div className="text-emerald-300 pt-1 text-[11px] font-semibold flex items-center gap-1">
-                      <CheckCircle2 className="w-3.5 h-3.5 flex-shrink-0 text-emerald-400" />
-                      <span>AI engine matched all specifications</span>
+                    <div>
+                      <strong className="text-emerald-400">Patched Ranking Reason:</strong> Catalyst injected machine-readable Schema.org with verified 15,000mm rating + Vibram MegaGrip sole at ₹3,499.
                     </div>
                   </div>
                 </div>
 
               </div>
             )}
+
           </div>
 
           {/* 2. Razorpay Revenue & Payment Loop Card */}
