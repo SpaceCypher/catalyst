@@ -876,21 +876,62 @@ export default function CatalystAgentHome({
             </button>
           </div>
         ) : (
-          <div className="rounded-2xl bg-emerald-950/40 border border-emerald-800/60 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono">
-            <div className="flex items-center space-x-2 text-emerald-300 font-semibold">
-              <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0" />
-              <span>{currentOpp.name} is deployed & Catalyst Enhanced on live storefront ✓</span>
+          <div className="space-y-3 pt-2">
+            <div className="rounded-2xl bg-emerald-950/40 border border-emerald-800/60 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono">
+              <div className="flex items-center space-x-2 text-emerald-300 font-semibold">
+                <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0" />
+                <span>{currentOpp.name} is deployed & Catalyst Enhanced on live storefront ✓</span>
+              </div>
+              <button
+                onClick={onOpenStorefront}
+                className="text-emerald-300 hover:text-white underline cursor-pointer font-medium flex items-center space-x-1"
+              >
+                <span>View updated store</span>
+                <ExternalLink className="w-3 h-3" />
+              </button>
             </div>
-            <button
-              onClick={onOpenStorefront}
-              className="text-emerald-300 hover:text-white underline cursor-pointer font-medium flex items-center space-x-1"
-            >
-              <span>View updated store</span>
-              <ExternalLink className="w-3 h-3" />
-            </button>
+
+            {/* Next Opportunity Advance Banner */}
+            {activeOpportunityId !== 'opp-04' ? (
+              <div className="p-4 rounded-2xl bg-gradient-to-r from-blue-950/60 to-purple-950/40 border border-blue-800/60 flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div className="space-y-0.5 text-left">
+                  <div className="text-[10px] font-mono uppercase tracking-wider text-blue-400 font-bold">
+                    Next High-Impact Opportunity Ready
+                  </div>
+                  <div className="text-sm font-bold text-white">
+                    {activeOpportunityId === 'opp-01' && '2. Venture 45L Backpack (+₹52,000 GMV Lift)'}
+                    {activeOpportunityId === 'opp-02' && '3. StormShield 3-Person Tent (+₹68,000 GMV Lift)'}
+                    {activeOpportunityId === 'opp-03' && '4. SwiftTrail Ultra Shoes (+₹45,000 GMV Lift)'}
+                  </div>
+                  <div className="text-xs text-slate-300">
+                    {activeOpportunityId === 'opp-01' && 'AI shoppers prefer SummitPro 50L. Missing 45L capacity & YKK zipper specs.'}
+                    {activeOpportunityId === 'opp-02' && 'AI shoppers prefer TrailPro Haven. Missing 3,000mm hydrostatic rating & ripstop specs.'}
+                    {activeOpportunityId === 'opp-03' && 'AI shoppers prefer SpeedCross 5. Missing 8mm heel drop & EVA midsole specs.'}
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => {
+                    if (activeOpportunityId === 'opp-01') handleSwitchOpportunity('opp-02');
+                    else if (activeOpportunityId === 'opp-02') handleSwitchOpportunity('opp-03');
+                    else if (activeOpportunityId === 'opp-03') handleSwitchOpportunity('opp-04');
+                  }}
+                  className="flex-shrink-0 py-2.5 px-5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs transition-all flex items-center space-x-1.5 cursor-pointer shadow-md"
+                >
+                  <span>Investigate Next Fix →</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            ) : (
+              <div className="p-3.5 rounded-2xl bg-slate-900 border border-slate-800 text-xs font-mono text-emerald-300 flex items-center justify-between">
+                <span>All 4 Catalog Opportunities have been reviewed and optimized!</span>
+                <span className="text-[10px] text-slate-400">100% Catalog Coverage</span>
+              </div>
+            )}
           </div>
         )}
       </div>
+
 
       {/* 4. THE ONE WOW FEATURE: AUTONOMOUS AI SHOPPER SANDBOX */}
       <div className="rounded-3xl bg-[#121624]/95 border border-slate-700/80 p-6 sm:p-8 shadow-xl space-y-5">

@@ -164,8 +164,15 @@ export default function DiffReviewModal({
             >
               Close
             </button>
-            
-            {!isApproved && (
+
+            {isApproved ? (
+              <button
+                onClick={onClose}
+                className="flex-1 sm:flex-initial px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold flex items-center justify-center space-x-1.5 transition-all cursor-pointer shadow-sm"
+              >
+                <span>Explore Next Opportunity (Venture 45L) →</span>
+              </button>
+            ) : (
               <button
                 onClick={() => {
                   onApprove(diff.diff_id || 'diff-apex-01');
@@ -187,6 +194,7 @@ export default function DiffReviewModal({
               </button>
             )}
           </div>
+
         </div>
 
       </div>
