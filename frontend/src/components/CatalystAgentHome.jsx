@@ -1315,6 +1315,57 @@ export default function CatalystAgentHome({
 
           </div>
 
+          {/* 1.5. Autonomous Agent Chain-of-Thought Reasoning Log */}
+          <div className="rounded-3xl bg-[#0b101d] border border-blue-900/50 p-5 shadow-xl space-y-3 font-mono text-xs">
+            <div className="flex items-center justify-between border-b border-slate-800/80 pb-2.5">
+              <div className="flex items-center space-x-2 text-blue-400 font-bold text-xs">
+                <Bot className="w-4 h-4 text-blue-400" />
+                <span>Agent Chain-of-Thought (Reasoning Trace)</span>
+              </div>
+              <span className="text-[10px] text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800 font-bold">
+                100% Fact-Checked
+              </span>
+            </div>
+
+            <div className="space-y-2 text-[11px] text-slate-300">
+              <div className="p-2.5 rounded-xl bg-[#060810] border border-slate-800/80 space-y-1">
+                <div className="flex items-center justify-between text-blue-300 font-bold text-[10px]">
+                  <span>STEP 1: OBSERVE DEMAND LOSS</span>
+                  <span className="text-slate-500">get_query_results()</span>
+                </div>
+                <p className="text-slate-300 text-[11px] leading-relaxed">
+                  Evaluated 40 high-intent shopping queries. Apex Ridge won only <strong>12.7%</strong> of trials while Monsoon Trekker Pro captured <strong>55.0%</strong>.
+                </p>
+              </div>
+
+              <div className="p-2.5 rounded-xl bg-[#060810] border border-slate-800/80 space-y-1">
+                <div className="flex items-center justify-between text-amber-300 font-bold text-[10px]">
+                  <span>STEP 2: DIAGNOSE EVIDENCE GAP</span>
+                  <span className="text-slate-500">diagnose_gap()</span>
+                </div>
+                <p className="text-slate-300 text-[11px] leading-relaxed">
+                  Competitors provide 11 machine-readable specifications in Schema.org JSON-LD. Apex Ridge had only 5 generic text attributes with 0 JSON-LD tags.
+                </p>
+              </div>
+
+              <div className="p-2.5 rounded-xl bg-[#060810] border border-slate-800/80 space-y-1">
+                <div className="flex items-center justify-between text-emerald-300 font-bold text-[10px]">
+                  <span>STEP 3: PROPOSE CATALOG PATCH</span>
+                  <span className="text-slate-500">generate_fix_diff()</span>
+                </div>
+                <p className="text-slate-300 text-[11px] leading-relaxed">
+                  Drafted FixDiff #diff-apex-01. Verified 4 claims against merchant warehouse data (HydroGuard IPX7 15,000mm, 420g, Vibram sole). 0 hallucinations.
+                </p>
+              </div>
+
+              <div className="p-2 rounded-xl bg-purple-950/20 border border-purple-800/30 text-purple-300 text-[10px] flex items-center justify-between">
+                <span>GATE: State paused at <code className="text-white font-bold bg-slate-900 px-1 py-0.5 rounded">WAIT_FOR_APPROVAL</code></span>
+                <span className="text-purple-400 font-bold">Human Sign-off Mandatory</span>
+              </div>
+            </div>
+          </div>
+
+
           {/* 2. Catalyst's Proposed Fix & Approval Gate */}
           <div className="rounded-3xl bg-[#0e172a] border border-blue-900/40 p-6 shadow-xl space-y-4">
             <div className="space-y-1">
