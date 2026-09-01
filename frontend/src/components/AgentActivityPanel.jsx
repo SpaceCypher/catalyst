@@ -213,6 +213,17 @@ export default function AgentActivityPanel({ events = [], agentState, activeDiff
     }
   ];
 
+  const stateMachineSteps = [
+    { id: 'OBSERVE', num: '01', done: true, active: false },
+    { id: 'DIAGNOSE', num: '02', done: true, active: false },
+    { id: 'PROPOSE', num: '03', done: true, active: false },
+    { id: 'WAIT APPROVAL', num: '04', done: isApproved, active: !isApproved },
+    { id: 'APPLY', num: '05', done: isApproved, active: false },
+    { id: 'EXPERIMENT', num: '06', done: isApproved, active: false },
+    { id: 'VERIFY', num: '07', done: isApproved, active: false },
+    { id: 'REPORT', num: '08', done: false, active: isApproved },
+  ];
+
   return (
     <div className="space-y-6">
 
@@ -240,41 +251,46 @@ export default function AgentActivityPanel({ events = [], agentState, activeDiff
       <div className="bg-[#121624]/95 border border-slate-700/80 rounded-3xl p-5 sm:p-6 shadow-xl">
         <p className="text-[10px] font-mono text-slate-500 uppercase tracking-wider mb-3">Agent state machine — current position</p>
         <div className="grid grid-cols-4 sm:grid-cols-8 gap-1.5">
-          {STATE_MACHINE.map(s => {
-            const isStateDone = isApproved 
-              ? (s.num <= 7) 
-              : s.done;
-            const isStateActive = isApproved 
-              ? (s.id === 'COMPLETE' || s.id === 'MONITOR') 
-              : s.active;
-
-            return (
-              <div
-                key={s.id}
-                className={`py-2 px-1 rounded-xl border text-center transition-all ${
-                  isStateActive
+          {stateMachineSteps.map(s => (
+            <div
+              key={s.id}
+              className={`py-2 px-1 rounded-xl border text-center transition-all ${
+                s.active
+                  ? isApproved
                     ? 'bg-emerald-950/50 border-emerald-600/70 ring-1 ring-emerald-500/30'
-                    : isStateDone
-                    ? 'bg-emerald-950/30 border-emerald-800/40'
-                    : 'bg-[#090c14] border-slate-800'
-                }`}
-              >
-                <div className={`text-[9px] font-mono font-bold ${isStateActive ? 'text-emerald-300' : isStateDone ? 'text-emerald-400' : 'text-slate-600'}`}>
-                  {isStateDone && !isStateActive ? '✓' : s.num}
-                </div>
-                <div className={`text-[9px] uppercase tracking-wide font-semibold mt-0.5 truncate ${isStateActive ? 'text-emerald-200' : isStateDone ? 'text-emerald-300' : 'text-slate-600'}`}>
-                  {s.id}
-                </div>
+                    : 'bg-amber-950/40 border-amber-700/60 ring-1 ring-amber-500/20'
+                  : s.done
+                  ? 'bg-emerald-950/30 border-emerald-800/40'
+                  : 'bg-[#090c14] border-slate-800'
+              }`}
+            >
+              <div className={`text-[9px] font-mono font-bold ${
+                s.active
+                  ? isApproved ? 'text-emerald-300' : 'text-amber-400'
+                  : s.done
+                  ? 'text-emerald-400'
+                  : 'text-slate-600'
+              }`}>
+                {s.done ? '✓' : s.num}
               </div>
-            );
-          })}
+              <div className={`text-[9px] uppercase tracking-wide font-semibold mt-0.5 truncate ${
+                s.active
+                  ? isApproved ? 'text-emerald-200' : 'text-amber-200'
+                  : s.done
+                  ? 'text-emerald-300'
+                  : 'text-slate-600'
+              }`}>
+                {s.id}
+              </div>
+            </div>
+          ))}
         </div>
         <div className="mt-3 flex items-center gap-2 text-xs font-sans">
           {isApproved ? (
             <>
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
               <span className="text-emerald-300 font-medium">Approved & Deployed</span>
-              <span className="text-slate-400">— Catalog patch active on apex-outdoor.vercel.app with verified schema.</span>
+              <span className="text-slate-400">— Catalog patch active on apex-outdoor.vercel.app with verified Schema.org JSON-LD.</span>
             </>
           ) : (
             <>
@@ -285,6 +301,7 @@ export default function AgentActivityPanel({ events = [], agentState, activeDiff
           )}
         </div>
       </div>
+
 
       {/* Reasoning Trace */}
       <div className="bg-[#121624]/95 border border-slate-700/80 rounded-3xl p-6 sm:p-7 shadow-xl">
