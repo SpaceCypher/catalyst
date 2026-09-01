@@ -274,8 +274,10 @@ export default function App() {
       {/* 5-Beat Pitch Demo Walkthrough Stepper Modal */}
       {isDemoModalOpen && (
         <DemoWalkthroughModal
+          isOpen={isDemoModalOpen}
           onClose={() => setIsDemoModalOpen(false)}
           onNavigateTab={(tab) => {
+
             if (tab === 'inbox' || tab === 'opportunities') navigateToTab('catalyst');
             else if (tab === 'experiments' || tab === 'attribution' || tab === 'console') navigateToTab('proof');
             else navigateToTab('catalyst');
