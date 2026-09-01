@@ -200,10 +200,10 @@ export default function App() {
         onOpenDemoModal={() => setIsDemoModalOpen(true)}
         onOpenStorefront={handleOpenStorefront}
         isResetting={isResetting}
-        hasAnalyzed={hasAnalyzed}
-        verifiedRevenue={experimentResult?.summary?.treatment_incremental_revenue || 150000}
+        verifiedRevenue={(activeDiff?.status === 'approved' || activeDiff?.status === 'applied') ? (experimentResult?.summary?.treatment_incremental_revenue || 150000) : 0}
         agentStatus={getAgentStatus()}
       />
+
 
 
       {/* Main Experience Flow with Fixed Navbar Offset */}

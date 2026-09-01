@@ -1725,17 +1725,23 @@ export default function CatalystAgentHome({
               <span className="text-xs font-mono text-slate-400 uppercase tracking-wider">
                 Controlled Simulation Revenue Impact ({currentOpp.category})
               </span>
-              <span className="text-xs font-mono text-emerald-400 font-bold bg-emerald-950/60 px-2.5 py-0.5 rounded-full border border-emerald-800/60">
-                {currentOpp.revenue.liftPct}
+              <span className={`text-xs font-mono font-bold px-2.5 py-0.5 rounded-full border transition-all ${
+                isCurrentApproved
+                  ? 'text-emerald-400 bg-emerald-950/60 border-emerald-800/60'
+                  : 'text-amber-400 bg-amber-950/60 border-amber-800/60'
+              }`}>
+                {isCurrentApproved ? currentOpp.revenue.liftPct : '0.0% Lift (Pending Approval)'}
               </span>
             </div>
 
             <div className="flex items-baseline space-x-3">
-              <div className="text-4xl sm:text-5xl font-display font-bold text-emerald-300 tracking-tight">
-                {currentOpp.revenue.gmvDisplay}
+              <div className={`text-4xl sm:text-5xl font-display font-bold tracking-tight transition-all ${
+                isCurrentApproved ? 'text-emerald-300' : 'text-slate-400'
+              }`}>
+                {isCurrentApproved ? currentOpp.revenue.gmvDisplay : '₹0'}
               </div>
               <div className="text-xs font-mono text-slate-300">
-                incremental GMV verified
+                {isCurrentApproved ? 'incremental GMV verified' : `projected ${currentOpp.revenue.gmvDisplay} (awaiting fix deployment)`}
               </div>
             </div>
 
@@ -1752,12 +1758,18 @@ export default function CatalystAgentHome({
                   <span className="text-slate-200">{currentOpp.revenue.controlText}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-emerald-400">Treatment Arm (1,500 queries):</span>
-                  <span className="text-emerald-300 font-bold">{currentOpp.revenue.treatmentText}</span>
+                  <span className={isCurrentApproved ? 'text-emerald-400' : 'text-slate-400'}>
+                    Treatment Arm (1,500 queries):
+                  </span>
+                  <span className={isCurrentApproved ? 'text-emerald-300 font-bold' : 'text-slate-400'}>
+                    {isCurrentApproved ? currentOpp.revenue.treatmentText : `Awaiting deployment (Projected: ${currentOpp.revenue.treatmentText})`}
+                  </span>
                 </div>
                 <div className="flex justify-between border-t border-slate-800 pt-1 font-bold">
                   <span className="text-white">Net Incremental GMV:</span>
-                  <span className="text-emerald-400">{currentOpp.revenue.netText}</span>
+                  <span className={isCurrentApproved ? 'text-emerald-400' : 'text-amber-400'}>
+                    {isCurrentApproved ? currentOpp.revenue.netText : '₹0 (Pending Fix Deployment)'}
+                  </span>
                 </div>
               </div>
 
@@ -1775,6 +1787,7 @@ export default function CatalystAgentHome({
             <ArrowRight className="w-3.5 h-3.5 text-blue-300" />
           </button>
         </div>
+
 
         {/* Right: Next Best Action Loop (Closed-loop Agent) */}
         <div className="rounded-3xl bg-[#121624]/95 border border-slate-700/80 p-6 sm:p-8 shadow-xl space-y-4 animate-in fade-in duration-300 flex flex-col justify-between">
