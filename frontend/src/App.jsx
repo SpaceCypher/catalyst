@@ -34,8 +34,9 @@ const getTabFromPath = () => {
 
 export default function App() {
   const [currentView, setCurrentView] = useState('catalyst'); // 'catalyst' | 'storefront'
-  const [hasAnalyzed, setHasAnalyzed] = useState(true);
+  const [hasAnalyzed, setHasAnalyzed] = useState(false);
   const [activeTab, setActiveTab] = useState(getTabFromPath);
+
   const [opportunities, setOpportunities] = useState([]);
   const [selectedOpp, setSelectedOpp] = useState(null);
   const [activeDiff, setActiveDiff] = useState(null);
