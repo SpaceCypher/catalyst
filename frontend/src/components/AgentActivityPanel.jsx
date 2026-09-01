@@ -13,8 +13,10 @@ import {
   ChevronUp,
   ArrowRight,
   Terminal,
-  AlertCircle
+  AlertCircle,
+  ExternalLink
 } from 'lucide-react';
+
 
 // The 3-step reasoning trace Catalyst produced to arrive at this fix
 const REASONING_STEPS = [
