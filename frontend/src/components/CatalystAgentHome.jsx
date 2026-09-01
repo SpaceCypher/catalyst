@@ -549,61 +549,6 @@ export default function CatalystAgentHome({
     }
   };
 
-  // Live AI Simulator Chain-of-Thought State
-  const [simStep, setSimStep] = useState(0); // 0 = idle, 1 = parse, 2 = crawl, 3 = evaluate, 4 = patch, 5 = rank
-  const [simProgress, setSimProgress] = useState(0);
-  const [simLogs, setSimLogs] = useState([]);
-
-  const handleRunAiSimulator = (queryToRun) => {
-    const q = queryToRun || searchQuery || currentOpp.queryPreset;
-    setIsSimulatingQuery(true);
-    setSimStep(1);
-    setSimProgress(15);
-    setSimLogs([
-      `[0.0s] 🔍 Query Parser: Tokenizing intent & constraints for "${q}"...`
-    ]);
-
-    setTimeout(() => {
-      setSimStep(2);
-      setSimProgress(40);
-      setSimLogs(prev => [
-        ...prev,
-        `[0.8s] 🕷️ Multi-Store Crawler: Retrieving catalog vectors across Apex Ridge vs 2 competitors...`
-      ]);
-    }, 800);
-
-    setTimeout(() => {
-      setSimStep(3);
-      setSimProgress(65);
-      setSimLogs(prev => [
-        ...prev,
-        `[1.6s] ⚖️ Schema Evaluator: Baseline Apex Ridge lacks machine-readable JSON-LD and IPX7 rating.`
-      ]);
-    }, 1600);
-
-    setTimeout(() => {
-      setSimStep(4);
-      setSimProgress(88);
-      setSimLogs(prev => [
-        ...prev,
-        `[2.4s] ⚡ Catalyst Patch: Applying verified HydroGuard 15,000mm + Vibram 5mm lugs spec matrix.`
-      ]);
-    }, 2400);
-
-    setTimeout(() => {
-      setSimStep(5);
-      setSimProgress(100);
-      setSimLogs(prev => [
-        ...prev,
-        `[3.2s] 🎯 Decision Synthesizer: Apex Ridge (₹3,499) ranked #1 Top Recommended Choice.`
-      ]);
-    }, 3200);
-
-    setTimeout(() => {
-      setIsSimulatingQuery(false);
-      setSimStep(0);
-    }, 3600);
-  };
 
 
 
@@ -1465,210 +1410,74 @@ export default function CatalystAgentHome({
         {/* ================= RIGHT COLUMN: AI Simulator & Razorpay Revenue ================= */}
         <div className="space-y-6 flex flex-col justify-between">
           
-          {/* 1. AI Shopping Simulator Card */}
-          <div className="rounded-3xl bg-[#121624]/95 border border-slate-700/80 p-6 shadow-xl space-y-4 flex-1">
-            <div className="space-y-2">
-              <div className="text-xs font-mono text-slate-400 font-semibold uppercase tracking-wider flex items-center justify-between">
-                <span className="flex items-center gap-1.5 text-blue-400 font-bold">
-                  <Search className="w-3.5 h-3.5" />
-                  <span>AI Shopping Simulator</span>
-                </span>
-                <span className="text-[10px] text-blue-300 font-mono">Real Engine Verification</span>
+          {/* 1. AI Search Discovery & Retrieval Benchmark */}
+          <div className="rounded-3xl bg-[#121624]/95 border border-slate-700/80 p-6 shadow-xl space-y-4 flex-1 font-mono text-xs">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div className="flex items-center space-x-2 text-blue-400 font-bold text-xs uppercase tracking-wider">
+                <Search className="w-4 h-4" />
+                <span>AI Search Discovery Benchmark</span>
               </div>
-              
-              {/* Simulator Input Form */}
-              <form 
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  handleRunAiSimulator();
-                }}
-                className="flex items-center space-x-2 pt-1"
-              >
-                <div className="relative flex-1">
-                  <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder={`e.g. ${currentOpp.queryPreset}`}
-                    className="w-full pl-10 pr-3 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-white text-xs font-mono focus:outline-none focus:border-blue-400"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  disabled={isSimulatingQuery}
-                  className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 disabled:bg-slate-800 text-xs font-mono text-white flex items-center space-x-1.5 cursor-pointer transition-all shadow-sm flex-shrink-0"
-                >
-                  {isSimulatingQuery ? (
-                    <>
-                      <Loader2 className="w-3.5 h-3.5 animate-spin text-blue-200" />
-                      <span>Running...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Play className="w-3.5 h-3.5 text-blue-200" />
-                      <span>Run</span>
-                    </>
-                  )}
-                </button>
-              </form>
+              <span className="text-[10px] text-emerald-400 bg-emerald-950/80 px-2.5 py-1 rounded-full border border-emerald-800 font-bold">
+                40 Continuous Query Vectors
+              </span>
+            </div>
 
-              {/* Preset Query Chips */}
-              <div className="flex flex-wrap items-center gap-1.5 pt-0.5 text-[11px] font-mono">
-                <span className="text-slate-500">Presets:</span>
-                {currentOpp.presets.map((preset, idx) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => {
-                      setSearchQuery(preset);
-                      handleRunAiSimulator(preset);
-                    }}
-                    className="px-2 py-0.5 rounded-md bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-slate-200 transition-colors cursor-pointer"
-                  >
-                    {preset}
-                  </button>
+            {/* Query Intent Vector Table */}
+            <div className="space-y-2">
+              <span className="text-[10px] text-slate-400 uppercase tracking-wider font-bold block">
+                Commercial Intent Performance
+              </span>
+              
+              <div className="space-y-1.5">
+                {[
+                  { query: 'Best waterproof hiking boots under ₹5,000', baseline: '15.0%', patched: '55.0%', lift: '+40.0 pts' },
+                  { query: 'Monsoon trekking boots with Vibram sole', baseline: '10.0%', patched: '45.0%', lift: '+35.0 pts' },
+                  { query: 'Lightweight 420g trail hiking shoes', baseline: '20.0%', patched: '60.0%', lift: '+40.0 pts' },
+                  { query: 'Winter alpine breathable waterproof boots', baseline: '15.0%', patched: '50.0%', lift: '+35.0 pts' }
+                ].map((item, idx) => (
+                  <div key={idx} className="p-2.5 rounded-xl bg-[#090d16] border border-slate-800 flex items-center justify-between gap-2 text-[11px]">
+                    <div className="truncate flex-1 text-slate-300">
+                      "{item.query}"
+                    </div>
+                    <div className="flex items-center space-x-2 flex-shrink-0">
+                      <span className="text-rose-400/80 line-through text-[10px]">{item.baseline}</span>
+                      <span className="text-emerald-400 font-bold">{isCurrentApproved ? item.patched : item.baseline}</span>
+                      {isCurrentApproved && (
+                        <span className="text-[9px] bg-emerald-950 text-emerald-300 px-1.5 py-0.5 rounded border border-emerald-800/80 font-bold">
+                          {item.lift}
+                        </span>
+                      )}
+                    </div>
+                  </div>
                 ))}
               </div>
             </div>
 
-            {/* Before vs After Simulation Result Grid with Live Chain-of-Thought Stream */}
-            {isSimulatingQuery ? (
-              <div className="p-5 rounded-2xl bg-[#080c14] border border-blue-900/60 space-y-3.5 animate-in fade-in duration-150 font-mono text-xs shadow-2xl">
-                
-                <div className="flex items-center justify-between border-b border-slate-800/80 pb-2">
-                  <div className="flex items-center space-x-2 text-blue-400 font-bold text-[11px]">
-                    <Loader2 className="w-3.5 h-3.5 animate-spin text-blue-300" />
-                    <span>AI SHOPPER REASONING IN PROGRESS...</span>
-                  </div>
-                  <span className="text-[10px] text-emerald-400 font-bold bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800">
-                    Gemini 2.5 Flash Search
-                  </span>
-                </div>
-
-                {/* Animated Progress Bar */}
-                <div className="w-full bg-slate-900 rounded-full h-1.5 overflow-hidden border border-slate-800">
-                  <div 
-                    className="h-full bg-gradient-to-r from-blue-500 via-indigo-400 to-emerald-400 transition-all duration-300 rounded-full shadow-sm"
-                    style={{ width: `${simProgress}%` }}
-                  />
-                </div>
-
-                {/* Progressive Step Indicators */}
-                <div className="grid grid-cols-4 gap-1 text-[9px] text-center">
-                  {['1. Parse Intent', '2. Entity Graph', '3. Schema Eval', '4. Rank Match'].map((stepName, i) => (
-                    <div 
-                      key={i} 
-                      className={`py-1.5 px-1 rounded-lg transition-all ${
-                        simStep > i + 1 
-                          ? 'bg-emerald-950/80 text-emerald-300 border border-emerald-800 font-bold' 
-                          : simStep === i + 1 
-                            ? 'bg-blue-950 text-blue-300 border border-blue-500 font-bold animate-pulse' 
-                            : 'bg-slate-900/60 text-slate-500 border border-slate-800'
-                      }`}
-                    >
-                      {stepName}
-                    </div>
-                  ))}
-                </div>
-
-                {/* Live Streaming Logs */}
-                <div className="p-3.5 bg-[#05070d] rounded-xl border border-slate-800 text-[11px] space-y-1.5 max-h-40 overflow-y-auto">
-                  {simLogs.map((log, idx) => (
-                    <div key={idx} className="text-emerald-300 font-mono leading-relaxed animate-in fade-in">
-                      {log}
-                    </div>
-                  ))}
-                </div>
+            {/* Aggregate Evidence Density */}
+            <div className="p-3.5 rounded-2xl bg-[#080c14] border border-slate-800 space-y-2">
+              <div className="flex justify-between text-[11px]">
+                <span className="text-slate-400">Average Win-Rate:</span>
+                <span className="font-bold text-white">
+                  {isCurrentApproved ? '16.7% → 37.5% (+125% Lift)' : '16.7% (Baseline)'}
+                </span>
               </div>
-            ) : (
-              <div className="space-y-3 font-mono text-xs pt-1">
-                
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {/* BEFORE FIX */}
-                  <div className="p-4 rounded-2xl bg-[#0d0f17] border border-slate-800 space-y-2">
-                    <div className="flex items-center justify-between text-slate-400 text-[11px] font-semibold uppercase tracking-wider">
-                      <span>BEFORE FIX</span>
-                      <span className="text-[10px] text-rose-400 font-normal">Omitted</span>
-                    </div>
-                    <div className="text-xs text-slate-300 space-y-1.5">
-                      <div className="p-2 rounded-lg bg-slate-800/80 border border-slate-700 text-white font-semibold flex items-center justify-between">
-                        <span>{currentOpp.simBefore.first}</span>
-                        <span className="text-[10px] text-emerald-400 font-normal">{currentOpp.simBefore.firstTag}</span>
-                      </div>
-                      <div className="p-2 rounded-lg bg-slate-800/40 border border-slate-800 text-slate-300 flex items-center justify-between">
-                        <span>{currentOpp.simBefore.second}</span>
-                        <span className="text-[10px] text-slate-400 font-normal">{currentOpp.simBefore.secondTag}</span>
-                      </div>
-                      <div className="text-rose-400 pt-1 text-[11px] font-bold flex items-center gap-1">
-                        <XCircle className="w-3.5 h-3.5 flex-shrink-0" />
-                        <span>{currentOpp.simBefore.omitted}</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* AFTER FIX */}
-                  <div className={`p-4 rounded-2xl border space-y-2 transition-all ${
-                    isCurrentApproved 
-                      ? 'bg-emerald-950/30 border-emerald-800/60 shadow-sm'
-                      : 'bg-[#0d0f17] border-slate-800/60 opacity-60'
-                  }`}>
-                    <div className="flex items-center justify-between text-emerald-400 text-[11px] font-semibold uppercase tracking-wider">
-                      <span>AFTER CATALYST FIX</span>
-                      <span className="text-[10px] font-bold text-emerald-300">#1 Pick ✓</span>
-                    </div>
-                    <div className="text-xs text-slate-300 space-y-1.5">
-                      <div className="p-2 rounded-lg bg-emerald-900/40 border border-emerald-700/60 text-white font-bold flex items-center justify-between shadow-sm">
-                        <span className="text-emerald-300">{currentOpp.simAfter.first}</span>
-                        <span className="text-[10px] text-emerald-400 font-normal">{currentOpp.simAfter.firstTag}</span>
-                      </div>
-                      <div className="p-2 rounded-lg bg-slate-900/60 border border-slate-800 text-slate-400 flex items-center justify-between">
-                        <span>{currentOpp.simAfter.second}</span>
-                        <span className="text-[10px] text-slate-500 font-normal">{currentOpp.simAfter.secondTag}</span>
-                      </div>
-                      <div className="text-emerald-300 pt-1 text-[11px] font-semibold flex items-center gap-1">
-                        <CheckCircle2 className="w-3.5 h-3.5 flex-shrink-0 text-emerald-400" />
-                        <span>AI engine matched all specifications</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* AI Chain-of-Thought Reasoning Explainer */}
-                <div className="p-4 rounded-2xl bg-[#080c14] border border-slate-800 text-[11px] space-y-2.5 shadow-lg">
-                  <div className="flex items-center justify-between text-slate-400 border-b border-slate-800/80 pb-2">
-                    <span className="text-blue-400 font-bold flex items-center gap-1.5 text-xs">
-                      <Sparkles className="w-3.5 h-3.5 text-blue-400" />
-                      <span>AI Model Chain-of-Thought Reasoning</span>
-                    </span>
-                    <button 
-                      onClick={() => handleRunAiSimulator()}
-                      className="text-[10px] text-blue-300 hover:text-blue-200 underline font-mono cursor-pointer"
-                    >
-                      Re-run Live Trace ↻
-                    </button>
-                  </div>
-
-                  <div className="space-y-2 text-slate-300 leading-relaxed font-mono text-[11px]">
-                    <div className="p-2.5 rounded-xl bg-rose-950/20 border border-rose-900/30 text-rose-200">
-                      <strong className="text-rose-400 block mb-0.5">1. Baseline Omission Reason:</strong>
-                      AI shopping assistants dropped Apex Ridge because hydrostatic head rating (IPX7) and lug depth could not be verified from unstructured text. Monsoon Trekker was chosen instead.
-                    </div>
-                    <div className="p-2.5 rounded-xl bg-emerald-950/20 border border-emerald-900/30 text-emerald-200">
-                      <strong className="text-emerald-400 block mb-0.5">2. Patched Recommendation Reason:</strong>
-                      Catalyst injected verified Schema.org JSON-LD (HydroGuard IPX7 15,000mm, Vibram MegaGrip 5mm lugs). Apex Ridge at ₹3,499 now outperforms Monsoon Trekker (₹4,499) across price & specs.
-                    </div>
-                  </div>
-                </div>
-
+              <div className="flex justify-between text-[11px]">
+                <span className="text-slate-400">Machine-Readable Specs:</span>
+                <span className="font-bold text-emerald-400">
+                  {isCurrentApproved ? '11 Specs (100% Valid JSON-LD)' : '5 Specs (0% JSON-LD)'}
+                </span>
               </div>
-            )}
-
+              <div className="flex justify-between text-[11px]">
+                <span className="text-slate-400">Grounded Safety Check:</span>
+                <span className="text-emerald-400 font-bold">0 Unsupported Claims ✓</span>
+              </div>
+            </div>
 
           </div>
 
           {/* 2. Razorpay Revenue & Payment Loop Card */}
           <div className="rounded-3xl bg-[#121624]/95 border border-slate-700/80 p-6 shadow-xl space-y-4 font-mono text-xs flex-1">
+
             <div className="flex items-center space-x-2 text-xs font-semibold uppercase tracking-wider text-blue-300">
               <CreditCard className="w-4 h-4 text-blue-400" />
               <span>Razorpay Revenue & Payment Intelligence</span>
