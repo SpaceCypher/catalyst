@@ -979,43 +979,59 @@ export default function CatalystAgentHome({
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 font-mono">
           
           {/* AI Recommendations */}
-          <div className="p-4 rounded-2xl bg-[#090d16] border border-slate-800 space-y-1">
-            <div className="text-[10px] text-slate-400 uppercase tracking-wider">AI Recommendations</div>
+          <div className="p-4 rounded-2xl bg-[#090d16] border border-slate-800 space-y-2">
+            <div className="flex items-center justify-between text-[10px] text-slate-400 uppercase tracking-wider">
+              <span>AI Recommendations</span>
+              <span className="text-blue-300">40 Query Vectors</span>
+            </div>
             <div className="text-2xl font-bold text-white">
               {isCurrentApproved ? '15% → 28%' : '15% (Baseline)'}
             </div>
-            <div className="text-[10px] text-emerald-400 font-medium">
-              {isCurrentApproved ? '+86% relative recommendation lift' : 'Awaiting fix deployment'}
+            <div className="text-[11px] text-slate-300 leading-snug">
+              {isCurrentApproved 
+                ? 'Won 6 of 40 queries at baseline → Won 11 of 40 queries after patch (+86% relative lift).' 
+                : 'Apex Ridge is omitted from 34 of 40 queries due to missing IPX7 depth specs.'}
             </div>
           </div>
 
           {/* Revenue */}
-          <div className="p-4 rounded-2xl bg-[#090d16] border border-slate-800 space-y-1">
-            <div className="text-[10px] text-slate-400 uppercase tracking-wider">Store Revenue</div>
+          <div className="p-4 rounded-2xl bg-[#090d16] border border-slate-800 space-y-2">
+            <div className="flex items-center justify-between text-[10px] text-slate-400 uppercase tracking-wider">
+              <span>Store Revenue</span>
+              <span className="text-blue-300">3,000 Sessions</span>
+            </div>
             <div className="text-2xl font-bold text-white">
               {isCurrentApproved ? '₹1.20L → ₹2.70L' : '₹1.20L (Control)'}
             </div>
-            <div className="text-[10px] text-slate-400">
-              {isCurrentApproved ? '3,000 session controlled benchmark' : 'Baseline 1,500 queries'}
+            <div className="text-[11px] text-slate-300 leading-snug">
+              {isCurrentApproved 
+                ? 'Control: 24 orders (₹1.20L) vs. Treatment: 54 orders (₹2.70L) across identical traffic.' 
+                : 'Control baseline: 24 orders × ₹5,000 average order value = ₹1,20,000.'}
             </div>
           </div>
 
           {/* Net Incremental GMV */}
-          <div className={`p-4 rounded-2xl border space-y-1 transition-all ${
+          <div className={`p-4 rounded-2xl border space-y-2 transition-all ${
             isCurrentApproved
               ? 'bg-emerald-950/30 border-emerald-800/80'
               : 'bg-[#090d16] border-slate-800'
           }`}>
-            <div className="text-[10px] text-slate-400 uppercase tracking-wider">Net Incremental GMV</div>
+            <div className="flex items-center justify-between text-[10px] text-slate-400 uppercase tracking-wider">
+              <span>Net Incremental GMV</span>
+              <span className="text-emerald-400 font-bold">Razorpay Verified</span>
+            </div>
             <div className={`text-2xl font-bold ${isCurrentApproved ? 'text-emerald-300' : 'text-slate-400'}`}>
               {isCurrentApproved ? currentOpp.revenue.gmvDisplay : '₹0'}
             </div>
-            <div className="text-[10px] text-emerald-400 font-medium">
-              {isCurrentApproved ? 'Verified by Razorpay Webhooks ✓' : 'Projected +₹1.50L on deployment'}
+            <div className="text-[11px] text-emerald-300 leading-snug">
+              {isCurrentApproved 
+                ? 'Formula: Treatment (₹2.70L) − Control (₹1.20L) = +₹1,50,000 net causal revenue.' 
+                : 'Requires fix deployment to unlock projected +₹1.50L incremental lift.'}
             </div>
           </div>
 
         </div>
+
 
         <button
           onClick={onNavigateToProof}
