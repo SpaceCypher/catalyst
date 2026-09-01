@@ -277,12 +277,11 @@ export default function App() {
           isOpen={isDemoModalOpen}
           onClose={() => setIsDemoModalOpen(false)}
           onNavigateTab={(tab) => {
-
-            if (tab === 'inbox' || tab === 'opportunities') navigateToTab('catalyst');
-            else if (tab === 'experiments' || tab === 'attribution' || tab === 'console') navigateToTab('proof');
-            else navigateToTab('catalyst');
-            setIsDemoModalOpen(false);
+            if (tab === 'catalyst' || tab === 'inbox' || tab === 'opportunities') navigateToTab('catalyst');
+            else if (tab === 'proof' || tab === 'experiments' || tab === 'attribution' || tab === 'console') navigateToTab('proof');
+            else if (tab === 'store') navigateToTab('store');
           }}
+
           onOpenDiff={() => {
             setIsDiffModalOpen(true);
             setIsDemoModalOpen(false);
