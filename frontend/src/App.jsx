@@ -201,8 +201,10 @@ export default function App() {
         onOpenStorefront={handleOpenStorefront}
         isResetting={isResetting}
         hasAnalyzed={hasAnalyzed}
+        verifiedRevenue={experimentResult?.summary?.treatment_incremental_revenue || 150000}
         agentStatus={getAgentStatus()}
       />
+
 
       {/* Main Experience Flow with Fixed Navbar Offset */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-8">

@@ -19,6 +19,7 @@ export default function Navbar({
   onOpenStorefront,
   isResetting,
   hasAnalyzed,
+  verifiedRevenue = 150000,
   agentStatus = 'ready' // 'ready' | 'analyzing' | 'waiting_approval' | 'measuring' | 'complete'
 }) {
   const navItems = [
@@ -26,6 +27,10 @@ export default function Navbar({
     { id: 'store', label: 'Store', icon: ShoppingBag },
     { id: 'proof', label: 'Proof', icon: ShieldCheck },
   ];
+
+  const formattedAmount = verifiedRevenue >= 100000 
+    ? `+₹${(verifiedRevenue / 100000).toFixed(2)}L` 
+    : `+₹${verifiedRevenue.toLocaleString('en-IN')}`;
 
   const getStatusDisplay = () => {
     switch(agentStatus) {
@@ -36,12 +41,13 @@ export default function Navbar({
       case 'measuring':
         return { label: 'Measuring...', color: 'bg-purple-400', textColor: 'text-purple-300', pulse: true };
       case 'complete':
-        return { label: 'Verified (+₹1.50L)', color: 'bg-emerald-400', textColor: 'text-emerald-300', pulse: false };
+        return { label: `Verified (${formattedAmount})`, color: 'bg-emerald-400', textColor: 'text-emerald-300', pulse: false };
       case 'ready':
       default:
         return { label: 'Ready', color: 'bg-emerald-400', textColor: 'text-emerald-300', pulse: false };
     }
   };
+
 
   const status = getStatusDisplay();
 
