@@ -1461,53 +1461,120 @@ export default function CatalystAgentHome({
         {/* ================= RIGHT COLUMN: AI Simulator & Razorpay Revenue ================= */}
         <div className="space-y-6 flex flex-col justify-between">
           
-          {/* 1. AI Search Discovery & Retrieval Benchmark */}
+          {/* 1. Test Your Own AI Shopping Query & Discovery Benchmark */}
           <div className="rounded-3xl bg-[#121624]/95 border border-slate-700/80 p-6 shadow-xl space-y-4 flex-1 font-mono text-xs">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center space-x-2 text-blue-400 font-bold text-xs uppercase tracking-wider">
                 <Search className="w-4 h-4" />
-                <span>AI Search Discovery Benchmark</span>
+                <span>Test Your Own AI Query</span>
               </div>
               <span className="text-[10px] text-emerald-400 bg-emerald-950/80 px-2.5 py-1 rounded-full border border-emerald-800 font-bold">
-                40 Continuous Query Vectors
+                Live Intent Evaluator
               </span>
             </div>
 
-            {/* Query Intent Vector Table */}
+            {/* Interactive Query Input Form */}
             <div className="space-y-2">
-              <span className="text-[10px] text-slate-400 uppercase tracking-wider font-bold block">
-                Commercial Intent Performance
-              </span>
-              
-              <div className="space-y-1.5">
-                {[
-                  { query: 'Best waterproof hiking boots under ₹5,000', baseline: '15.0%', patched: '55.0%', lift: '+40.0 pts' },
-                  { query: 'Monsoon trekking boots with Vibram sole', baseline: '10.0%', patched: '45.0%', lift: '+35.0 pts' },
-                  { query: 'Lightweight 420g trail hiking shoes', baseline: '20.0%', patched: '60.0%', lift: '+40.0 pts' },
-                  { query: 'Winter alpine breathable waterproof boots', baseline: '15.0%', patched: '50.0%', lift: '+35.0 pts' }
-                ].map((item, idx) => (
-                  <div key={idx} className="p-2.5 rounded-xl bg-[#090d16] border border-slate-800 flex items-center justify-between gap-2 text-[11px]">
-                    <div className="truncate flex-1 text-slate-300">
-                      "{item.query}"
-                    </div>
-                    <div className="flex items-center space-x-2 flex-shrink-0">
-                      <span className="text-rose-400/80 line-through text-[10px]">{item.baseline}</span>
-                      <span className="text-emerald-400 font-bold">{isCurrentApproved ? item.patched : item.baseline}</span>
-                      {isCurrentApproved && (
-                        <span className="text-[9px] bg-emerald-950 text-emerald-300 px-1.5 py-0.5 rounded border border-emerald-800/80 font-bold">
-                          {item.lift}
-                        </span>
-                      )}
-                    </div>
-                  </div>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                }}
+                className="flex items-center space-x-2"
+              >
+                <div className="relative flex-1">
+                  <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder={`e.g. ${currentOpp.queryPreset}`}
+                    className="w-full pl-10 pr-3 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-white text-xs font-mono focus:outline-none focus:border-blue-400"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-mono text-white flex items-center space-x-1.5 cursor-pointer transition-all shadow-sm flex-shrink-0"
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>Evaluate</span>
+                </button>
+              </form>
+
+              {/* Preset Query Chips */}
+              <div className="flex flex-wrap items-center gap-1.5 pt-0.5 text-[11px] font-mono">
+                <span className="text-slate-500">Presets:</span>
+                {currentOpp.presets.map((preset, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setSearchQuery(preset)}
+                    className={`px-2 py-0.5 rounded-md border text-[11px] transition-colors cursor-pointer ${
+                      searchQuery === preset
+                        ? 'bg-blue-600/30 border-blue-500 text-blue-200 font-bold'
+                        : 'bg-slate-900 hover:bg-slate-800 border-slate-800 text-slate-400 hover:text-slate-200'
+                    }`}
+                  >
+                    {preset}
+                  </button>
                 ))}
               </div>
             </div>
 
-            {/* Aggregate Evidence Density */}
+            {/* Before vs After Live Comparison for the active query */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+              {/* BEFORE FIX */}
+              <div className="p-3.5 rounded-2xl bg-[#0d0f17] border border-slate-800 space-y-2">
+                <div className="flex items-center justify-between text-slate-400 text-[10px] font-semibold uppercase tracking-wider">
+                  <span>BEFORE FIX</span>
+                  <span className="text-[10px] text-rose-400 font-normal">Omitted</span>
+                </div>
+                <div className="text-xs text-slate-300 space-y-1.5">
+                  <div className="p-2 rounded-lg bg-slate-800/80 border border-slate-700 text-white font-semibold flex items-center justify-between text-[11px]">
+                    <span>{currentOpp.simBefore.first}</span>
+                    <span className="text-[10px] text-emerald-400 font-normal">{currentOpp.simBefore.firstTag}</span>
+                  </div>
+                  <div className="p-2 rounded-lg bg-slate-800/40 border border-slate-800 text-slate-300 flex items-center justify-between text-[11px]">
+                    <span>{currentOpp.simBefore.second}</span>
+                    <span className="text-[10px] text-slate-400 font-normal">{currentOpp.simBefore.secondTag}</span>
+                  </div>
+                  <div className="text-rose-400 pt-1 text-[10px] font-bold flex items-center gap-1">
+                    <XCircle className="w-3.5 h-3.5 flex-shrink-0" />
+                    <span>{currentOpp.simBefore.omitted}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* AFTER FIX */}
+              <div className={`p-3.5 rounded-2xl border space-y-2 transition-all ${
+                isCurrentApproved 
+                  ? 'bg-emerald-950/30 border-emerald-800/60 shadow-sm'
+                  : 'bg-[#0d0f17] border-slate-800/60 opacity-60'
+              }`}>
+                <div className="flex items-center justify-between text-emerald-400 text-[10px] font-semibold uppercase tracking-wider">
+                  <span>AFTER CATALYST FIX</span>
+                  <span className="text-[10px] font-bold text-emerald-300">#1 Pick ✓</span>
+                </div>
+                <div className="text-xs text-slate-300 space-y-1.5">
+                  <div className="p-2 rounded-lg bg-emerald-900/40 border border-emerald-700/60 text-white font-bold flex items-center justify-between text-[11px] shadow-sm">
+                    <span className="text-emerald-300">{currentOpp.simAfter.first}</span>
+                    <span className="text-[10px] text-emerald-400 font-normal">{currentOpp.simAfter.firstTag}</span>
+                  </div>
+                  <div className="p-2 rounded-lg bg-slate-900/60 border border-slate-800 text-slate-400 flex items-center justify-between text-[11px]">
+                    <span>{currentOpp.simAfter.second}</span>
+                    <span className="text-[10px] text-slate-500 font-normal">{currentOpp.simAfter.secondTag}</span>
+                  </div>
+                  <div className="text-emerald-300 pt-1 text-[10px] font-semibold flex items-center gap-1">
+                    <CheckCircle2 className="w-3.5 h-3.5 flex-shrink-0 text-emerald-400" />
+                    <span>All specifications verified & matched</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Query Performance Benchmarks */}
             <div className="p-3.5 rounded-2xl bg-[#080c14] border border-slate-800 space-y-2">
               <div className="flex justify-between text-[11px]">
-                <span className="text-slate-400">Average Win-Rate:</span>
+                <span className="text-slate-400">AI Recommendation Rate:</span>
                 <span className="font-bold text-white">
                   {isCurrentApproved ? '16.7% → 37.5% (+125% Lift)' : '16.7% (Baseline)'}
                 </span>
@@ -1525,6 +1592,7 @@ export default function CatalystAgentHome({
             </div>
 
           </div>
+
 
           {/* 2. Razorpay Revenue & Payment Loop Card */}
           <div className="rounded-3xl bg-[#121624]/95 border border-slate-700/80 p-6 shadow-xl space-y-4 font-mono text-xs flex-1">
