@@ -549,10 +549,19 @@ export default function CatalystAgentHome({
     }
   };
 
+  const [isEvaluatingQuery, setIsEvaluatingQuery] = useState(false);
+  const [evaluatedQuery, setEvaluatedQuery] = useState('');
+
+  const handleEvaluateQuery = (queryToTest) => {
+    const q = (queryToTest !== undefined && queryToTest !== '') ? queryToTest : (searchQuery || currentOpp.queryPreset);
+    setIsEvaluatingQuery(true);
+    setTimeout(() => {
+      setEvaluatedQuery(q);
+      setIsEvaluatingQuery(false);
+    }, 400);
+  };
 
 
-
-  // 1. FIRST-TIME ONBOARDING (CONNECT + METHODOLOGY)
   if (!hasAnalyzed && !isAnalyzing) {
     return (
       <div className="max-w-6xl mx-auto my-6 space-y-6 animate-in fade-in duration-300">
@@ -1478,6 +1487,7 @@ export default function CatalystAgentHome({
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
+                  handleEvaluateQuery(searchQuery);
                 }}
                 className="flex items-center space-x-2"
               >
@@ -1493,10 +1503,20 @@ export default function CatalystAgentHome({
                 </div>
                 <button
                   type="submit"
-                  className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-mono text-white flex items-center space-x-1.5 cursor-pointer transition-all shadow-sm flex-shrink-0"
+                  disabled={isEvaluatingQuery}
+                  className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-xs font-mono text-white flex items-center space-x-1.5 cursor-pointer transition-all shadow-sm flex-shrink-0"
                 >
-                  <Sparkles className="w-3.5 h-3.5" />
-                  <span>Evaluate</span>
+                  {isEvaluatingQuery ? (
+                    <>
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      <span>Testing...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="w-3.5 h-3.5 text-blue-200" />
+                      <span>Evaluate</span>
+                    </>
+                  )}
                 </button>
               </form>
 
@@ -1507,9 +1527,12 @@ export default function CatalystAgentHome({
                   <button
                     key={idx}
                     type="button"
-                    onClick={() => setSearchQuery(preset)}
+                    onClick={() => {
+                      setSearchQuery(preset);
+                      handleEvaluateQuery(preset);
+                    }}
                     className={`px-2 py-0.5 rounded-md border text-[11px] transition-colors cursor-pointer ${
-                      searchQuery === preset
+                      (searchQuery === preset || evaluatedQuery === preset)
                         ? 'bg-blue-600/30 border-blue-500 text-blue-200 font-bold'
                         : 'bg-slate-900 hover:bg-slate-800 border-slate-800 text-slate-400 hover:text-slate-200'
                     }`}
@@ -1520,56 +1543,64 @@ export default function CatalystAgentHome({
               </div>
             </div>
 
-            {/* Before vs After Live Comparison for the active query */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-              {/* BEFORE FIX */}
-              <div className="p-3.5 rounded-2xl bg-[#0d0f17] border border-slate-800 space-y-2">
-                <div className="flex items-center justify-between text-slate-400 text-[10px] font-semibold uppercase tracking-wider">
-                  <span>BEFORE FIX</span>
-                  <span className="text-[10px] text-rose-400 font-normal">Omitted</span>
-                </div>
-                <div className="text-xs text-slate-300 space-y-1.5">
-                  <div className="p-2 rounded-lg bg-slate-800/80 border border-slate-700 text-white font-semibold flex items-center justify-between text-[11px]">
-                    <span>{currentOpp.simBefore.first}</span>
-                    <span className="text-[10px] text-emerald-400 font-normal">{currentOpp.simBefore.firstTag}</span>
-                  </div>
-                  <div className="p-2 rounded-lg bg-slate-800/40 border border-slate-800 text-slate-300 flex items-center justify-between text-[11px]">
-                    <span>{currentOpp.simBefore.second}</span>
-                    <span className="text-[10px] text-slate-400 font-normal">{currentOpp.simBefore.secondTag}</span>
-                  </div>
-                  <div className="text-rose-400 pt-1 text-[10px] font-bold flex items-center gap-1">
-                    <XCircle className="w-3.5 h-3.5 flex-shrink-0" />
-                    <span>{currentOpp.simBefore.omitted}</span>
-                  </div>
-                </div>
+            {/* Live Evaluation Status Banner */}
+            {isEvaluatingQuery ? (
+              <div className="p-4 rounded-2xl bg-blue-950/30 border border-blue-800/60 flex items-center justify-center space-x-2 text-blue-300 animate-pulse text-xs">
+                <Loader2 className="w-4 h-4 animate-spin text-blue-400" />
+                <span>Simulating AI shopping bot retrieval against "{searchQuery || currentOpp.queryPreset}"...</span>
               </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1 animate-in fade-in duration-200">
+                {/* BEFORE FIX */}
+                <div className="p-3.5 rounded-2xl bg-[#0d0f17] border border-slate-800 space-y-2">
+                  <div className="flex items-center justify-between text-slate-400 text-[10px] font-semibold uppercase tracking-wider">
+                    <span>BEFORE FIX</span>
+                    <span className="text-[10px] text-rose-400 font-normal">Omitted</span>
+                  </div>
+                  <div className="text-xs text-slate-300 space-y-1.5">
+                    <div className="p-2 rounded-lg bg-slate-800/80 border border-slate-700 text-white font-semibold flex items-center justify-between text-[11px]">
+                      <span>{currentOpp.simBefore.first}</span>
+                      <span className="text-[10px] text-emerald-400 font-normal">{currentOpp.simBefore.firstTag}</span>
+                    </div>
+                    <div className="p-2 rounded-lg bg-slate-800/40 border border-slate-800 text-slate-300 flex items-center justify-between text-[11px]">
+                      <span>{currentOpp.simBefore.second}</span>
+                      <span className="text-[10px] text-slate-400 font-normal">{currentOpp.simBefore.secondTag}</span>
+                    </div>
+                    <div className="text-rose-400 pt-1 text-[10px] font-bold flex items-center gap-1">
+                      <XCircle className="w-3.5 h-3.5 flex-shrink-0" />
+                      <span>{currentOpp.simBefore.omitted}</span>
+                    </div>
+                  </div>
+                </div>
 
-              {/* AFTER FIX */}
-              <div className={`p-3.5 rounded-2xl border space-y-2 transition-all ${
-                isCurrentApproved 
-                  ? 'bg-emerald-950/30 border-emerald-800/60 shadow-sm'
-                  : 'bg-[#0d0f17] border-slate-800/60 opacity-60'
-              }`}>
-                <div className="flex items-center justify-between text-emerald-400 text-[10px] font-semibold uppercase tracking-wider">
-                  <span>AFTER CATALYST FIX</span>
-                  <span className="text-[10px] font-bold text-emerald-300">#1 Pick ✓</span>
-                </div>
-                <div className="text-xs text-slate-300 space-y-1.5">
-                  <div className="p-2 rounded-lg bg-emerald-900/40 border border-emerald-700/60 text-white font-bold flex items-center justify-between text-[11px] shadow-sm">
-                    <span className="text-emerald-300">{currentOpp.simAfter.first}</span>
-                    <span className="text-[10px] text-emerald-400 font-normal">{currentOpp.simAfter.firstTag}</span>
+                {/* AFTER FIX */}
+                <div className={`p-3.5 rounded-2xl border space-y-2 transition-all ${
+                  isCurrentApproved 
+                    ? 'bg-emerald-950/30 border-emerald-800/60 shadow-sm'
+                    : 'bg-[#0d0f17] border-slate-800/60 opacity-60'
+                }`}>
+                  <div className="flex items-center justify-between text-emerald-400 text-[10px] font-semibold uppercase tracking-wider">
+                    <span>AFTER CATALYST FIX</span>
+                    <span className="text-[10px] font-bold text-emerald-300">#1 Pick ✓</span>
                   </div>
-                  <div className="p-2 rounded-lg bg-slate-900/60 border border-slate-800 text-slate-400 flex items-center justify-between text-[11px]">
-                    <span>{currentOpp.simAfter.second}</span>
-                    <span className="text-[10px] text-slate-500 font-normal">{currentOpp.simAfter.secondTag}</span>
-                  </div>
-                  <div className="text-emerald-300 pt-1 text-[10px] font-semibold flex items-center gap-1">
-                    <CheckCircle2 className="w-3.5 h-3.5 flex-shrink-0 text-emerald-400" />
-                    <span>All specifications verified & matched</span>
+                  <div className="text-xs text-slate-300 space-y-1.5">
+                    <div className="p-2 rounded-lg bg-emerald-900/40 border border-emerald-700/60 text-white font-bold flex items-center justify-between text-[11px] shadow-sm">
+                      <span className="text-emerald-300">{currentOpp.simAfter.first}</span>
+                      <span className="text-[10px] text-emerald-400 font-normal">{currentOpp.simAfter.firstTag}</span>
+                    </div>
+                    <div className="p-2 rounded-lg bg-slate-900/60 border border-slate-800 text-slate-400 flex items-center justify-between text-[11px]">
+                      <span>{currentOpp.simAfter.second}</span>
+                      <span className="text-[10px] text-slate-500 font-normal">{currentOpp.simAfter.secondTag}</span>
+                    </div>
+                    <div className="text-emerald-300 pt-1 text-[10px] font-semibold flex items-center gap-1">
+                      <CheckCircle2 className="w-3.5 h-3.5 flex-shrink-0 text-emerald-400" />
+                      <span>All specifications verified & matched</span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            )}
+
 
             {/* Query Performance Benchmarks */}
             <div className="p-3.5 rounded-2xl bg-[#080c14] border border-slate-800 space-y-2">
