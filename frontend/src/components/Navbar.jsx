@@ -6,8 +6,10 @@ import {
   ShoppingBag,
   ShieldCheck,
   Zap,
-  ExternalLink
+  ExternalLink,
+  Server
 } from 'lucide-react';
+
 
 export default function Navbar({ 
   activeTab, 
@@ -111,6 +113,20 @@ export default function Navbar({
             <span>Store</span>
             <ExternalLink className="w-3 h-3 text-slate-500 ml-0.5" />
           </button>
+
+          {/* Backend API Link */}
+          <a
+            href="https://catalyst-880d.onrender.com/docs"
+            target="_blank"
+            rel="noreferrer"
+            className="hidden md:flex items-center space-x-1 px-2.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-emerald-400 hover:text-emerald-300 text-xs font-mono whitespace-nowrap transition-all"
+            title="Open Live FastAPI Backend Docs on Render"
+          >
+            <Server className="w-3.5 h-3.5 flex-shrink-0" />
+            <span>API Docs</span>
+            <ExternalLink className="w-3 h-3 text-emerald-500/70 ml-0.5" />
+          </a>
+
 
           {/* 5-Beat Demo Pitch Button */}
           <button

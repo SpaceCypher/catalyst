@@ -11,7 +11,8 @@ import {
   HelpCircle,
   Code2,
   Info,
-  Loader2
+  Loader2,
+  Server
 } from 'lucide-react';
 import thinCatalog from './catalog_thin.json';
 import richCatalog from './catalog_rich.json';
@@ -99,16 +100,30 @@ export default function App() {
               </div>
             )}
 
+            {/* Link to Backend API */}
+            <a
+              href="https://catalyst-880d.onrender.com/docs"
+              target="_blank"
+              rel="noreferrer"
+              className="hidden md:flex items-center space-x-1 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-emerald-400 text-xs font-mono font-bold border border-slate-700 transition-all"
+              title="Open Live FastAPI Backend on Render"
+            >
+              <Server className="w-3 h-3" />
+              <span>Backend API</span>
+              <ExternalLink className="w-2.5 h-2.5 text-emerald-500/70" />
+            </a>
+
             {/* Link to Catalyst Agent */}
             <a
               href="https://frontend-two-zeta-16.vercel.app/"
               target="_blank"
               rel="noreferrer"
-              className="hidden lg:flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-md shadow-indigo-600/20 transition-all"
+              className="hidden sm:flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-md shadow-indigo-600/20 transition-all"
             >
               <span>Launch Catalyst Agent</span>
               <ExternalLink className="w-3 h-3" />
             </a>
+
           </div>
 
         </div>
@@ -372,9 +387,19 @@ export default function App() {
       )}
 
       {/* Footer */}
-      <footer className="border-t border-slate-800 py-6 bg-[#040810] text-center text-xs text-slate-500 font-mono">
-        Apex Ridge Outdoors • Connected to Catalyst AI Revenue Agent • Razorpay Buildathon
+      <footer className="border-t border-slate-800 py-6 bg-[#040810] text-center text-xs text-slate-500 font-mono space-y-2">
+        <div>Apex Ridge Outdoors • Connected to Catalyst AI Revenue Agent • Razorpay Buildathon</div>
+        <div className="flex items-center justify-center space-x-4 text-[11px] text-slate-400">
+          <a href="https://frontend-two-zeta-16.vercel.app/" target="_blank" rel="noreferrer" className="hover:text-white underline">
+            Catalyst Dashboard
+          </a>
+          <span>•</span>
+          <a href="https://catalyst-880d.onrender.com/docs" target="_blank" rel="noreferrer" className="hover:text-emerald-400 underline">
+            Live FastAPI Backend Docs
+          </a>
+        </div>
       </footer>
+
 
     </div>
   );
