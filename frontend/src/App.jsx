@@ -34,7 +34,12 @@ const getTabFromPath = () => {
 
 export default function App() {
   const [currentView, setCurrentView] = useState('catalyst'); // 'catalyst' | 'storefront'
-  const [hasAnalyzed, setHasAnalyzed] = useState(false);
+  const [hasAnalyzed, setHasAnalyzed] = useState(() => {
+    if (typeof window === 'undefined') return true;
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('onboard') === 'true') return false;
+    return localStorage.getItem('catalyst_has_analyzed') !== 'false';
+  });
   const [activeTab, setActiveTab] = useState(getTabFromPath);
 
   const [opportunities, setOpportunities] = useState([]);
