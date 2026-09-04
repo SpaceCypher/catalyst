@@ -238,6 +238,9 @@ export default function App() {
           <CatalystAgentHome
             hasAnalyzed={hasAnalyzed}
             onAnalyzeComplete={() => {
+              if (typeof window !== 'undefined') {
+                localStorage.setItem('catalyst_has_analyzed', 'true');
+              }
               setHasAnalyzed(true);
               loadAllData();
             }}
