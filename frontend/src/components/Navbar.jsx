@@ -14,6 +14,7 @@ import {
 export default function Navbar({ 
   activeTab, 
   setActiveTab, 
+  onSelectTab,
   onResetDemo, 
   onOpenDemoModal,
   onOpenStorefront,
@@ -22,6 +23,11 @@ export default function Navbar({
   verifiedRevenue = 150000,
   agentStatus = 'ready' // 'ready' | 'analyzing' | 'waiting_approval' | 'measuring' | 'complete'
 }) {
+  const handleTabClick = (tabId) => {
+    if (typeof onSelectTab === 'function') onSelectTab(tabId);
+    if (typeof setActiveTab === 'function') setActiveTab(tabId);
+  };
+
   const navItems = [
     { id: 'catalyst', label: 'Catalyst', icon: Zap },
     { id: 'store', label: 'Store', icon: ShoppingBag },
@@ -90,7 +96,7 @@ export default function Navbar({
                 return (
                   <button
                     key={item.id}
-                    onClick={() => setActiveTab(item.id)}
+                    onClick={() => handleTabClick(item.id)}
                     className={`flex items-center space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs whitespace-nowrap transition-all cursor-pointer ${
                       isActive
                         ? 'bg-slate-800/90 text-blue-200 border border-slate-700 font-semibold shadow-sm'

@@ -21,8 +21,14 @@ dist/
 .vercel
 .turbo
 
-# Environment secrets
+# Environment secrets & OS
 .env
 .env.local
 .DS_Store
 api-key.txt
+
+# Media & Video Automation
+media/
+scripts/automate_*.py
+scripts/generate_voiceover*.py
+scripts/verify_site_recording.py

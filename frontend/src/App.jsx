@@ -35,10 +35,10 @@ const getTabFromPath = () => {
 export default function App() {
   const [currentView, setCurrentView] = useState('catalyst'); // 'catalyst' | 'storefront'
   const [hasAnalyzed, setHasAnalyzed] = useState(() => {
-    if (typeof window === 'undefined') return true;
+    if (typeof window === 'undefined') return false;
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('onboard') === 'true') return false;
-    return localStorage.getItem('catalyst_has_analyzed') !== 'false';
+    return localStorage.getItem('catalyst_has_analyzed') === 'true';
   });
   const [activeTab, setActiveTab] = useState(getTabFromPath);
 
@@ -176,6 +176,7 @@ export default function App() {
         localStorage.removeItem('catalyst_verified_sessions');
         localStorage.removeItem('catalyst_diff_status');
         localStorage.removeItem('catalyst_active_tab');
+        localStorage.removeItem('catalyst_has_analyzed');
       }
       setOppApprovals({
         'opp-01': false,
@@ -218,6 +219,7 @@ export default function App() {
       
       {/* Top Navbar */}
       <Navbar
+        hasAnalyzed={hasAnalyzed}
         activeTab={activeTab}
         onSelectTab={navigateToTab}
         onResetDemo={handleResetDemo}
@@ -250,8 +252,8 @@ export default function App() {
             onSelectOpportunity={setActiveOpportunityId}
             approvedOpps={oppApprovals}
             onSetApprovedOpps={setOppApprovals}
-            onApproveFix={() => handleApproveFix('diff-apex-01')}
-            onRejectFix={() => handleRejectFix('diff-apex-01')}
+            onApproveFix={() => handleApproveDiff('diff-apex-01')}
+            onRejectFix={() => handleRejectDiff('diff-apex-01')}
             isApproving={isApproving}
             onRunExperiment={() => runExperiment('diff-apex-01')}
             experimentResult={experimentResult}
